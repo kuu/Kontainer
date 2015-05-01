@@ -7,11 +7,19 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint src/",
+    "clean": "npm run clean-src && npm run clean-test",
+    "clean-src": "rm -fR transpiled/src ; mkdir -p transpiled/src",
+    "clean-test": "rm -fR transpiled/test ; mkdir -p transpiled/test",
+    "transpile": "npm run transpile-src && npm run transpile-test",
+    "transpile-src": "npm run clean-src && babel src/ --out-dir transpiled/src/",
+    "transpile-test": "npm run clean-test && babel test/ --out-dir transpiled/test/",
+    "test": "npm run lint && npm run transpile && jasmine-node transpiled/test/spec/"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "babel": "^5.2.2",
     "eslint": "^0.20.0",
     "jasmine-node": "^1.14.5"
   }

@@ -1,3 +1,5 @@
+'use strict';
+
 var Box = require('./Box');
 
 function FullBox(boxType, v, f) {

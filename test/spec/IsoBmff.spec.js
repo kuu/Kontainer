@@ -1,19 +1,34 @@
-var Kontainer = require('..'),
+var Kontainer = require('../../src/'),
+    IsoBmff = Kontainer.IsoBmff,
+    Box = IsoBmff.Box,
     Writer = Kontainer.Writer,
     Logger = Kontainer.Logger;
 
-class ParentBox extends Kontainer.IsoBmff.Box {
+class ParentBox extends Box {
+  constructor(props) {
+    super('abcd', props);
+  }
 
-  serialize(buffer, offset) {
+  serialize(buffer, offset=0) {
     var attr1 = this.props.attr1,
         attr2 = this.props.attr2,
-        currentPos = offset || 0;
+        base = offset;
 
-    currentPos += Writer.writeString(attr1, buffer, currentPos);
-    currentPos += Writer.writeNumber(attr2, buffer, currentPos);
+    if (this.type === 'uuid') {
+      base += Box.UUID_HEADER_LENGTH;
+    } else {
+      base += Box.HEADER_LENGTH;
+    }
 
-    return currentPos - offset;
-  },
+    base += Writer.writeString(attr1, buffer, base);
+    base += Writer.writeNumber(attr2, buffer, base, 4);
+
+    this.size = base - offset;
+
+    super.serialize(buffer, offset);
+
+    return this.size;
+  }
 
   dump(indent) {
     Logger.setIndent(indent || 0);
@@ -30,15 +45,33 @@ ParentBox.propTypes = {
 };
 
 ParentBox.defaultProps = {
-  arrt1: 'a',
-  arrt2: 0
+  attr1: 'a',
+  attr2: 0
 };
 
-class ChildBox extends Kontainer.IsoBmff.Box {
-  serialize(buffer, offset) {
-    var attr3 = this.props.attr3;
-    return Writer.writeNumber(attr3, buffer, offset);
-  },
+class ChildBox extends Box {
+  constructor(props) {
+    super('efgh', props);
+  }
+
+  serialize(buffer, offset=0) {
+    var attr3 = this.props.attr3,
+        base = offset;
+
+    if (this.type === 'uuid') {
+      base += Box.UUID_HEADER_LENGTH;
+    } else {
+      base += Box.HEADER_LENGTH;
+    }
+
+    base += Writer.writeNumber(attr3, buffer, base, 4);
+
+    this.size = base - offset;
+
+    super.serialize(buffer, offset);
+
+    return this.size;
+  }
 
   dump(indent) {
     Logger.setIndent(indent || 0);
@@ -58,8 +91,8 @@ ChildBox.defaultProps = {
 };
 
 var buffer = Kontainer.renderToArrayBuffer(
-  Kontainer.createElement(ParentBox, {attr1: 'abc', attr2: 123},
-    Kontainer.createElement(ChildBox, {attr3: 456}),
-    Kontainer.createElement(ChildBox, {attr3: 789})
+  IsoBmff.createElement(ParentBox, {attr1: 'abc', attr2: 123},
+    IsoBmff.createElement(ChildBox, {attr3: 456}),
+    IsoBmff.createElement(ChildBox, {attr3: 789})
   )
 );

@@ -5,6 +5,7 @@ var MediaFormat = require('../MediaFormat'),
     FullBox = require('./FullBox');
 
 var clazz = {
+  ftyp: require('./FileTypeBox')
 };
 
 function createElement(type, props, children) {
@@ -15,6 +16,7 @@ function createElement(type, props, children) {
       console.error('IsoBmff.createElement: invalid type.');
       return null;
     }
+    arguments[0] = type;
   } else if (!type || typeof type.prototype.serialize !== 'function') {
     console.error('IsoBmff.createElement: type should be a string or a class object.');
     return null;

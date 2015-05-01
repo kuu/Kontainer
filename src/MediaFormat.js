@@ -12,7 +12,7 @@ function extractChild(child, children) {
   }
 }
 
-function createElement(type, props, children) {
+function createElement(type, props={}, children) {
   var childrenArgsLen = arguments.length - 2,
       childArray = [], defaultProps;
 

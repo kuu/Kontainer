@@ -1,39 +1,43 @@
-'use strict';
+var Box = require('./Box'),
+    PropTypes = require('../PropTypes'),
+    Writer = require('../util/Writer');
 
-var Box = require('./Box');
+class FileTypeBox extends Box {
+  constructor(props) {
+    super('ftyp', props);
+  }
 
-function FileTypeBox() {
-  Box('ftyp');
-  this.majorBrand = ''; // unsigned int(32)
-  this.minorVersion = 0; // unsigned int(32)
-  this.compatibleBrands = []; // unsigned int(32) []
+  serialize(buffer, offset=0) {
+    var majorBrand = this.props.majorBrand,
+        minorVersion = this.props.minorVersion,
+        compatibleBrands = this.props.compatibleBrands,
+        base = offset;
+
+    base += Box.HEADER_LENGTH;
+    base += Writer.writeString(majorBrand, buffer, base, 4);
+    base += Writer.writeNumber(minorVersion, buffer, base, 4);
+    compatibleBrands.forEach(brand => {
+      base += Writer.writeString(brand, buffer, base, 4);
+    });
+
+    this.size = base - offset;
+
+    super.serialize(buffer, offset);
+
+    return this.size;
+  }
 }
 
-FileTypeBox.verify = function (instance) {
-  var majorBrand = instance.majorBrand,
-      minorVersion = instance.minorVersion,
-      compatibleBrands = instance.compatibleBrands,
-      brand;
-
-  if (typeof majorBrand !== 'string' || majorBrand.length !== 4) {
-    return false;
-  }
-  if (typeof minorVersion !== 'number' || minorVersion < 0 || minorVersion >= (1 << 32)) {
-    return false;
-  }
-  for (var i = 0, il = compatibleBrands.length; i < il; i++) {
-    brand = compatibleBrands[i];
-    if (typeof brand !== 'string' || brand.length !== 4) {
-      return false;
-    }
-  }
-  return true;
+FileTypeBox.propTypes = {
+  majorBrand: PropTypes.string,
+  minorVersion: PropTypes.number,
+  compatibleBrands: PropTypes.arrayOf(PropTypes.string)
 };
 
-FileTypeBox.serialize = function (buffer, offset, instance) {
-  Box.serialize(buffer, offset, instance);
+FileTypeBox.defaultProps = {
+  majorBrand: 'isom',
+  minorVersion: 0,
+  compatibleBrands: []
 };
-
-Box.register('ftyp', FileTypeBox);
 
 module.exports = FileTypeBox;

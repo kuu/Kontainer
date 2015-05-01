@@ -27,6 +27,19 @@ class Box {
 
     return base - offset;
   }
+
+  updateSize(buffer, offset=0) {
+    var base = offset,
+        size = this.size;
+
+    if (size < 4294967296) {
+      base += Writer.writeNumber(size, buffer, base, 4);
+    } else {
+      console.error('IsoBmff.Box.serialize: largesize(>4GB) is not supported.');
+      return 0;
+    }
+    return base - offset;
+  }
 }
 
 Box.HEADER_LENGTH = 8;

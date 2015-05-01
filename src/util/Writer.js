@@ -68,20 +68,14 @@ function writeString(str, buffer, offset, length) {
   return base - offset;
 }
 
-function writeNumber(num, buffer, offset, length) {
-  var base = offset, byte,
-      lowerLimit = offset + (length || 0),
-      upperLimit = offset + (length || Infinity);
+function writeNumber(num, buffer, offset, length=4) {
+  var base = offset, byte;
 
-  while ((byte = num & 0xff) && (base - offset <= upperLimit)) {
+  for (var i = length - 1; i >= 0; i--) {
+    byte = (num >> (8 * i)) & 0xFF;
     writeByte(byte, buffer, base++);
-    num >>>= 8;
   }
 
-  // padding
-  while (base < lowerLimit) {
-    writeByte(0, buffer, base++);
-  }
   return base - offset;
 }
 

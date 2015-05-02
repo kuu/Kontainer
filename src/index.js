@@ -3,7 +3,7 @@ var IsoBmff = require('./IsoBmff/'),
     Writer = require('./util/Writer'),
     Logger = require('./util/Logger');
 
-function traversePostOrder(element, buffer, offset=0) {
+function traverse(element, buffer, offset=0) {
   var instance, props, children, base = offset;
 
   if (!element) {
@@ -17,7 +17,7 @@ function traversePostOrder(element, buffer, offset=0) {
   base += instance.serialize(buffer, offset);
 
   children.forEach(child => {
-    base += traversePostOrder(child, buffer, base);
+    base += traverse(child, buffer, base);
   });
 
   instance.size = base - offset;
@@ -30,10 +30,11 @@ function renderToArrayBuffer(element) {
   var size, buffer;
 
   // Culculate the entire byte size.
-  size = traversePostOrder(element);
+  size = traverse(element);
 
+  // Write to the array buffer.
   buffer = new Uint8Array(size);
-  traversePostOrder(element, buffer);
+  traverse(element, buffer);
 
 /*
   console.log('size=', buffer.length);

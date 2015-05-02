@@ -3,6 +3,8 @@ var IsoBmff = require('./IsoBmff/'),
     Writer = require('./util/Writer'),
     Logger = require('./util/Logger');
 
+require("babel/polyfill");
+
 function traverse(element, buffer, offset=0) {
   var instance, props, children, base = offset;
 

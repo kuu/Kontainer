@@ -1,13 +1,15 @@
 function Element(type, props) {
+  this.type = type;
+  this.props = props;
   this.instance = new type(props);
 }
 
-function extractChild(child, children) {
+function extractChild(child, childArray) {
   if (child instanceof Element) {
-    children.push(child);
+    childArray.push(child);
   } else if (child instanceof Array) {
     child.forEach(item => {
-      extractChild(item, children);
+      extractChild(item, childArray);
     });
   }
 }

@@ -4,7 +4,7 @@ var Box = require('./Box'),
 
 class FileTypeBox extends Box {
   constructor(props) {
-    super('ftyp', props);
+    super(FileTypeBox.COMPACT_NAME, props);
   }
 
   serialize(buffer, offset=0) {
@@ -28,6 +28,8 @@ class FileTypeBox extends Box {
   }
 }
 
+FileTypeBox.COMPACT_NAME = 'ftyp';
+
 FileTypeBox.propTypes = {
   majorBrand: PropTypes.string,
   minorVersion: PropTypes.number,
@@ -38,6 +40,12 @@ FileTypeBox.defaultProps = {
   majorBrand: 'isom',
   minorVersion: 0,
   compatibleBrands: []
+};
+
+FileTypeBox.spec = {
+  container: 'file',
+  quantity: Box.QUANTITY_EXACTLY_ONE,
+  mandatoryBoxList: []
 };
 
 module.exports = FileTypeBox;

@@ -44,5 +44,8 @@ class Box {
 
 Box.HEADER_LENGTH = 8;
 Box.UUID_HEADER_LENGTH = 24;
+Box.QUANTITY_ANY_NUMBER = 0;
+Box.QUANTITY_EXACTLY_ONE = 1;
+Box.QUANTITY_ZERO_OR_ONE = 2;
 
 module.exports = Box;

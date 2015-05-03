@@ -1,6 +1,6 @@
 'use strict';
 
-var MediaFormat = require('../MediaFormat'),
+var MediaFormat = require('../core/MediaFormat'),
     Box = require('./Box'),
     FullBox = require('./FullBox');
 
@@ -56,7 +56,7 @@ function validateChild(context, child) {
 function createElement(type, props, children) {
   var element, context = {};
 
-  console.log('IsoBmff.createElement(', type, props, children, ')');
+  void children;
 
   if (typeof type === 'string') {
     type = clazz[type];

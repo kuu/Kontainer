@@ -1,6 +1,6 @@
 var Box = require('./Box'),
-    PropTypes = require('../PropTypes'),
-    Writer = require('../util/Writer');
+    PropTypes = require('../core/PropTypes'),
+    Writer = require('../core/Writer');
 
 class FileTypeBox extends Box {
   constructor(props) {

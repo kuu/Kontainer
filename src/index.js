@@ -1,7 +1,6 @@
 var IsoBmff = require('./IsoBmff/'),
-    PropTypes = require('./PropTypes'),
-    Writer = require('./util/Writer'),
-    Logger = require('./util/Logger');
+    PropTypes = require('./core/PropTypes'),
+    Writer = require('./core/Writer');
 
 require("babel/polyfill");
 
@@ -10,6 +9,7 @@ function traverse(element, buffer, offset=0) {
       propTypes, base = offset, err;
 
   if (!element) {
+    console.warn('Kontainer.renderToArrayBuffer: null element.');
     return 0;
   }
 
@@ -37,16 +37,18 @@ function traverse(element, buffer, offset=0) {
     instance = element.instance = new type(props);
   }
 
+  // Write self to the array buffer.
   base += instance.serialize(buffer, offset);
 
+  // Write children to the array buffer.
   children.forEach(child => {
     base += traverse(child, buffer, base);
   });
 
-  instance.size = base - offset;
-  instance.updateSize(buffer, offset);
+  // Update the size.
+  instance.setSize(base - offset, buffer, offset);
 
-  return instance.size;
+  return instance.getSize();
 }
 
 function renderToArrayBuffer(element) {
@@ -59,12 +61,6 @@ function renderToArrayBuffer(element) {
   buffer = new Uint8Array(size);
   traverse(element, buffer);
 
-/*
-  console.log('size=', buffer.length);
-  for (var i = 0, il = buffer.length; i < il; i++) {
-    console.log(buffer[i]);
-  }
-  */
   return buffer.buffer;
 }
 
@@ -72,6 +68,5 @@ module.exports = {
   renderToArrayBuffer: renderToArrayBuffer,
   IsoBmff: IsoBmff,
   PropTypes: PropTypes,
-  Writer: Writer,
-  Logger: Logger
+  Writer: Writer
 };

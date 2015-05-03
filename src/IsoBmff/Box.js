@@ -1,9 +1,9 @@
-var Writer = require('../util/Writer');
+var Component = require('../core/Component'),
+    Writer = require('../core/Writer');
 
-class Box {
+class Box extends Component {
   constructor(type, props) {
-    this.type = type;
-    this.props = props;
+    super(type, props);
     this.size = 0;
   }
 
@@ -28,9 +28,12 @@ class Box {
     return base - offset;
   }
 
-  updateSize(buffer, offset=0) {
-    var base = offset,
-        size = this.size;
+  getSize() {
+    return this.size;
+  }
+
+  setSize(size, buffer, offset=0) {
+    var base = offset;
 
     if (size < 4294967296) {
       base += Writer.writeNumber(size, buffer, base, 4);

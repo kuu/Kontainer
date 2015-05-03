@@ -1,11 +1,11 @@
-'use strict';
-
 var Box = require('./Box');
 
-function FullBox(boxType, v, f) {
-  Box(boxType);
-  this.version = v; // unsigned int(8)
-  this.flag = f; // bit(24)
+class FullBox extends Box {
+  constructor(type, props, version, flags) {
+    super(type, props);
+    this.version = version; // unsigned int(8)
+    this.flag = flags; // bit(24)
+  }
 }
 
 module.exports = FullBox;

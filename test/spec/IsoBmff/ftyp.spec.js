@@ -17,7 +17,7 @@ describe('FileTypeBox', function () {
       ];
 
   it('can be initialized with the default values', function () {
-    var buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('ftyp'));
+    var buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'isom'}));
     var array = new Uint8Array(buffer);
     expect(array.length).toBe(defaultValue.length);
     for (var i = 0, il = array.length; i < il; i++) {

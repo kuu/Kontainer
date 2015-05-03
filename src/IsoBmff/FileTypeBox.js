@@ -32,13 +32,12 @@ class FileTypeBox extends Box {
 FileTypeBox.COMPACT_NAME = 'ftyp';
 
 FileTypeBox.propTypes = {
-  majorBrand: PropTypes.string,
+  majorBrand: PropTypes.string.isRequired,
   minorVersion: PropTypes.number,
   compatibleBrands: PropTypes.arrayOf(PropTypes.string)
 };
 
 FileTypeBox.defaultProps = {
-  majorBrand: 'isom',
   minorVersion: 0,
   compatibleBrands: []
 };

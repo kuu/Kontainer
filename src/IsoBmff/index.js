@@ -58,21 +58,25 @@ function createElement(type, props, children) {
 
   void children;
 
+  // Validate type.
   if (typeof type === 'string') {
     type = clazz[type];
     if (!type) {
-      console.error('IsoBmff.createElement: invalid type.');
+      console.error('IsoBmff.createElement: invalid type: "' + type + '"');
       return null;
     }
     arguments[0] = type;
-  } else if (!type || typeof type.prototype.serialize !== 'function') {
-    console.error('IsoBmff.createElement: type should be a string or a class object.');
+  } else if (!type || !(type.prototype instanceof Box)) {
+    console.error('IsoBmff.createElement: "type" should be a subclass of the Box.');
     return null;
   }
 
-  element = MediaFormat.createElement.apply(this, arguments);
+  // Create element.
+  if (!(element = MediaFormat.createElement.apply(this, arguments))) {
+    return null;
+  }
 
-  // Validate children
+  // Validate children.
   context = {
     container: type.COMPACT_NAME,
     mandatoryCheckList: new Map(type.spec.mandatoryBoxList.map(boxType => [boxType, false])),

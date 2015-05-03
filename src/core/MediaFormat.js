@@ -1,3 +1,5 @@
+var Component = require('./Component');
+
 function Element(type, props) {
   this.type = type;
   this.props = props;
@@ -14,9 +16,27 @@ function extractChild(child, childArray) {
   }
 }
 
+function isValidComponentClass(type) {
+  var proto = type.prototype;
+
+  if (proto instanceof Component &&
+      typeof proto.serialize === 'function' &&
+      typeof proto.getSize === 'function' &&
+      typeof proto.setSize === 'function') {
+    return true;
+  }
+  return false;
+}
+
 function createElement(type, props={}, children) {
   var childrenArgsLen = arguments.length - 2,
       childArray = [], defaultProps;
+
+  // Validate type
+  if (!isValidComponentClass(type)) {
+    console.error('MediaFormat.createElement: the class does not implement necessary methods.');
+    return null;
+  }
 
   // Resolve children
   if (childrenArgsLen === 1) {

@@ -16,6 +16,11 @@ describe('FileTypeBox', function () {
         105, 115, 111, 50 // compatible_brands[1]='iso2'
       ];
 
+  it('requires major_brand', function () {
+    var buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('ftyp'));
+    expect(buffer).toBe(null);
+  });
+
   it('can be initialized with the default values', function () {
     var buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'isom'}));
     var array = new Uint8Array(buffer);

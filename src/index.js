@@ -30,7 +30,7 @@ function traverse(element, buffer, offset=0) {
         return true;
       })) {
         console.error('Kontainer.renderToArrayBuffer: Validation failed: ' + err.message);
-        return null;
+        return 0;
       }
     }
     // Instantiation
@@ -56,6 +56,10 @@ function renderToArrayBuffer(element) {
 
   // Culculate the entire byte size.
   size = traverse(element);
+
+  if (!size) {
+    return null;
+  }
 
   // Write to the array buffer.
   buffer = new Uint8Array(size);

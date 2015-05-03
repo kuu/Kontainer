@@ -28,9 +28,11 @@ function isValidComponentClass(type) {
   return false;
 }
 
-function createElement(type, props={}, children) {
+function createElement(type, props, children) {
   var childrenArgsLen = arguments.length - 2,
       childArray = [], defaultProps;
+
+  props = props || {};
 
   // Validate type
   if (!isValidComponentClass(type)) {

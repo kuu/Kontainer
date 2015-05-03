@@ -33,15 +33,13 @@ class Box extends Component {
   }
 
   setSize(size, buffer, offset=0) {
-    var base = offset;
-
     if (size < 4294967296) {
-      base += Writer.writeNumber(size, buffer, base, 4);
+      Writer.writeNumber(size, buffer, offset, 4);
     } else {
       console.error('IsoBmff.Box.serialize: largesize(>4GB) is not supported.');
       return 0;
     }
-    return base - offset;
+    this.size = size;
   }
 }
 

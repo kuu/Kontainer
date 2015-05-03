@@ -1,6 +1,8 @@
+/*global describe, it, expect */
 describe('FileTypeBox', function () {
-  var Kontainer = require('../../../src/'),
-      IsoBmff = Kontainer.IsoBmff,
+  var Kontainer = require('../../../src/');
+
+  var IsoBmff = Kontainer.IsoBmff,
       defaultValue = [
         0, 0, 0, 16, // size=16
         102, 116, 121, 112, // type='ftyp'
@@ -31,7 +33,7 @@ describe('FileTypeBox', function () {
   });
 
   it('can be initialized with the specified values', function () {
-    var buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'avc1', minorVersion: 2, compatibleBrands:['isom', 'iso2']}));
+    var buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}));
     var array = new Uint8Array(buffer);
     expect(array.length).toBe(avc1Value.length);
     for (var i = 0, il = array.length; i < il; i++) {

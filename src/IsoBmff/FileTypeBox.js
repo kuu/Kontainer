@@ -11,9 +11,8 @@ class FileTypeBox extends Box {
     var majorBrand = this.props.majorBrand,
         minorVersion = this.props.minorVersion,
         compatibleBrands = this.props.compatibleBrands,
-        base = offset;
+        base = offset + Box.HEADER_LENGTH;
 
-    base += Box.HEADER_LENGTH;
     base += Writer.writeString(majorBrand, buffer, base, 4);
     base += Writer.writeNumber(minorVersion, buffer, base, 4);
     compatibleBrands.forEach(brand => {

@@ -79,7 +79,23 @@ function writeNumber(num, buffer, offset, length=4) {
   return base - offset;
 }
 
+function writeFixedNumber(num, buffer, offset, length=4) {
+  var base = offset,
+      left = num > 0 ? Math.floor(num) : Math.ceil(num),
+      right = parseFloat('0.' + String(num).split(".")[1]),
+      half = length / 2;
+
+  base += writeNumber(left, buffer, base, half);
+
+  right = Math.floor(right * (1 << (half * 8)));
+
+  base += writeNumber(right, buffer, base, half);
+
+  return base - offset;
+}
+
 module.exports = {
   writeString: writeString,
-  writeNumber: writeNumber
+  writeNumber: writeNumber,
+  writeFixedNumber: writeFixedNumber
 };

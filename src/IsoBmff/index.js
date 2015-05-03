@@ -5,7 +5,10 @@ var MediaFormat = require('../core/MediaFormat'),
     FullBox = require('./FullBox');
 
 var clazz = {
-  ftyp: require('./FileTypeBox')
+  file: require('./File'),
+  ftyp: require('./FileTypeBox'),
+  moov: require('./MovieBox'),
+  mvhd: require('./MovieHeaderBox')
 };
 
 function validateChild(context, child) {
@@ -23,7 +26,7 @@ function validateChild(context, child) {
       container = [childSpec.container];
     }
     if (container.indexOf(context.container) === -1) {
-      return false;
+      return [false, 'Container of ' + childName + ' is wrong.'];
     }
   }
 
@@ -43,32 +46,36 @@ function validateChild(context, child) {
     // Validate
     if (quantity === Box.QUANTITY_EXACTLY_ONE) {
       if (quantityTable[childName] !== 1) {
-        return false;
+        return [false, 'Quantity of ' + childName + ' should be exactly one.'];
       }
     } else if (quantity === Box.QUANTITY_ZERO_OR_ONE) {
       if (quantityTable[childName] > 1) {
-        return false;
+        return [false, 'Quantity of ' + childName + ' should be zero or one.'];
       }
     }
   }
+  return [true, null];
 }
 
 function createElement(type, props, children) {
-  var element, context = {};
+  var componentClass, element, context = {},
+      spec, result, errorMessage;
 
   void children;
 
   // Validate type.
   if (typeof type === 'string') {
-    type = clazz[type];
-    if (!type) {
+    componentClass = clazz[type];
+    if (!componentClass) {
       console.error('IsoBmff.createElement: invalid type: "' + type + '"');
       return null;
     }
-    arguments[0] = type;
+    arguments[0] = componentClass;
   } else if (!type || !(type.prototype instanceof Box)) {
     console.error('IsoBmff.createElement: "type" should be a subclass of the Box.');
     return null;
+  } else {
+    componentClass = type;
   }
 
   // Create element.
@@ -77,18 +84,29 @@ function createElement(type, props, children) {
   }
 
   // Validate children.
+  spec = componentClass.spec;
   context = {
-    container: type.COMPACT_NAME,
-    mandatoryCheckList: new Map(type.spec.mandatoryBoxList.map(boxType => [boxType, false])),
+    container: componentClass.COMPACT_NAME,
+    mandatoryCheckList: new Map(spec.mandatoryBoxList.map(boxType => [boxType, false])),
     quantityTable: {}
   };
 
   if (!element.props.children.every(child => {
-      return validateChild(context, child);
+      [result, errorMessage] = validateChild(context, child);
+      return result;
     })) {
-    console.error('IsoBmff.createElement: Breaking the rule of composition.');
+    console.error('IsoBmff.createElement: Breaking the rule of composition: ' + errorMessage);
     return null;
   }
+
+  spec.mandatoryBoxList.forEach(boxType => {
+    if (!context.mandatoryCheckList.get(boxType)) {
+      console.error('IsoBmff.createElement: Breaking the rule of composition: "' +
+        boxType + '" is required as a child of "' + context.container + '"');
+      element = null;
+    }
+  });
+
   return element;
 }
 

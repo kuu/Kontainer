@@ -5,6 +5,7 @@ var Box = require('./Box'),
 class FileTypeBox extends Box {
   constructor(props) {
     super(FileTypeBox.COMPACT_NAME, props);
+    // Validate props.
   }
 
   serialize(buffer, offset=0) {

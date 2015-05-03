@@ -1,7 +1,7 @@
 function Element(type, props) {
   this.type = type;
   this.props = props;
-  this.instance = new type(props);
+  this.instance = null; // Instantiation is deferred until the rendering time.
 }
 
 function extractChild(child, childArray) {

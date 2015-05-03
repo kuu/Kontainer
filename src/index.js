@@ -6,15 +6,36 @@ var IsoBmff = require('./IsoBmff/'),
 require("babel/polyfill");
 
 function traverse(element, buffer, offset=0) {
-  var instance, props, children, base = offset;
+  var type, props, children, instance,
+      propTypes, base = offset, err;
 
   if (!element) {
     return 0;
   }
 
-  instance = element.instance;
-  props = instance.props;
+  type = element.type;
+  props = element.props;
   children = props.children;
+  instance = element.instance;
+
+  if (!instance) {
+    // Validate props
+    propTypes = type.propTypes;
+    if (propTypes) {
+      if (!Object.keys(propTypes).every(key => {
+        err = propTypes[key](props, key, type.COMPACT_NAME);
+        if (err) {
+          return false;
+        }
+        return true;
+      })) {
+        console.error('Kontainer.renderToArrayBuffer: Validation failed: ' + err.message);
+        return null;
+      }
+    }
+    // Instantiation
+    instance = element.instance = new type(props);
+  }
 
   base += instance.serialize(buffer, offset);
 

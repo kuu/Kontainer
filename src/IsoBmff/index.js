@@ -82,7 +82,7 @@ function createElement(type, props, children) {
   if (!element.props.children.every(child => {
       return validateChild(context, child);
     })) {
-    console.error('MediaFormat.createElement: Breaking the rule of composition.');
+    console.error('IsoBmff.createElement: Breaking the rule of composition.');
     return null;
   }
   return element;

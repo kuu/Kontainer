@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "lint": "eslint src/",
+    "lint": "eslint src/ test/",
     "clean": "npm run clean-src && npm run clean-test",
     "clean-src": "rm -fR transpiled/src ; mkdir -p transpiled/src",
     "clean-test": "rm -fR transpiled/test ; mkdir -p transpiled/test",
@@ -20,6 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "babel": "^5.2.2",
+    "babel-eslint": "^3.0.1",
     "eslint": "^0.20.0",
     "jasmine-node": "^1.14.5"
   }

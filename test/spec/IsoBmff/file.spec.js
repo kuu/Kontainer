@@ -29,7 +29,9 @@ describe('File', function () {
         IsoBmff.createElement('mvhd'),
         IsoBmff.createElement('trak', null,
           IsoBmff.createElement('tkhd'),
-          IsoBmff.createElement('mdia')
+          IsoBmff.createElement('mdia', null,
+            IsoBmff.createElement('mdhd')
+          )
         )
       )
     ));

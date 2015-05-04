@@ -10,7 +10,8 @@ var clazz = {
   moov: require('./MovieBox'),
   mvhd: require('./MovieHeaderBox'),
   trak: require('./TrackBox'),
-  tkhd: require('./TrackHeaderBox')
+  tkhd: require('./TrackHeaderBox'),
+  mdia: require('./MediaBox')
 };
 
 function validateChild(context, child) {

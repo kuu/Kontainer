@@ -28,7 +28,8 @@ describe('File', function () {
       IsoBmff.createElement('moov', null,
         IsoBmff.createElement('mvhd'),
         IsoBmff.createElement('trak', null,
-          IsoBmff.createElement('tkhd')
+          IsoBmff.createElement('tkhd'),
+          IsoBmff.createElement('mdia')
         )
       )
     ));

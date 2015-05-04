@@ -31,7 +31,8 @@ describe('File', function () {
           IsoBmff.createElement('tkhd'),
           IsoBmff.createElement('mdia', null,
             IsoBmff.createElement('mdhd'),
-            IsoBmff.createElement('hdlr')
+            IsoBmff.createElement('hdlr'),
+            IsoBmff.createElement('minf')
           )
         )
       )

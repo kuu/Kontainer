@@ -13,7 +13,8 @@ var clazz = {
   tkhd: require('./TrackHeaderBox'),
   mdia: require('./MediaBox'),
   mdhd: require('./MediaHeaderBox'),
-  hdlr: require('./HandlerReferenceBox')
+  hdlr: require('./HandlerReferenceBox'),
+  minf: require('./MediaInformationBox')
 };
 
 function validateChild(context, child) {

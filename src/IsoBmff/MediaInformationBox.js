@@ -16,7 +16,7 @@ MediaInformationBox.COMPACT_NAME = 'minf';
 MediaInformationBox.spec = {
   container: 'mdia',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: ['vmhd', 'smhd', 'hmhd', 'nmhd', 'dinf', 'stbl']
+  mandatoryBoxList: ['dinf', 'stbl']
 };
 
 module.exports = MediaInformationBox;

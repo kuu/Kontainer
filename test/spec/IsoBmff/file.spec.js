@@ -32,7 +32,9 @@ describe('File', function () {
           IsoBmff.createElement('mdia', null,
             IsoBmff.createElement('mdhd'),
             IsoBmff.createElement('hdlr'),
-            IsoBmff.createElement('minf')
+            IsoBmff.createElement('minf', null,
+              IsoBmff.createElement('vmhd')
+            )
           )
         )
       )

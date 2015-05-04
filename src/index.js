@@ -29,7 +29,7 @@ function traverse(element, buffer, offset=0) {
         }
         return true;
       })) {
-        console.error('Kontainer.renderToArrayBuffer: Validation failed: ' + err.message);
+        console.error('Kontainer.renderToArrayBuffer: Prop validation failed: ' + err.message);
         return 0;
       }
     }

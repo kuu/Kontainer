@@ -22,7 +22,6 @@ class MovieHeaderBox extends FullBox {
         byteLength = version ? 8 : 4,
         base = offset + FullBox.HEADER_LENGTH;
 
-    // creationTime in seconds since midnight, Jan. 1, 1904, in UTC time
     base += Writer.writeNumber(FullBox.convertTime(creationTime), buffer, base, byteLength);
     base += Writer.writeNumber(FullBox.convertTime(modificationTime), buffer, base, byteLength);
     base += Writer.writeNumber(timeScale, buffer, base, 4);
@@ -30,9 +29,9 @@ class MovieHeaderBox extends FullBox {
     base += Writer.writeFixedNumber(rate, buffer, base, 4);
     base += Writer.writeFixedNumber(volume, buffer, base, 2);
     base += Writer.writeNumber(0, buffer, base, 10);
-    matrix.forEach(index => {
-      base += Writer.writeFixedNumber(index, buffer, base, 4);
-    });
+    for (var i = 0; i < 9; i++) {
+      base += Writer.writeFixedNumber(matrix[i], buffer, base, 4);
+    }
     base += Writer.writeNumber(0, buffer, base, 24);
     base += Writer.writeNumber(nextTrackId, buffer, base, 4);
 

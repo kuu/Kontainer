@@ -8,7 +8,8 @@ var clazz = {
   file: require('./File'),
   ftyp: require('./FileTypeBox'),
   moov: require('./MovieBox'),
-  mvhd: require('./MovieHeaderBox')
+  mvhd: require('./MovieHeaderBox'),
+  trak: require('./TrackBox')
 };
 
 function validateChild(context, child) {
@@ -95,13 +96,13 @@ function createElement(type, props, children) {
       [result, errorMessage] = validateChild(context, child);
       return result;
     })) {
-    console.error('IsoBmff.createElement: Breaking the rule of composition: ' + errorMessage);
+    console.error('IsoBmff.createElement: Breaking the composition rule: ' + errorMessage);
     return null;
   }
 
   spec.mandatoryBoxList.forEach(boxType => {
     if (!context.mandatoryCheckList.get(boxType)) {
-      console.error('IsoBmff.createElement: Breaking the rule of composition: "' +
+      console.error('IsoBmff.createElement: Breaking the composition rule: "' +
         boxType + '" is required as a child of "' + context.container + '"');
       element = null;
     }

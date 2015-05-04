@@ -26,7 +26,8 @@ describe('File', function () {
     buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('file', null,
       IsoBmff.createElement('ftyp', {majorBrand: 'isom'}),
       IsoBmff.createElement('moov', null,
-        IsoBmff.createElement('mvhd')
+        IsoBmff.createElement('mvhd'),
+        IsoBmff.createElement('trak')
       )
     ));
     expect(buffer).not.toBe(null);

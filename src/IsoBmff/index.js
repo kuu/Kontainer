@@ -15,7 +15,8 @@ var clazz = {
   mdhd: require('./MediaHeaderBox'),
   hdlr: require('./HandlerReferenceBox'),
   minf: require('./MediaInformationBox'),
-  vmhd: require('./VideoMediaHeaderBox')
+  vmhd: require('./VideoMediaHeaderBox'),
+  smhd: require('./SoundMediaHeaderBox')
 };
 
 function validateChild(context, child) {

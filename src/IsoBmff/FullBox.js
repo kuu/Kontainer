@@ -36,7 +36,7 @@ class FullBox extends Box {
 
   static convertTime(date) {
     const SECONDS_BTW_1904_1970 = 2082844800;
-    return Math.floor(date.getTime() / 1000) + SECONDS_BTW_1904_1970;
+    return ((date.getTime() / 1000) | 0) + SECONDS_BTW_1904_1970;
   }
 }
 

@@ -27,7 +27,9 @@ describe('File', function () {
       IsoBmff.createElement('ftyp', {majorBrand: 'isom'}),
       IsoBmff.createElement('moov', null,
         IsoBmff.createElement('mvhd'),
-        IsoBmff.createElement('trak')
+        IsoBmff.createElement('trak', null,
+          IsoBmff.createElement('tkhd')
+        )
       )
     ));
     expect(buffer).not.toBe(null);

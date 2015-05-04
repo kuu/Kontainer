@@ -83,7 +83,7 @@ function writeFixedNumber(num, buffer, offset, length=4) {
   var base = offset,
       left = num > 0 ? Math.floor(num) : Math.ceil(num),
       right = parseFloat('0.' + String(num).split(".")[1]),
-      half = length / 2;
+      half = Math.min(length / 2, 2);
 
   base += writeNumber(left, buffer, base, half);
 

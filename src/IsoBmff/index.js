@@ -9,7 +9,8 @@ var clazz = {
   ftyp: require('./FileTypeBox'),
   moov: require('./MovieBox'),
   mvhd: require('./MovieHeaderBox'),
-  trak: require('./TrackBox')
+  trak: require('./TrackBox'),
+  tkhd: require('./TrackHeaderBox')
 };
 
 function validateChild(context, child) {

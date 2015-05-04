@@ -30,7 +30,8 @@ describe('File', function () {
         IsoBmff.createElement('trak', null,
           IsoBmff.createElement('tkhd'),
           IsoBmff.createElement('mdia', null,
-            IsoBmff.createElement('mdhd')
+            IsoBmff.createElement('mdhd'),
+            IsoBmff.createElement('hdlr')
           )
         )
       )

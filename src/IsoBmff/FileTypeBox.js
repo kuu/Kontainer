@@ -1,6 +1,7 @@
 var Box = require('./Box'),
     PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer');
+    Writer = require('../core/Writer'),
+    Reader = require('../core/Reader');
 
 class FileTypeBox extends Box {
   constructor(props) {
@@ -24,6 +25,34 @@ class FileTypeBox extends Box {
     super.serialize(buffer, offset);
 
     return this.size;
+  }
+
+  static parse(buffer, offset=0) {
+    var base = offset,
+        readBytesNum, props, boxEnd,
+        majorBrand, minorVersion,
+        brand, compatibleBrands;
+
+    [readBytesNum, props] = Box.parse(buffer, base);
+    base += readBytesNum;
+    boxEnd = offset + props.size;
+
+    [readBytesNum, majorBrand] = Reader.readString(buffer, base, 4);
+    base += readBytesNum;
+
+    [readBytesNum, minorVersion] = Reader.readNumber(buffer, base, 4);
+    base += readBytesNum;
+
+    props.majorBrand = majorBrand;
+    props.minorVersion = minorVersion;
+    compatibleBrands = props.compatibleBrands = [];
+    while (base < boxEnd) {
+      [readBytesNum, brand] = Reader.readString(buffer, base, 4);
+      compatibleBrands.push(brand);
+      base += readBytesNum;
+    }
+
+    return [base - offset, props];
   }
 }
 

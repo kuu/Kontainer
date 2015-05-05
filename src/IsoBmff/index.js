@@ -1,8 +1,7 @@
 'use strict';
 
 var MediaFormat = require('../core/MediaFormat'),
-    Box = require('./Box'),
-    FullBox = require('./FullBox');
+    Box = require('./Box');
 
 var clazz = {
   file: require('./File'),
@@ -119,8 +118,63 @@ function createElement(type, props, children) {
   return element;
 }
 
+function parse(buffer, offset) {
+  var readBytesNum, props, boxSize, boxType, boxClass,
+      base = offset, boxEnd, element, children = [];
+
+  // Read the Box params as we don't know the type.
+  [readBytesNum, props] = Box.parse(buffer, offset);
+  if (!props) {
+    console.error('IsoBmff.createElementFromArrayBuffer: Failed to parse.');
+    return [0, null];
+  }
+
+  boxType = props.type;
+  boxSize = props.size;
+
+  if (boxType === 'uuid') {
+    boxType = props.extendedType;
+  }
+
+  boxClass = clazz[boxType];
+  if (!boxClass) {
+    console.error('IsoBmff.createElementFromArrayBuffer: Unsupported type - ' + boxType);
+    return [0, null];
+  }
+
+  [readBytesNum, props] = boxClass.parse(buffer, offset);
+  if (!props) {
+    console.error('IsoBmff.createElementFromArrayBuffer: Failed to parse.');
+    return [0, null];
+  }
+
+  base += (boxSize || readBytesNum);
+  boxEnd = buffer.length;
+
+  while (base < boxEnd) {
+    [readBytesNum, element] = parse(buffer, base);
+    if (!element) {
+      break;
+    }
+    children.push(element);
+    base += (element.props.size || readBytesNum);
+  }
+  return [base - offset, MediaFormat.createElement(boxClass, props, children)];
+}
+
+function createElementFromArrayBuffer(buffer, offset=0) {
+  var readBytesNum, element;
+
+  if (buffer instanceof ArrayBuffer === false) {
+    console.error('IsoBmff.createElementFromArrayBuffer: Not an ArrayBuffer.');
+    return null;
+  }
+  [readBytesNum, element] = parse(new Uint8Array(buffer), offset);
+  void readBytesNum;
+  return element;
+}
+
 module.exports = {
-  Box: Box,
-  FullBox: FullBox,
-  createElement: createElement
+  createElement: createElement,
+  createElementFromArrayBuffer: createElementFromArrayBuffer
 };

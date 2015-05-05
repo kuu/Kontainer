@@ -47,4 +47,11 @@ describe('File', function () {
       expect(array[i]).toBe(value[i]);
     }
   });
+
+  it('parses binary data', function () {
+    var b = new Uint8Array(value), elem;
+
+    elem = IsoBmff.createElementFromArrayBuffer(b.buffer);
+    expect(elem).not.toBe(null);
+  });
 });

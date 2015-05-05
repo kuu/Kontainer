@@ -1,2 +1,2 @@
 # Kontainer
-A media file format generator that exposes a React-like API.
+A media file format generator/parser that exposes a React-like API.

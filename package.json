@@ -1,7 +1,7 @@
 {
   "name": "Kontainer",
   "version": "1.0.0",
-  "description": "A media file format generator that exposes a React-like API.",
+  "description": "A media file format generator/parser that exposes a React-like API.",
   "main": "index.js",
   "directories": {
     "test": "test"

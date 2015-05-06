@@ -38,7 +38,7 @@ function validateChild(context, child) {
       container = [childSpec.container];
     }
     if (container.indexOf(context.container) === -1) {
-      return [false, 'Container of ' + childName + ' is wrong.'];
+      return [false, '"' + childName + '" cannot be a child of "' + context.container + '"'];
     }
   }
 

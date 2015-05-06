@@ -41,16 +41,18 @@ function readCharacter(buffer, offset) {
   return [base - offset, String.fromCharCode(charCode)];
 }
 
+const MAX_URL_LENGTH = 2048;
+
 function readString(buffer, offset, length) {
   var base = offset,
-      limit = offset + (length || 0),
+      limit = offset + (length || MAX_URL_LENGTH),
       readBytesNum, ch, str = '';
 
   while (base < limit) {
     [readBytesNum, ch] = readCharacter(buffer, base);
     if (!ch) {
-      str = null;
-      base = offset;
+      // Null terminated string.
+      base += readBytesNum;
       break;
     }
     str += ch;

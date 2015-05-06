@@ -34,7 +34,12 @@ describe('File', function () {
             IsoBmff.createElement('hdlr'),
             IsoBmff.createElement('minf', null,
               IsoBmff.createElement('vmhd'),
-              IsoBmff.createElement('dinf')
+              IsoBmff.createElement('dinf', null,
+                IsoBmff.createElement('dref', null,
+                  IsoBmff.createElement('url '),
+                  IsoBmff.createElement('urn ')
+                )
+              )
             )
           )
         )

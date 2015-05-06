@@ -4,19 +4,22 @@ var MediaFormat = require('../core/MediaFormat'),
     Box = require('./Box');
 
 var clazz = {
-  file: require('./File'),
-  ftyp: require('./FileTypeBox'),
-  moov: require('./MovieBox'),
-  mvhd: require('./MovieHeaderBox'),
-  trak: require('./TrackBox'),
-  tkhd: require('./TrackHeaderBox'),
-  mdia: require('./MediaBox'),
-  mdhd: require('./MediaHeaderBox'),
-  hdlr: require('./HandlerReferenceBox'),
-  minf: require('./MediaInformationBox'),
-  vmhd: require('./VideoMediaHeaderBox'),
-  smhd: require('./SoundMediaHeaderBox'),
-  dinf: require('./DataInformationBox')
+  'file': require('./File'),
+  'ftyp': require('./FileTypeBox'),
+  'moov': require('./MovieBox'),
+  'mvhd': require('./MovieHeaderBox'),
+  'trak': require('./TrackBox'),
+  'tkhd': require('./TrackHeaderBox'),
+  'mdia': require('./MediaBox'),
+  'mdhd': require('./MediaHeaderBox'),
+  'hdlr': require('./HandlerReferenceBox'),
+  'minf': require('./MediaInformationBox'),
+  'vmhd': require('./VideoMediaHeaderBox'),
+  'smhd': require('./SoundMediaHeaderBox'),
+  'dinf': require('./DataInformationBox'),
+  'dref': require('./DataReferenceBox'),
+  'url ': require('./DataEntryUrlBox'),
+  'urn ': require('./DataEntryUrnBox')
 };
 
 function validateChild(context, child) {

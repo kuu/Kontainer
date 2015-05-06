@@ -1,7 +1,8 @@
 var Box = require('./Box'),
     FullBox = require('./FullBox'),
     PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer');
+    Writer = require('../core/Writer'),
+    Reader = require('../core/Reader');
 
 class HandlerReferenceBox extends FullBox {
   constructor(props) {
@@ -24,6 +25,31 @@ class HandlerReferenceBox extends FullBox {
     super.serialize(buffer, offset);
 
     return this.size;
+  }
+
+  static parse(buffer, offset=0) {
+    var base = offset,
+        readBytesNum, props, boxEnd,
+        handlerType, name;
+
+    [readBytesNum, props] = FullBox.parse(buffer, base);
+    base += readBytesNum;
+    boxEnd = offset + props.size;
+
+    base += 4; // skip reserved
+
+    [readBytesNum, handlerType] = Reader.readString(buffer, base, 4);
+    base += readBytesNum;
+
+    base += 12; // skip reserved
+
+    [readBytesNum, name] = Reader.readString(buffer, base, boxEnd - base);
+    base += readBytesNum;
+
+    props.handlerType = handlerType;
+    props.name = name;
+
+    return [base - offset, props];
   }
 }
 

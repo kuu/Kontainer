@@ -17,6 +17,16 @@ class Component {
   setSize(size, buffer, offset) {
     void offset;
   }
+
+  // virtual
+  toString(context) {
+    void context;
+  }
+
+  // virtual
+  static parse(buffer, offset) {
+    void offset;
+  }
 }
 
 module.exports = Component;

@@ -1,7 +1,8 @@
 var Box = require('./Box'),
     FullBox = require('./FullBox'),
     PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer');
+    Writer = require('../core/Writer'),
+    Reader = require('../core/Reader');
 
 class VideoMediaHeaderBox extends FullBox {
   constructor(props) {
@@ -24,6 +25,32 @@ class VideoMediaHeaderBox extends FullBox {
     super.serialize(buffer, offset);
 
     return this.size;
+  }
+
+  static parse(buffer, offset=0) {
+    var base = offset,
+        readBytesNum, props,
+        graphicsMode, r, g, b;
+
+    [readBytesNum, props] = FullBox.parse(buffer, base);
+    base += readBytesNum;
+
+    [readBytesNum, graphicsMode] = Reader.readNumber(buffer, base, 2);
+    base += readBytesNum;
+
+    [readBytesNum, r] = Reader.readNumber(buffer, base, 2);
+    base += readBytesNum;
+
+    [readBytesNum, g] = Reader.readNumber(buffer, base, 2);
+    base += readBytesNum;
+
+    [readBytesNum, b] = Reader.readNumber(buffer, base, 2);
+    base += readBytesNum;
+
+    props.graphicMode = graphicsMode;
+    props.opColor = {r: r, g: g, b: b};
+
+    return [base - offset, props];
   }
 }
 

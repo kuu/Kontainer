@@ -94,8 +94,30 @@ function writeFixedNumber(num, buffer, offset, length=4) {
   return base - offset;
 }
 
+function writeIso639Lang(language, buffer, offset) {
+  var base = offset, charCode, num = 0;
+
+  if (language.length !== 3) {
+    return 0;
+  }
+
+  for (var i = 0; i < 3; i++) {
+    charCode = language.charCodeAt(i);
+    if (charCode > 0x1F) {
+      return 0;
+    }
+    num <<= 5;
+    num |= charCode;
+  }
+
+  base += writeNumber(num, buffer, base, 2);
+
+  return base - offset;
+}
+
 module.exports = {
   writeString: writeString,
   writeNumber: writeNumber,
-  writeFixedNumber: writeFixedNumber
+  writeFixedNumber: writeFixedNumber,
+  writeIso639Lang: writeIso639Lang
 };

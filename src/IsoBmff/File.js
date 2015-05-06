@@ -5,14 +5,20 @@ class File extends Box {
     super(File.COMPACT_NAME, props);
   }
 
-  serialize(buffer, offset) {
-    void offset;
+  serialize() {
     return 0;
   }
 
-  setSize(size, buffer, offset) {
-    void offset;
+  setSize() {
     // Nop
+  }
+
+  toString() {
+    return null;
+  }
+
+  static parse() {
+    return [0, null];
   }
 }
 

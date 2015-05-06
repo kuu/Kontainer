@@ -1,5 +1,6 @@
 var Box = require('./Box'),
-    Writer = require('../core/Writer');
+    Writer = require('../core/Writer'),
+    Reader = require('../core/Reader');
 
 class FullBox extends Box {
   constructor(type, props, version, flags) {
@@ -34,9 +35,34 @@ class FullBox extends Box {
     return this.size;
   }
 
-  static convertTime(date) {
+  static parse(buffer, offset=0) {
+    var base = offset,
+        readBytesNum, props,
+        version, flags;
+
+    [readBytesNum, props] = Box.parse(buffer, base);
+    base += readBytesNum;
+
+    [readBytesNum, version] = Reader.readNumber(buffer, base, 1);
+    base += readBytesNum;
+
+    [readBytesNum, flags] = Reader.readNumber(buffer, base, 3);
+    base += readBytesNum;
+
+    props.version = version;
+    props.flags = flags;
+
+    return [base - offset, props];
+  }
+
+  static date2sec(date) {
     const SECONDS_BTW_1904_1970 = 2082844800;
     return ((date.getTime() / 1000) | 0) + SECONDS_BTW_1904_1970;
+  }
+
+  static sec2date(sec) {
+    const SECONDS_BTW_1904_1970 = 2082844800;
+    return new Date((sec - SECONDS_BTW_1904_1970) * 1000);
   }
 }
 

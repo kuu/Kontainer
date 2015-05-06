@@ -1,7 +1,8 @@
 var Box = require('./Box'),
     FullBox = require('./FullBox'),
     PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer');
+    Writer = require('../core/Writer'),
+    Reader = require('../core/Reader');
 
 class MovieHeaderBox extends FullBox {
   constructor(props) {
@@ -22,8 +23,8 @@ class MovieHeaderBox extends FullBox {
         byteLength = version ? 8 : 4,
         base = offset + FullBox.HEADER_LENGTH;
 
-    base += Writer.writeNumber(FullBox.convertTime(creationTime), buffer, base, byteLength);
-    base += Writer.writeNumber(FullBox.convertTime(modificationTime), buffer, base, byteLength);
+    base += Writer.writeNumber(FullBox.date2sec(creationTime), buffer, base, byteLength);
+    base += Writer.writeNumber(FullBox.date2sec(modificationTime), buffer, base, byteLength);
     base += Writer.writeNumber(timeScale, buffer, base, 4);
     base += Writer.writeNumber(duration, buffer, base, byteLength);
     base += Writer.writeFixedNumber(rate, buffer, base, 4);
@@ -40,6 +41,58 @@ class MovieHeaderBox extends FullBox {
     super.serialize(buffer, offset);
 
     return this.size;
+  }
+
+  static parse(buffer, offset=0) {
+    var base = offset,
+        readBytesNum, props, byteLength,
+        creationTime, modificationTime,
+        timeScale, duration, rate, volume,
+        matrix = new Array(9), nextTrackId;
+
+    [readBytesNum, props] = FullBox.parse(buffer, base);
+    base += readBytesNum;
+    byteLength = props.version ? 8 : 4;
+
+    [readBytesNum, creationTime] = Reader.readNumber(buffer, base, byteLength);
+    base += readBytesNum;
+
+    [readBytesNum, modificationTime] = Reader.readNumber(buffer, base, byteLength);
+    base += readBytesNum;
+
+    [readBytesNum, timeScale] = Reader.readNumber(buffer, base, 4);
+    base += readBytesNum;
+
+    [readBytesNum, duration] = Reader.readNumber(buffer, base, byteLength);
+    base += readBytesNum;
+
+    [readBytesNum, rate] = Reader.readFixedNumber(buffer, base, 4);
+    base += readBytesNum;
+
+    [readBytesNum, volume] = Reader.readFixedNumber(buffer, base, 2);
+    base += readBytesNum;
+
+    base += 10; // skip reserved
+
+    for (var i = 0; i < 9; i++) {
+      [readBytesNum, matrix[i]] = Reader.readFixedNumber(buffer, base, 4);
+      base += readBytesNum;
+    }
+    base += 24; // skip reserved
+
+    [readBytesNum, nextTrackId] = Reader.readNumber(buffer, base, 4);
+    base += readBytesNum;
+
+    props.creationTime = FullBox.sec2date(creationTime);
+    props.modificationTime = FullBox.sec2date(modificationTime);
+    props.timeScale = timeScale;
+    props.duration = duration;
+    props.rate = rate;
+    props.volume = volume;
+    props.matrix = matrix;
+    props.nextTrackId = nextTrackId;
+
+    return [base - offset, props];
   }
 }
 

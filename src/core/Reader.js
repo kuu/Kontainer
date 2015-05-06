@@ -86,8 +86,21 @@ function readFixedNumber(buffer, offset, length=4) {
   return [base - offset, left + right];
 }
 
+function readIso639Lang(buffer, offset) {
+  var base = offset, readBytesNum, num, language = '';
+
+  [readBytesNum, num] = readNumber(buffer, base, 2);
+  base += readBytesNum;
+
+  for (var i = 3 - 1; i >= 0; i--) {
+    language = String.fromCharCode((num >>> (5 * i)) & 0x1F) + language;
+  }
+  return [base - offset, language];
+}
+
 module.exports = {
   readString: readString,
   readNumber: readNumber,
-  readFixedNumber: readFixedNumber
+  readFixedNumber: readFixedNumber,
+  readIso639Lang: readIso639Lang
 };

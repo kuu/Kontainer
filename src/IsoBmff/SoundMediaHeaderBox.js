@@ -1,7 +1,8 @@
 var Box = require('./Box'),
     FullBox = require('./FullBox'),
     PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer');
+    Writer = require('../core/Writer'),
+    Reader = require('../core/Reader');
 
 class SoundMediaHeaderBox extends FullBox {
   constructor(props) {
@@ -21,6 +22,24 @@ class SoundMediaHeaderBox extends FullBox {
     super.serialize(buffer, offset);
 
     return this.size;
+  }
+
+  static parse(buffer, offset=0) {
+    var base = offset,
+        readBytesNum, props,
+        balance;
+
+    [readBytesNum, props] = FullBox.parse(buffer, base);
+    base += readBytesNum;
+
+    [readBytesNum, balance] = Reader.readFixedNumber(buffer, base, 2);
+    base += readBytesNum;
+
+    base += 2; // skip reserved
+
+    props.balance = balance;
+
+    return [base - offset, props];
   }
 }
 

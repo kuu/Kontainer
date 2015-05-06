@@ -1,7 +1,8 @@
 var Box = require('./Box'),
     FullBox = require('./FullBox'),
     PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer');
+    Writer = require('../core/Writer'),
+    Reader = require('../core/Reader');
 
 class MediaHeaderBox extends FullBox {
   constructor(props) {
@@ -33,11 +34,11 @@ class MediaHeaderBox extends FullBox {
         byteLength = version ? 8 : 4,
         base = offset + FullBox.HEADER_LENGTH;
 
-    base += Writer.writeNumber(FullBox.convertTime(creationTime), buffer, base, byteLength);
-    base += Writer.writeNumber(FullBox.convertTime(modificationTime), buffer, base, byteLength);
+    base += Writer.writeNumber(FullBox.date2sec(creationTime), buffer, base, byteLength);
+    base += Writer.writeNumber(FullBox.date2sec(modificationTime), buffer, base, byteLength);
     base += Writer.writeNumber(timeScale, buffer, base, 4);
     base += Writer.writeNumber(duration, buffer, base, byteLength);
-    base += Writer.writeIso639_2_T(language, buffer, base, 1);
+    base += Writer.writeIso639Lang(language, buffer, base, 1);
     base += Writer.writeNumber(0, buffer, base, 2);
 
     this.size = base - offset;
@@ -45,6 +46,40 @@ class MediaHeaderBox extends FullBox {
     super.serialize(buffer, offset);
 
     return this.size;
+  }
+
+  static parse(buffer, offset=0) {
+    var base = offset,
+        readBytesNum, props, byteLength,
+        creationTime, modificationTime,
+        timeScale, duration, language;
+
+    [readBytesNum, props] = FullBox.parse(buffer, base);
+    base += readBytesNum;
+    byteLength = props.version ? 8 : 4;
+
+    [readBytesNum, creationTime] = Reader.readNumber(buffer, base, byteLength);
+    base += readBytesNum;
+
+    [readBytesNum, modificationTime] = Reader.readNumber(buffer, base, byteLength);
+    base += readBytesNum;
+
+    [readBytesNum, timeScale] = Reader.readNumber(buffer, base, 4);
+    base += readBytesNum;
+
+    [readBytesNum, duration] = Reader.readNumber(buffer, base, byteLength);
+    base += readBytesNum;
+
+    [readBytesNum, language] = Reader.readIso639Lang(buffer, base);
+    base += readBytesNum;
+
+    props.creationTime = FullBox.sec2date(creationTime);
+    props.modificationTime = FullBox.sec2date(modificationTime);
+    props.timeScale = timeScale;
+    props.duration = duration;
+    props.language = language;
+
+    return [base - offset, props];
   }
 }
 

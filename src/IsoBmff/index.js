@@ -43,11 +43,6 @@ function validateChild(context, child) {
   }
 
   // Mandatory check.
-  /*
-  if (checkList.get(childName) !== void 0) {
-    checkList.set(childName, true);
-  }
-*/
   checkList[childName] = true;
 
   // Quantity check.
@@ -102,7 +97,6 @@ function createElement(type, props, children) {
   spec = componentClass.spec;
   context = {
     container: componentClass.COMPACT_NAME,
-    //mandatoryCheckList: new Map(spec.mandatoryBoxList.map(boxType => [boxType, false])),
     mandatoryCheckList: {},
     quantityTable: {}
   };

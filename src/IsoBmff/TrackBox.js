@@ -4,11 +4,6 @@ class TrackBox extends Box {
   constructor(props) {
     super(TrackBox.COMPACT_NAME, props);
   }
-
-  serialize(buffer, offset=0) {
-    this.size = Box.HEADER_LENGTH;
-    return super.serialize(buffer, offset);
-  }
 }
 
 TrackBox.COMPACT_NAME = 'trak';

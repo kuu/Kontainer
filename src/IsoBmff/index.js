@@ -19,7 +19,8 @@ var clazz = {
   'dinf': require('./DataInformationBox'),
   'dref': require('./DataReferenceBox'),
   'url ': require('./DataEntryUrlBox'),
-  'urn ': require('./DataEntryUrnBox')
+  'urn ': require('./DataEntryUrnBox'),
+  'stbl': require('./SampleTableBox')
 };
 
 function validateChild(context, child) {
@@ -42,9 +43,12 @@ function validateChild(context, child) {
   }
 
   // Mandatory check.
+  /*
   if (checkList.get(childName) !== void 0) {
     checkList.set(childName, true);
   }
+*/
+  checkList[childName] = true;
 
   // Quantity check.
   if ((quantity = childSpec.quantity) !== Box.QUANTITY_ANY_NUMBER) {
@@ -70,7 +74,7 @@ function validateChild(context, child) {
 
 function createElement(type, props, children) {
   var componentClass, element, context = {},
-      spec, result, errorMessage;
+      spec, result, errorMessage, checkList;
 
   void children;
 
@@ -98,7 +102,8 @@ function createElement(type, props, children) {
   spec = componentClass.spec;
   context = {
     container: componentClass.COMPACT_NAME,
-    mandatoryCheckList: new Map(spec.mandatoryBoxList.map(boxType => [boxType, false])),
+    //mandatoryCheckList: new Map(spec.mandatoryBoxList.map(boxType => [boxType, false])),
+    mandatoryCheckList: {},
     quantityTable: {}
   };
 
@@ -110,12 +115,22 @@ function createElement(type, props, children) {
     return null;
   }
 
+  checkList = context.mandatoryCheckList;
+
   spec.mandatoryBoxList.forEach(boxType => {
-    if (!context.mandatoryCheckList.get(boxType)) {
-      console.error('IsoBmff.createElement: Breaking the composition rule: "' +
-        boxType + '" is required as a child of "' + context.container + '"');
-      element = null;
+    if (boxType instanceof Array) {
+      if (boxType.some(box => checkList[box])) {
+        return;
+      }
+      boxType = boxType.join('", or "');
+    } else {
+      if (checkList[boxType]) {
+        return;
+      }
     }
+    console.error('IsoBmff.createElement: Breaking the composition rule: "' +
+      boxType + '" is required as a child of "' + context.container + '"');
+    element = null;
   });
 
   return element;

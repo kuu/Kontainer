@@ -39,7 +39,8 @@ describe('File', function () {
                   IsoBmff.createElement('url '),
                   IsoBmff.createElement('urn ')
                 )
-              )
+              ),
+              IsoBmff.createElement('stbl')
             )
           )
         )

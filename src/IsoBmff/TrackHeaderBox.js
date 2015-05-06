@@ -130,6 +130,7 @@ class TrackHeaderBox extends FullBox {
     [readBytesNum, height] = Reader.readNumber(buffer, base, 4);
     base += readBytesNum;
 
+    props.flags = TrackHeaderBox.decodeFlags(props.flags);
     props.creationTime = FullBox.sec2date(creationTime);
     props.modificationTime = FullBox.sec2date(modificationTime);
     props.trackId = trackId;

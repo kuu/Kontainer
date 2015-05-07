@@ -9,7 +9,7 @@ class VideoMediaHeaderBox extends FullBox {
     super(VideoMediaHeaderBox.COMPACT_NAME, props, props.version, 1);
   }
 
-  validate(context) {
+  static validate(context) {
     var trackType = context.currentTrackType;
     if (trackType && trackType !== 'video') {
       return new Error(`"${VideoMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
@@ -17,21 +17,37 @@ class VideoMediaHeaderBox extends FullBox {
     return null;
   }
 
-  serialize(buffer, offset=0) {
-    var props = this.props,
-        graphicsMode = props.graphicsMode,
-        opColor = props.opColor,
-        base = offset + FullBox.HEADER_LENGTH;
+  static encodeGraphicsMode(mode) {
+    var m = 0;
+    if (mode === 'copy') {
+      m = 0;
+    }
+    return m;
+  }
 
+  static decodeGraphicsMode(m) {
+    var mode = 'copy';
+    if (m === 0) {
+      mode = 'copy';
+    }
+    return mode;
+  }
+  serialize(buffer, offset=0) {
+    //console.log('--- VideoMediaHeaderBox.serialize enter.');
+    var props = this.props,
+        graphicsMode = VideoMediaHeaderBox.encodeGraphicsMode(props.graphicsMode),
+        opColor = props.opColor,
+        base = offset;
+
+    base += super.serialize(buffer, base);
     base += Writer.writeNumber(graphicsMode, buffer, base, 2);
     base += Writer.writeNumber(opColor.r, buffer, base, 2);
     base += Writer.writeNumber(opColor.g, buffer, base, 2);
     base += Writer.writeNumber(opColor.b, buffer, base, 2);
 
-    this.size = base - offset;
+    super.setSize(base - offset, buffer, offset);
 
-    super.serialize(buffer, offset);
-
+    //console.log(`--- VideoMediaHeaderBox.serialize exit. size=${this.size}`);
     return this.size;
   }
 
@@ -55,7 +71,7 @@ class VideoMediaHeaderBox extends FullBox {
     [readBytesNum, b] = Reader.readNumber(buffer, base, 2);
     base += readBytesNum;
 
-    props.graphicMode = graphicsMode;
+    props.graphicsMode = VideoMediaHeaderBox.decodeGraphicsMode(graphicsMode);
     props.opColor = {r: r, g: g, b: b};
 
     return [base - offset, props];

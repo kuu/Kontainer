@@ -9,7 +9,7 @@ class SoundMediaHeaderBox extends FullBox {
     super(SoundMediaHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
 
-  validate(context) {
+  static validate(context) {
     var trackType = context.currentTrackType;
     if (trackType && trackType !== 'audio') {
       return new Error(`"${SoundMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
@@ -20,14 +20,13 @@ class SoundMediaHeaderBox extends FullBox {
   serialize(buffer, offset=0) {
     var props = this.props,
         balance = props.balance,
-        base = offset + FullBox.HEADER_LENGTH;
+        base = offset;
 
+    base += super.serialize(buffer, base);
     base += Writer.writeFixedNumber(balance, buffer, base, 2);
     base += Writer.writeNumber(0, buffer, base, 2);
 
-    this.size = base - offset;
-
-    super.serialize(buffer, offset);
+    super.setSize(base - offset, buffer, offset);
 
     return this.size;
   }

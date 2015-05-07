@@ -10,9 +10,12 @@ class FullBox extends Box {
   }
 
   serialize(buffer, offset=0) {
+    //console.log('--- FullBox.serialize enter.');
     var version = this.version,
         flags = this.flags,
-        base = offset + (this.type === 'uuid' ? Box.UUID_HEADER_LENGTH : Box.HEADER_LENGTH);
+        base = offset;
+
+    base += super.serialize(buffer, base);
 
     // version is unsigned int(8)
     if (version > 255) {
@@ -28,10 +31,9 @@ class FullBox extends Box {
 
     base += Writer.writeNumber(flags, buffer, base, 3);
 
-    this.size = base - offset;
+    super.setSize(base - offset, buffer, offset);
 
-    super.serialize(buffer, offset);
-
+    //console.log('--- FullBox.serialize exit.');
     return this.size;
   }
 
@@ -67,5 +69,3 @@ class FullBox extends Box {
 }
 
 module.exports = FullBox;
-FullBox.HEADER_LENGTH = Box.HEADER_LENGTH + 4;
-FullBox.UUID_HEADER_LENGTH = Box.UUID_HEADER_LENGTH + 4;

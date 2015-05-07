@@ -43,6 +43,7 @@ class TrackHeaderBox extends FullBox {
   }
 
   serialize(buffer, offset=0) {
+    //console.log('--- TrackHeaderBox.serialize enter.');
     var props = this.props,
         version = props.version,
         creationTime = props.creationTime || new Date(),
@@ -56,8 +57,9 @@ class TrackHeaderBox extends FullBox {
         width = props.width,
         height = props.height,
         byteLength = version ? 8 : 4,
-        base = offset + FullBox.HEADER_LENGTH;
+        base = offset;
 
+    base += super.serialize(buffer, base);
     base += Writer.writeNumber(FullBox.date2sec(creationTime), buffer, base, byteLength);
     base += Writer.writeNumber(FullBox.date2sec(modificationTime), buffer, base, byteLength);
     base += Writer.writeNumber(trackId, buffer, base, 4);
@@ -74,10 +76,9 @@ class TrackHeaderBox extends FullBox {
     base += Writer.writeNumber(width, buffer, base, 4);
     base += Writer.writeNumber(height, buffer, base, 4);
 
-    this.size = base - offset;
+    super.setSize(base - offset, buffer, offset);
 
-    super.serialize(buffer, offset);
-
+    //console.log(`--- TrackHeaderBox.serialize exit. size=${this.size}`);
     return this.size;
   }
 

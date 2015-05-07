@@ -18,6 +18,8 @@ function traverse(context, element, buffer, offset=0) {
   children = props.children;
   instance = element.instance;
 
+  //console.log(`traverse enter. type=${type.COMPACT_NAME}`);
+
   if (!instance) {
     // Validate props
     propTypes = type.propTypes;
@@ -34,7 +36,7 @@ function traverse(context, element, buffer, offset=0) {
       }
     }
     // Validate context
-    err = type.validate(context);
+    err = type.validate(context, props);
     if (err) {
       console.error('Kontainer.renderToArrayBuffer: Context validation failed: ' + err.message);
     }
@@ -53,6 +55,7 @@ function traverse(context, element, buffer, offset=0) {
   // Update the size.
   instance.setSize(base - offset, buffer, offset);
 
+  //console.log(`traverse exit. type=${type.COMPACT_NAME} size=${instance.getSize()}`);
   return instance.getSize();
 }
 

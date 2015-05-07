@@ -43,7 +43,7 @@ function writeCharacter(charCode, buffer, offset) {
     writeByte(0x80 | ((charCode >> 6) & 0x3F), buffer, base++);
     writeByte(0x80 | ((charCode >> 0) & 0x3F), buffer, base++);
   } else {
-    console.error('util.writeCharacter: Invalid char code - ' + charCode);
+    console.error('Writer.writeCharacter: Invalid char code - ' + charCode);
   }
   return base - offset;
 }
@@ -51,7 +51,8 @@ function writeCharacter(charCode, buffer, offset) {
 function writeString(str, buffer, offset, length) {
   var base = offset,
       lowerLimit = offset + (length || 0),
-      upperLimit = offset + (length || Infinity);
+      upperLimit = offset + (length || Infinity),
+      nullTerminationNeeded = (length === void 0);
 
   for (var i = 0, il = str.length; i < il; i++) {
     base += writeCharacter(str.charCodeAt(i), buffer, base);
@@ -63,6 +64,10 @@ function writeString(str, buffer, offset, length) {
 
   // padding
   while (base < lowerLimit) {
+    writeByte(0, buffer, base++);
+  }
+
+  if (nullTerminationNeeded) {
     writeByte(0, buffer, base++);
   }
   return base - offset;
@@ -98,12 +103,14 @@ function writeIso639Lang(language, buffer, offset) {
   var base = offset, charCode, num = 0;
 
   if (language.length !== 3) {
+    console.error(`Writer.writeIso639Lang: Invalid language code - ${language}`);
     return 0;
   }
 
   for (var i = 0; i < 3; i++) {
-    charCode = language.charCodeAt(i);
+    charCode = language.charCodeAt(i) - 0x60;
     if (charCode > 0x1F) {
+      console.error(`Writer.writeIso639Lang: Invalid character - ${language[i]}`);
       return 0;
     }
     num <<= 5;

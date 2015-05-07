@@ -9,8 +9,8 @@ class File extends Box {
     return 0;
   }
 
-  setSize() {
-    // Nop
+  setSize(size) {
+    this.size = size;
   }
 
   toString() {

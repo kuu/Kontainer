@@ -10,6 +10,7 @@ class MovieHeaderBox extends FullBox {
   }
 
   serialize(buffer, offset=0) {
+    //console.log('--- MovieHeaderBox.serialize enter.');
     var props = this.props,
         version = props.version,
         creationTime = props.creationTime || new Date(),
@@ -21,8 +22,9 @@ class MovieHeaderBox extends FullBox {
         matrix = props.matrix,
         nextTrackId = props.nextTrackId,
         byteLength = version ? 8 : 4,
-        base = offset + FullBox.HEADER_LENGTH;
+        base = offset;
 
+    base += super.serialize(buffer, base);
     base += Writer.writeNumber(FullBox.date2sec(creationTime), buffer, base, byteLength);
     base += Writer.writeNumber(FullBox.date2sec(modificationTime), buffer, base, byteLength);
     base += Writer.writeNumber(timeScale, buffer, base, 4);
@@ -36,10 +38,9 @@ class MovieHeaderBox extends FullBox {
     base += Writer.writeNumber(0, buffer, base, 24);
     base += Writer.writeNumber(nextTrackId, buffer, base, 4);
 
-    this.size = base - offset;
+    super.setSize(base - offset, buffer, offset);
 
-    super.serialize(buffer, offset);
-
+    //console.log(`--- MovieHeaderBox.serialize exit. size=${this.size}`);
     return this.size;
   }
 
@@ -114,7 +115,7 @@ MovieHeaderBox.defaultProps = {
   version: 0,
   creationTime: null,
   modificationTime: null,
-  duration: 0,
+  duration: 0xFFFFFFFF,
   rate: 1.0,
   volume: 1.0,
   matrix: [1, 0, 0, 0, 1, 0, 0, 0, 16384]

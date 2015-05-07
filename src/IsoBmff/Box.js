@@ -9,6 +9,7 @@ class Box extends Component {
   }
 
   serialize(buffer, offset=0) {
+    //console.log('--- Box.serialize enter.');
     var base = offset,
         size = this.size,
         type = this.type;
@@ -26,7 +27,10 @@ class Box extends Component {
       base += Writer.writeString(this.props.extendedType, buffer, base, 16);
     }
 
-    return base - offset;
+    this.size = base - offset;
+
+    //console.log(`--- Box.serialize exit. size=${this.size}`);
+    return this.size;
   }
 
   getSize() {
@@ -57,7 +61,7 @@ class Box extends Component {
 
     if (size === 0) {
       // box extends to end of file
-      void size;
+      void 0;
     } else if (size === 1) {
       // 64bit largesize
       console.error('IsoBmff.Box.parse: largesize(>4GB) is not supported.');
@@ -77,8 +81,6 @@ class Box extends Component {
   }
 }
 
-Box.HEADER_LENGTH = 8;
-Box.UUID_HEADER_LENGTH = 24;
 Box.QUANTITY_ANY_NUMBER = 0;
 Box.QUANTITY_EXACTLY_ONE = 1;
 Box.QUANTITY_ZERO_OR_ONE = 2;

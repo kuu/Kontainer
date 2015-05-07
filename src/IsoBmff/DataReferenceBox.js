@@ -11,7 +11,7 @@ class DataReferenceBox extends FullBox {
 
   static encodeFlags(flags) {
     var f = 0;
-    if (flags.inTheSameFile) {
+    if (flags && flags.inTheSameFile) {
       f |= 0x01;
     }
     return f;
@@ -29,16 +29,17 @@ class DataReferenceBox extends FullBox {
   }
 
   serialize(buffer, offset=0) {
+    //console.log('--- DataReferenceBox.serialize enter.');
     var props = this.props,
         entryCount = props.entryCount,
-        base = offset + FullBox.HEADER_LENGTH;
+        base = offset;
 
+    base += super.serialize(buffer, base);
     base += Writer.writeNumber(entryCount, buffer, base, 4);
 
-    this.size = base - offset;
+    super.setSize(base - offset, buffer, offset);
 
-    super.serialize(buffer, offset);
-
+    //console.log(`--- DataReferenceBox.serialize exit. size=${this.size}`);
     return this.size;
   }
 
@@ -53,6 +54,7 @@ class DataReferenceBox extends FullBox {
     [readBytesNum, entryCount] = Reader.readNumber(buffer, base, 4);
     base += readBytesNum;
 
+    props.flags = DataReferenceBox.decodeFlags(props.flags);
     props.entryCount = entryCount;
 
     return [base - offset, props];

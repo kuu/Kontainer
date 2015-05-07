@@ -38,7 +38,7 @@ function readCharacter(buffer, offset) {
     console.error('util.readCharacter: Invalid char code - ' + firstByte);
     return [0, null];
   }
-  return [base - offset, String.fromCharCode(charCode)];
+  return [base - offset, charCode ? String.fromCharCode(charCode) : null];
 }
 
 const MAX_URL_LENGTH = 2048;

@@ -11,18 +11,19 @@ class DataEntryUrnBox extends FullBox {
   }
 
   serialize(buffer, offset=0) {
+    //console.log('--- DataEntryUrnBox.serialize enter.');
     var props = this.props,
         name = props.name,
         location = props.location,
-        base = offset + FullBox.HEADER_LENGTH;
+        base = offset;
 
+    base += super.serialize(buffer, base);
     base += Writer.writeString(name, buffer, base);
     base += Writer.writeString(location, buffer, base);
 
-    this.size = base - offset;
+    super.setSize(base - offset, buffer, offset);
 
-    super.serialize(buffer, offset);
-
+    //console.log(`--- DataEntryUrnBox.serialize exit. size=${this.size}`);
     return this.size;
   }
 
@@ -40,6 +41,7 @@ class DataEntryUrnBox extends FullBox {
     [readBytesNum, location] = Reader.readString(buffer, base);
     base += readBytesNum;
 
+    props.flags = DataReferenceBox.decodeFlags(props.flag);
     props.name = name;
     props.location = location;
 
@@ -51,12 +53,14 @@ DataEntryUrnBox.COMPACT_NAME = 'urn ';
 
 DataEntryUrnBox.propTypes = {
   version: PropTypes.number,
+  flags: PropTypes.object,
   name: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired
 };
 
 DataEntryUrnBox.defaultProps = {
-  version: 0
+  version: 0,
+  flags: {inTheSameFile: false}
 };
 
 DataEntryUrnBox.spec = {

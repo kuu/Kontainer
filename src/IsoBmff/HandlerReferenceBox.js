@@ -33,37 +33,37 @@ class HandlerReferenceBox extends FullBox {
     return handlerType;
   }
 
-  validate(context, props) {
-    context.currentTrackType = HandlerReferenceBox.encodeHandlerType(props.handlerType);
+  static validate(context, props) {
+    context.currentTrackType = props.handlerType;
     return null;
   }
 
   serialize(buffer, offset=0) {
+    //console.log('--- HandlerReferenceBox.serialize enter.');
     var props = this.props,
         handlerType = HandlerReferenceBox.encodeHandlerType(props.handlerType),
         name = props.name,
-        base = offset + FullBox.HEADER_LENGTH;
+        base = offset;
 
+    base += super.serialize(buffer, base);
     base += Writer.writeNumber(0, buffer, base, 4);
     base += Writer.writeString(handlerType, buffer, base, 4);
     base += Writer.writeNumber(0, buffer, base, 12);
     base += Writer.writeString(name, buffer, base);
 
-    this.size = base - offset;
+    super.setSize(base - offset, buffer, offset);
 
-    super.serialize(buffer, offset);
-
+    //console.log(`--- HandlerReferenceBox.serialize exit. size=${this.size}`);
     return this.size;
   }
 
   static parse(buffer, offset=0) {
     var base = offset,
-        readBytesNum, props, boxEnd,
+        readBytesNum, props,
         handlerType, name;
 
     [readBytesNum, props] = FullBox.parse(buffer, base);
     base += readBytesNum;
-    boxEnd = offset + props.size;
 
     base += 4; // skip reserved
 
@@ -72,7 +72,7 @@ class HandlerReferenceBox extends FullBox {
 
     base += 12; // skip reserved
 
-    [readBytesNum, name] = Reader.readString(buffer, base, boxEnd - base);
+    [readBytesNum, name] = Reader.readString(buffer, base);
     base += readBytesNum;
 
     props.handlerType = HandlerReferenceBox.decodeHandlerType(handlerType);
@@ -86,7 +86,7 @@ HandlerReferenceBox.COMPACT_NAME = 'hdlr';
 
 HandlerReferenceBox.propTypes = {
   version: PropTypes.oneOf([0, 1]),
-  handlerType: PropTypes.oneOf(['vide', 'soun', 'hint']).isRequired,
+  handlerType: PropTypes.oneOf(['video', 'audio', 'hint']).isRequired,
   name: PropTypes.string.isRequired
 };
 

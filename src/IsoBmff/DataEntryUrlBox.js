@@ -11,16 +11,17 @@ class DataEntryUrlBox extends FullBox {
   }
 
   serialize(buffer, offset=0) {
+    //console.log('--- DataEntryUrlBox.serialize enter.');
     var props = this.props,
         location = props.location,
-        base = offset + FullBox.HEADER_LENGTH;
+        base = offset;
 
+    base += super.serialize(buffer, base);
     base += Writer.writeString(location, buffer, base);
 
-    this.size = base - offset;
+    super.setSize(base - offset, buffer, offset);
 
-    super.serialize(buffer, offset);
-
+    //console.log(`--- DataEntryUrlBox.serialize exit. size=${this.size}`);
     return this.size;
   }
 
@@ -35,6 +36,7 @@ class DataEntryUrlBox extends FullBox {
     [readBytesNum, location] = Reader.readString(buffer, base);
     base += readBytesNum;
 
+    props.flags = DataReferenceBox.decodeFlags(props.flag);
     props.location = location;
 
     return [base - offset, props];
@@ -45,11 +47,13 @@ DataEntryUrlBox.COMPACT_NAME = 'url ';
 
 DataEntryUrlBox.propTypes = {
   version: PropTypes.number,
+  flags: PropTypes.object,
   location: PropTypes.string.isRequired
 };
 
 DataEntryUrlBox.defaultProps = {
-  version: 0
+  version: 0,
+  flags: {inTheSameFile: false}
 };
 
 DataEntryUrlBox.spec = {

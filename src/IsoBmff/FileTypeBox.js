@@ -9,21 +9,22 @@ class FileTypeBox extends Box {
   }
 
   serialize(buffer, offset=0) {
+    //console.log('--- FileTypeBox.serialize enter.');
     var majorBrand = this.props.majorBrand,
         minorVersion = this.props.minorVersion,
         compatibleBrands = this.props.compatibleBrands,
-        base = offset + Box.HEADER_LENGTH;
+        base = offset;
 
+    base += super.serialize(buffer, base);
     base += Writer.writeString(majorBrand, buffer, base, 4);
     base += Writer.writeNumber(minorVersion, buffer, base, 4);
     compatibleBrands.forEach(brand => {
       base += Writer.writeString(brand, buffer, base, 4);
     });
 
-    this.size = base - offset;
+    super.setSize(base - offset, buffer, offset);
 
-    super.serialize(buffer, offset);
-
+    //console.log(`--- FileTypeBox.serialize exit. size=${this.size}`);
     return this.size;
   }
 

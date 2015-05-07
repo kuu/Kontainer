@@ -5,8 +5,8 @@ class Component {
   }
 
   // To be overridden
-  static validate(context) {
-    void context;
+  static validate(context, props) {
+    void props;
     return null;
   }
 

@@ -9,9 +9,38 @@ class HandlerReferenceBox extends FullBox {
     super(HandlerReferenceBox.COMPACT_NAME, props, props.version, 0);
   }
 
+  static encodeHandlerType(handlerType) {
+    var t = 'vide';
+    if (handlerType === 'video') {
+      t = 'vide';
+    } else if (handlerType === 'audio') {
+      t = 'soun';
+    } else if (handlerType === 'hint') {
+      t = 'hint';
+    }
+    return t;
+  }
+
+  static decodeHandlerType(t) {
+    var handlerType = 'video';
+    if (t === 'vide') {
+      handlerType = 'video';
+    } else if (t === 'soun') {
+      handlerType = 'audio';
+    } else if (t === 'hint') {
+      handlerType = 'hint';
+    }
+    return handlerType;
+  }
+
+  validate(context, props) {
+    context.currentTrackType = HandlerReferenceBox.encodeHandlerType(props.handlerType);
+    return null;
+  }
+
   serialize(buffer, offset=0) {
     var props = this.props,
-        handlerType = props.handlerType,
+        handlerType = HandlerReferenceBox.encodeHandlerType(props.handlerType),
         name = props.name,
         base = offset + FullBox.HEADER_LENGTH;
 
@@ -46,7 +75,7 @@ class HandlerReferenceBox extends FullBox {
     [readBytesNum, name] = Reader.readString(buffer, base, boxEnd - base);
     base += readBytesNum;
 
-    props.handlerType = handlerType;
+    props.handlerType = HandlerReferenceBox.decodeHandlerType(handlerType);
     props.name = name;
 
     return [base - offset, props];

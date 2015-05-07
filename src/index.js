@@ -4,7 +4,7 @@ var IsoBmff = require('./IsoBmff/'),
 
 require("babel/polyfill");
 
-function traverse(element, buffer, offset=0) {
+function traverse(context, element, buffer, offset=0) {
   var type, props, children, instance,
       propTypes, base = offset, err;
 
@@ -33,6 +33,11 @@ function traverse(element, buffer, offset=0) {
         return 0;
       }
     }
+    // Validate context
+    err = type.validate(context);
+    if (err) {
+      console.error('Kontainer.renderToArrayBuffer: Context validation failed: ' + err.message);
+    }
     // Instantiation
     instance = element.instance = new type(props);
   }
@@ -42,7 +47,7 @@ function traverse(element, buffer, offset=0) {
 
   // Write children to the array buffer.
   children.forEach(child => {
-    base += traverse(child, buffer, base);
+    base += traverse(context, child, buffer, base);
   });
 
   // Update the size.
@@ -52,10 +57,10 @@ function traverse(element, buffer, offset=0) {
 }
 
 function renderToArrayBuffer(element) {
-  var size, buffer;
+  var size, buffer, context = {};
 
   // Culculate the entire byte size.
-  size = traverse(element);
+  size = traverse(context, element);
 
   if (!size) {
     return null;
@@ -63,7 +68,7 @@ function renderToArrayBuffer(element) {
 
   // Write to the array buffer.
   buffer = new Uint8Array(size);
-  traverse(element, buffer);
+  traverse(context, element, buffer);
 
   return buffer.buffer;
 }

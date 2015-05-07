@@ -4,26 +4,32 @@ class Component {
     this.props = props;
   }
 
-  // virtual
+  // To be overridden
+  static validate(context) {
+    void context;
+    return null;
+  }
+
+  // To be overridden
   serialize(buffer, offset) {
     void offset;
   }
 
-  // virtual
+  // To be overridden
   getSize() {
   }
 
-  // virtual
+  // To be overridden
   setSize(size, buffer, offset) {
     void offset;
   }
 
-  // virtual
+  // To be overridden
   toString(context) {
     void context;
   }
 
-  // virtual
+  // To be overridden
   static parse(buffer, offset) {
     void offset;
   }

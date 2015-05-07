@@ -9,6 +9,14 @@ class SoundMediaHeaderBox extends FullBox {
     super(SoundMediaHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
 
+  validate(context) {
+    var trackType = context.currentTrackType;
+    if (trackType && trackType !== 'audio') {
+      return new Error(`"${SoundMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
+    }
+    return null;
+  }
+
   serialize(buffer, offset=0) {
     var props = this.props,
         balance = props.balance,

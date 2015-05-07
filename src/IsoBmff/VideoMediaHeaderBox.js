@@ -9,6 +9,14 @@ class VideoMediaHeaderBox extends FullBox {
     super(VideoMediaHeaderBox.COMPACT_NAME, props, props.version, 1);
   }
 
+  validate(context) {
+    var trackType = context.currentTrackType;
+    if (trackType && trackType !== 'video') {
+      return new Error(`"${VideoMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
+    }
+    return null;
+  }
+
   serialize(buffer, offset=0) {
     var props = this.props,
         graphicsMode = props.graphicsMode,

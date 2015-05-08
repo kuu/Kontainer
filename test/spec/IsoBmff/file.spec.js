@@ -21,7 +21,12 @@ describe('File', function () {
                     IsoBmff.createElement('urn ', {location: '/data', name: '/name'})
                   )
                 ),
-                IsoBmff.createElement('stbl')
+                IsoBmff.createElement('stbl', null,
+                  IsoBmff.createElement('stsd', {entryCount: 2},
+                    IsoBmff.createElement('avc1'),
+                    IsoBmff.createElement('avc1')
+                  )
+                )
               )
             )
           )

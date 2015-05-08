@@ -22,7 +22,9 @@ var clazz = {
   'dref': require('./DataReferenceBox'),
   'url ': require('./DataEntryUrlBox'),
   'urn ': require('./DataEntryUrnBox'),
-  'stbl': require('./SampleTableBox')
+  'stbl': require('./SampleTableBox'),
+  'stsd': require('./SampleDescriptionBox'),
+  'avc1': require('./AVCSampleEntry')
 };
 
 function validateChild(context, child) {

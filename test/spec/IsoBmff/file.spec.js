@@ -155,9 +155,15 @@ describe('File', function () {
   });
 
   it('parses binary data', function () {
-    var b = new Uint8Array(value), elem;
+    var b = new Uint8Array(value), elem, buf, array;
 
     elem = IsoBmff.createElementFromArrayBuffer(b.buffer);
     expect(elem).not.toBe(null);
+    buf = Kontainer.renderToArrayBuffer(elem);
+    expect(buf).not.toBe(null);
+    array = new Uint8Array(buf);
+    for (var i = 0, il = array.length; i < il; i++) {
+      expect(array[i]).toBe(value[i]);
+    }
   });
 });

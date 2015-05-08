@@ -1,8 +1,32 @@
-/*global describe, it, expect */
+import customMatchers from '../../helper/matcher';
+
+/*global describe, it, expect, beforeEach */
 describe('File', function () {
   var Kontainer = require('../../../src/');
-
   var IsoBmff = Kontainer.IsoBmff,
+      topLevelElement = IsoBmff.createElement('file', null,
+        IsoBmff.createElement('ftyp', {majorBrand: 'isom'}),
+        IsoBmff.createElement('moov', null,
+          IsoBmff.createElement('mvhd', {creationTime: new Date(0), modificationTime: new Date(0), timeScale: 1, nextTrackId: 4}),
+          IsoBmff.createElement('trak', null,
+            IsoBmff.createElement('tkhd', {creationTime: new Date(0), modificationTime: new Date(0), trackId: 1, width: 640, height: 480}),
+            IsoBmff.createElement('mdia', null,
+              IsoBmff.createElement('mdhd', {creationTime: new Date(0), modificationTime: new Date(0), timeScale: 1}),
+              IsoBmff.createElement('hdlr', {handlerType: 'video', name: 'avc'}),
+              IsoBmff.createElement('minf', null,
+                IsoBmff.createElement('vmhd'),
+                IsoBmff.createElement('dinf', null,
+                  IsoBmff.createElement('dref', {entryCount: 2},
+                    IsoBmff.createElement('url ', {location: '/data'}),
+                    IsoBmff.createElement('urn ', {location: '/data', name: '/name'})
+                  )
+                ),
+                IsoBmff.createElement('stbl')
+              )
+            )
+          )
+        )
+      ),
       value = [
     0, 0, 0, 16, // size=16
     102, 116, 121, 112, // type='ftyp'
@@ -110,8 +134,13 @@ describe('File', function () {
     115, 116, 98, 108// type='stbl'
   ];
 
-  it('requires "ftyp" and "moov" as direct children', function () {
-    var buffer;
+  beforeEach(function() {
+    this.addMatchers(customMatchers);
+  });
+
+  it('generates a binary data from KontainerElements', function () {
+    var buffer, elem;
+
     buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('file', null,
       IsoBmff.createElement('ftyp', {majorBrand: 'isom'})
     ));
@@ -123,38 +152,18 @@ describe('File', function () {
     ));
     expect(buffer).toBe(null);
 
-    buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('file', null,
-      IsoBmff.createElement('ftyp', {majorBrand: 'isom'}),
-      IsoBmff.createElement('moov', null,
-        IsoBmff.createElement('mvhd', {creationTime: new Date(0), modificationTime: new Date(0), timeScale: 1, nextTrackId: 4}),
-        IsoBmff.createElement('trak', null,
-          IsoBmff.createElement('tkhd', {creationTime: new Date(0), modificationTime: new Date(0), trackId: 1, width: 640, height: 480}),
-          IsoBmff.createElement('mdia', null,
-            IsoBmff.createElement('mdhd', {creationTime: new Date(0), modificationTime: new Date(0), timeScale: 1}),
-            IsoBmff.createElement('hdlr', {handlerType: 'video', name: 'avc'}),
-            IsoBmff.createElement('minf', null,
-              IsoBmff.createElement('vmhd'),
-              IsoBmff.createElement('dinf', null,
-                IsoBmff.createElement('dref', {entryCount: 2},
-                  IsoBmff.createElement('url ', {location: '/data'}),
-                  IsoBmff.createElement('urn ', {location: '/data', name: '/name'})
-                )
-              ),
-              IsoBmff.createElement('stbl')
-            )
-          )
-        )
-      )
-    ));
+    buffer = Kontainer.renderToArrayBuffer(topLevelElement);
     expect(buffer).not.toBe(null);
     var array = new Uint8Array(buffer);
     expect(array.length).toBe(value.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value[i]);
     }
+    elem = IsoBmff.createElementFromArrayBuffer(buffer);
+    expect(elem).toHaveTheSamePropsAs(topLevelElement);
   });
 
-  it('parses binary data', function () {
+  it('parses a binary data into KontainerElements', function () {
     var b = new Uint8Array(value), elem, buf, array;
 
     elem = IsoBmff.createElementFromArrayBuffer(b.buffer);
@@ -162,6 +171,7 @@ describe('File', function () {
     buf = Kontainer.renderToArrayBuffer(elem);
     expect(buf).not.toBe(null);
     array = new Uint8Array(buf);
+    expect(array.length).toBe(value.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value[i]);
     }

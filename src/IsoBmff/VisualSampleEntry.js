@@ -9,13 +9,14 @@ class VisualSampleEntry extends SampleEntry {
 
   serialize(buffer, offset=0) {
     //console.log('--- VisualSampleEntry.serialize enter.');
-    var width = this.width,
-        height = this.height,
-        horizResolution = this.horizResolution,
-        vertResolution = this.vertResolution,
-        frameCount = this.frameCount,
-        compressorName = this.compressorName,
-        depth = this.depth,
+    var props = this.props,
+        width = props.width,
+        height = props.height,
+        horizResolution = props.horizResolution,
+        vertResolution = props.vertResolution,
+        frameCount = props.frameCount,
+        compressorName = props.compressorName,
+        depth = props.depth,
         base = offset;
 
     base += super.serialize(buffer, base);

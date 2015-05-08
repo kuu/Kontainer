@@ -23,8 +23,17 @@ describe('File', function () {
                 ),
                 IsoBmff.createElement('stbl', null,
                   IsoBmff.createElement('stsd', {entryCount: 2},
-                    IsoBmff.createElement('avc1'),
-                    IsoBmff.createElement('avc1')
+                    IsoBmff.createElement('avc1', {dataReferenceIndex: 1, width: 1280, height: 720}),
+                    IsoBmff.createElement('avcC', {
+                      avcProfileIndication: 'baseline',
+                      profileCompatibility: {
+                        constraintSet0Flag: false,
+                        constraintSet1Flag: false,
+                        constraintSet2Flag: false
+                      },
+                      avcLevelIndication: 1.3,
+                      lengthSize: 1
+                    })
                   )
                 )
               )

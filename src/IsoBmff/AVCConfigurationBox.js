@@ -68,23 +68,39 @@ class AVCConfigurationBox extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- AVCConfigurationBox.serialize enter.');
-    var configurationVersion = this.configurationVersion,
-        avcProfileIndication = this.avcProfileIndication,
-        profileCompatibility = this.profileCompatibility,
-        avcLevelIndication = this.avcLevelIndication,
-        lengthSizeMinusOne = this.lengthSizeMinusOne,
-        numOfSequenceParameterSets = this.numOfSequenceParameterSets,
-        sequenceParameterSet = this.sequenceParameterSet,
-        numOfPictureParameterSets = this.numOfPictureParameterSets,
-        pictureParameterSet = this.pictureParameterSet,
-        base = offset;
+    var props = this.props,
+        configurationVersion = props.configurationVersion,
+        avcProfileIndication = props.avcProfileIndication,
+        profileCompatibility = props.profileCompatibility,
+        avcLevelIndication = props.avcLevelIndication,
+        lengthSizeMinusOne = props.lengthSize - 1,
+        sequenceParameterSets = props.sequenceParameterSets,
+        pictureParameterSets = props.pictureParameterSets,
+        i, length, data, base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(configurationVersion, buffer, base, 1);
     base += Writer.writeNumber(AVCConfigurationBox.encodeProfile(avcProfileIndication), buffer, base, 1);
     base += Writer.writeNumber(AVCConfigurationBox.encodeCompatibility(profileCompatibility), buffer, base, 1);
-    compatibleBrands.forEach(brand => {
-      base += Writer.writeString(brand, buffer, base, 4);
+    base += Writer.writeNumber(avcLevelIndication * 10 | 0, buffer, base, 1);
+    base += Writer.writeNumber(0xFC | lengthSizeMinusOne, buffer, base, 1);
+    base += Writer.writeNumber(0xE0 | sequenceParameterSets.length, buffer, base, 1);
+    sequenceParameterSets.forEach(sps => {
+      length = sps.length;
+      data = sps.data;
+      base += Writer.writeNumber(length, buffer, base, 2);
+      for (i = 0; i < length; i++) {
+        buffer[base++] = data[i];
+      }
+    });
+    base += Writer.writeNumber(pictureParameterSets.length, buffer, base, 1);
+    pictureParameterSets.forEach(pps => {
+      length = pps.length;
+      data = pps.data;
+      base += Writer.writeNumber(length, buffer, base, 2);
+      for (i = 0; i < length; i++) {
+        buffer[base++] = data[i];
+      }
     });
 
     super.setSize(base - offset, buffer, offset);
@@ -94,29 +110,68 @@ class AVCConfigurationBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
-        readBytesNum, props, boxEnd,
-        majorBrand, minorVersion,
-        brand, compatibleBrands;
+    var base = offset, readBytesNum, props, i, j, length, data,
+        configurationVersion, avcProfileIndication, profileCompatibility,
+        avcLevelIndication, lengthSizeMinusOne,
+        numOfParameterSets,
+        sequenceParameterSets = [],
+        pictureParameterSets = [];
 
     [readBytesNum, props] = Box.parse(buffer, base);
     base += readBytesNum;
-    boxEnd = offset + props.size;
 
-    [readBytesNum, majorBrand] = Reader.readString(buffer, base, 4);
+    [readBytesNum, configurationVersion] = Reader.readNumber(buffer, base, 1);
     base += readBytesNum;
 
-    [readBytesNum, minorVersion] = Reader.readNumber(buffer, base, 4);
+    [readBytesNum, avcProfileIndication] = Reader.readNumber(buffer, base, 1);
     base += readBytesNum;
 
-    props.majorBrand = majorBrand;
-    props.minorVersion = minorVersion;
-    compatibleBrands = props.compatibleBrands = [];
-    while (base < boxEnd) {
-      [readBytesNum, brand] = Reader.readString(buffer, base, 4);
-      compatibleBrands.push(brand);
+    [readBytesNum, profileCompatibility] = Reader.readNumber(buffer, base, 1);
+    base += readBytesNum;
+
+    [readBytesNum, avcLevelIndication] = Reader.readNumber(buffer, base, 1);
+    base += readBytesNum;
+
+    [readBytesNum, lengthSizeMinusOne] = Reader.readNumber(buffer, base, 1);
+    base += readBytesNum;
+
+    [readBytesNum, numOfParameterSets] = Reader.readNumber(buffer, base, 1);
+    base += readBytesNum;
+
+    numOfParameterSets &= 0x1F;
+
+    for (i = 0; i < numOfParameterSets; i++) {
+      [readBytesNum, length] = Reader.readNumber(buffer, base, 1);
       base += readBytesNum;
+
+      data = new Uint8Array(length);
+      for (j = 0; j < length; j++) {
+        data[i] = buffer[base++];
+      }
+      sequenceParameterSets.push({length: length, data: data});
     }
+
+    [readBytesNum, numOfParameterSets] = Reader.readNumber(buffer, base, 1);
+    base += readBytesNum;
+
+    for (i = 0; i < numOfParameterSets; i++) {
+      [readBytesNum, length] = Reader.readNumber(buffer, base, 1);
+      base += readBytesNum;
+
+      data = new Uint8Array(length);
+      for (j = 0; j < length; j++) {
+        data[i] = buffer[base++];
+      }
+      pictureParameterSets.push({length: length, data: data});
+    }
+
+    props.configurationVersion = configurationVersion;
+    props.avcProfileIndication = AVCConfigurationBox.decodeProfile(avcProfileIndication);
+    props.profileCompatibility = AVCConfigurationBox.decodeCompatibility(profileCompatibility);
+    props.avcLevelIndication = avcLevelIndication / 10;
+    props.lengthSize = (lengthSizeMinusOne & 0x03) + 1;
+    props.sequenceParameterSets = sequenceParameterSets;
+    props.pictureParameterSets = pictureParameterSets;
 
     return [base - offset, props];
   }
@@ -126,43 +181,38 @@ AVCConfigurationBox.COMPACT_NAME = 'avcC';
 
 AVCConfigurationBox.propTypes = {
   configurationVersion: PropTypes.number,
-  avcProfileIndication: PropTypes.oneOf('baseline', 'main', 'extended').isRequired,
+  avcProfileIndication: PropTypes.oneOf(['baseline', 'main', 'extended']).isRequired,
   profileCompatibility: PropTypes.shape({
     constraintSet0Flag: PropTypes.bool,
     constraintSet1Flag: PropTypes.bool,
     constraintSet2Flag: PropTypes.bool
   }).isRequired,
-  avcLevelIndication: PropTypes.oneOf(
-    1, 1.1, 1.2, 1.3, '1b',
+  avcLevelIndication: PropTypes.oneOf([
+    1, 1.1, 1.2, 1.3,
     2, 2.1, 2.2,
     3, 3.1, 3.2,
     4, 4.1, 4.2,
     5, 5.1
-  ).isRequired,
-  lengthSizeMinusOne: PropTypes.number.isRequired,
-  numOfSequenceParameterSets: PropTypes.number,
-  sequenceParameterSet: PropTypes.arrayOf(
+  ]).isRequired,
+  lengthSize: PropTypes.oneOf([1, 2, 4]).isRequired,
+  sequenceParameterSets: PropTypes.arrayOf(
     PropTypes.shape({
-      sequenceParameterSetLength: PropTypes.number,
-      sequenceParameterSetNALUnit: PropTypes.any
+      length: PropTypes.number,
+      data: PropTypes.any
     })
   ),
-  numOfPictureParameterSets: PropTypes.number,
-  pictureParameterSet: PropTypes.arrayOf(
+  pictureParameterSets: PropTypes.arrayOf(
     PropTypes.shape({
-      pictureParameterSetLength: PropTypes.number,
-      pictureParameterSetNALUnit: PropTypes.any
+      length: PropTypes.number,
+      data: PropTypes.any
     })
   )
- }
 };
 
 AVCConfigurationBox.defaultProps = {
   configurationVersion: 1,
-  numOfSequenceParameterSets: 0,
-  sequenceParameterSet: [],
-  numOfPictureParameterSets: 0,
-  pictureParameterSet: []
+  sequenceParameterSets: [],
+  pictureParameterSets: []
 };
 
 AVCConfigurationBox.spec = {

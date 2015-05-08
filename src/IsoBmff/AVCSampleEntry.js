@@ -1,9 +1,6 @@
 var Box = require('./Box'),
     VisualSampleEntry = require('./VisualSampleEntry'),
-    AVCConfigurationBox = require('./AVCConfigurationBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+    PropTypes = require('../core/PropTypes');
 
 class AVCSampleEntry extends VisualSampleEntry {
   constructor(props) {
@@ -12,8 +9,7 @@ class AVCSampleEntry extends VisualSampleEntry {
 
   serialize(buffer, offset=0) {
     //console.log('--- AVCSampleEntry.serialize enter.');
-    var props = this.props,
-        base = offset;
+    var base = offset;
 
     base += super.serialize(buffer, base);
     super.setSize(base - offset, buffer, offset);

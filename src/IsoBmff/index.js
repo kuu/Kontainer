@@ -24,7 +24,8 @@ var clazz = {
   'urn ': require('./DataEntryUrnBox'),
   'stbl': require('./SampleTableBox'),
   'stsd': require('./SampleDescriptionBox'),
-  'avc1': require('./AVCSampleEntry')
+  'avc1': require('./AVCSampleEntry'),
+  'avcC': require('./AVCConfigurationBox')
 };
 
 function validateChild(context, child) {

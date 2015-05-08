@@ -95,7 +95,7 @@ function readIso639Lang(buffer, offset) {
   base += readBytesNum;
 
   for (var i = 3 - 1; i >= 0; i--) {
-    language = String.fromCharCode((num >>> (5 * i)) & 0x1F) + language;
+    language += String.fromCharCode(((num >>> (5 * i)) & 0x1F) + 0x60);
   }
   return [base - offset, language];
 }

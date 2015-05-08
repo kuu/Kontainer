@@ -145,7 +145,7 @@ function parse(buffer, offset) {
   boxSize = props.size;
   boxEnd = offset + boxSize;
 
-  console.log(`parse enter.: type=${boxType} size=${boxSize}`);
+  //console.log(`parse enter.: type=${boxType} size=${boxSize}`);
 
   if (boxType === 'uuid') {
     boxType = props.extendedType;
@@ -172,12 +172,12 @@ function parse(buffer, offset) {
     children.push(element);
     base += (element.props.size || readBytesNum);
   }
-  console.log(`parse exit.: type=${boxType} readBytesNum=${base - offset}`);
+  //console.log(`parse exit.: type=${boxType} readBytesNum=${base - offset}`);
   return [base - offset, MediaFormat.createElement(boxClass, props, children)];
 }
 
 function createElementFromArrayBuffer(buffer, offset=0) {
-  var base, endOfBuffer, readBytesNum, element, children;
+  var base, endOfBuffer, readBytesNum, element, list;
 
   if (buffer instanceof ArrayBuffer === false) {
     console.error('IsoBmff.createElementFromArrayBuffer: Not an ArrayBuffer.');
@@ -186,18 +186,23 @@ function createElementFromArrayBuffer(buffer, offset=0) {
 
   base = offset;
   endOfBuffer = base + buffer.byteLength;
-  children = [];
+  list = [];
 
   while (base < endOfBuffer) {
     [readBytesNum, element] = parse(new Uint8Array(buffer), base);
     if (!element) {
       break;
     }
-    children.push(element);
+    list.push(element);
     base += readBytesNum;
   }
   //console.log(`IsoBmff.createElementFromArrayBuffer: Done. ${base - offset} bytes read.`);
-  return MediaFormat.createElement(clazz.file, null, children);
+  if (list.length === 0) {
+    return null;
+  } else if (list.length === 1) {
+    return list[0];
+  }
+  return MediaFormat.createElement(clazz.file, null, list);
 }
 
 module.exports = {

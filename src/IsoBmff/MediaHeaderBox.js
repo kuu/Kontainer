@@ -6,42 +6,7 @@ var Box = require('./Box'),
 
 class MediaHeaderBox extends FullBox {
   constructor(props) {
-    super(MediaHeaderBox.COMPACT_NAME, props, props.version, MediaHeaderBox.encodeFlags(props.flags));
-  }
-
-  static encodeFlags(flags) {
-    var f = 0;
-    if (flags) {
-      if (flags.enabled) {
-        f |= 0x01;
-      }
-      if (flags.inMovie) {
-        f |= 0x02;
-      }
-      if (flags.inPreview) {
-        f |= 0x04;
-      }
-    }
-    return f;
-  }
-
-  static decodeFlags(f) {
-    var flags = {
-      enabled: false,
-      inMovie: false,
-      inPreview: false
-    };
-
-    if (f & 0x01) {
-      flags.enabled = true;
-    }
-    if (f & 0x02) {
-      flags.inMovie = true;
-    }
-    if (f & 0x04) {
-      flags.inPreview = true;
-    }
-    return flags;
+    super(MediaHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
 
   serialize(buffer, offset=0) {
@@ -97,7 +62,6 @@ class MediaHeaderBox extends FullBox {
 
     base += 2; // skip reserved
 
-    props.flags = MediaHeaderBox.decodeFlags(props.flags);
     props.creationTime = FullBox.sec2date(creationTime);
     props.modificationTime = FullBox.sec2date(modificationTime);
     props.timeScale = timeScale;

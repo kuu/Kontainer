@@ -73,8 +73,8 @@ class TrackHeaderBox extends FullBox {
     for (var i = 0; i < 9; i++) {
       base += Writer.writeFixedNumber(matrix[i], buffer, base, 4);
     }
-    base += Writer.writeNumber(width, buffer, base, 4);
-    base += Writer.writeNumber(height, buffer, base, 4);
+    base += Writer.writeFixedNumber(width, buffer, base, 4);
+    base += Writer.writeFixedNumber(height, buffer, base, 4);
 
     super.setSize(base - offset, buffer, offset);
 
@@ -125,10 +125,10 @@ class TrackHeaderBox extends FullBox {
       base += readBytesNum;
     }
 
-    [readBytesNum, width] = Reader.readNumber(buffer, base, 4);
+    [readBytesNum, width] = Reader.readFixedNumber(buffer, base, 4);
     base += readBytesNum;
 
-    [readBytesNum, height] = Reader.readNumber(buffer, base, 4);
+    [readBytesNum, height] = Reader.readFixedNumber(buffer, base, 4);
     base += readBytesNum;
 
     props.flags = TrackHeaderBox.decodeFlags(props.flags);

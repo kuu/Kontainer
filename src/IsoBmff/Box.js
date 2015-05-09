@@ -64,7 +64,7 @@ class Box extends Component {
       void 0;
     } else if (size === 1) {
       // 64bit largesize
-      console.error('IsoBmff.Box.parse: largesize(>4GB) is not supported.');
+      console.error(`IsoBmff.Box.parse(${type}): largesize(>4GB) is not supported.`);
       return null;
     }
 

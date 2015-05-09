@@ -125,6 +125,32 @@ var defaultPropsFormatter = {
     }
     return str;
   },
+  value: (v) => {
+    var str;
+    if (typeof v === 'object' && !(v instanceof Date)) {
+      str = '{';
+      Object.keys(v).forEach(key => {
+        str += (key + ': ' + v[key] + ', ');
+      });
+      return str + '}';
+    }
+    if (typeof v === 'string') {
+      return '"' + v + '"';
+    }
+    return v;
+  },
+  array: (a) => {
+    var str = '[ ';
+    a.forEach(v => {
+      if (v instanceof Array) {
+        str += defaultPropsFormatter.array(v);
+      } else {
+        str += defaultPropsFormatter.value(v);
+      }
+      str += ', ';
+    });
+    return str + ' ]';
+  },
   header: (indentNum, typeName) => {
     return defaultPropsFormatter.padding(indentNum) + '[' + typeName + '] >>>> start' + '\n';
   },
@@ -132,7 +158,13 @@ var defaultPropsFormatter = {
     return defaultPropsFormatter.padding(indentNum) + '[' + typeName + '] <<<< end' + '\n';
   },
   body: (indentNum, key, value) => {
-    return defaultPropsFormatter.padding(indentNum) + '\t' + key + ': ' + value + '\n';
+    var v;
+    if (value instanceof Array) {
+      v = defaultPropsFormatter.array(value);
+    } else {
+      v = defaultPropsFormatter.value(value);
+    }
+    return defaultPropsFormatter.padding(indentNum) + '\t' + key + ': ' + v + '\n';
   }
 };
 

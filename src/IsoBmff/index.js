@@ -146,7 +146,7 @@ function parse(buffer, offset) {
   }
 
   boxType = props.type;
-  boxSize = props.size;
+  boxSize = props.size || buffer.length - offset;
   boxEnd = offset + boxSize;
 
   //console.log(`parse enter.: type=${boxType} size=${boxSize}`);
@@ -170,12 +170,11 @@ function parse(buffer, offset) {
 
   while (base < boxEnd) {
     [readBytesNum, element] = parse(buffer, base);
-    if (!element) {
-      base += readBytesNum;
-      break;
+    if (element) {
+      children.push(element);
+      readBytesNum = element.props.size; // Use Box size since it's more reliable.
     }
-    children.push(element);
-    base += (element.props.size || readBytesNum);
+    base += readBytesNum;
   }
   //console.log(`parse exit.: type=${boxType} readBytesNum=${base - offset}`);
   return [base - offset, MediaFormat.createElement(boxClass, props, children)];

@@ -64,7 +64,7 @@ class FullBox extends Box {
 
   static sec2date(sec) {
     const SECONDS_BTW_1904_1970 = 2082844800;
-    return new Date((sec - SECONDS_BTW_1904_1970) * 1000);
+    return new Date(Math.max(0, sec - SECONDS_BTW_1904_1970) * 1000);
   }
 }
 

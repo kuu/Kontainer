@@ -8,6 +8,13 @@ class FileTypeBox extends Box {
     super(FileTypeBox.COMPACT_NAME, props);
   }
 
+  static validate(context, props) {
+    context.majorBrand = props.majorBrand;
+    context.minorVersion = props.minorVersion;
+    context.compatibleBrands = props.compatibleBrands;
+    return null;
+  }
+
   serialize(buffer, offset=0) {
     //console.log('--- FileTypeBox.serialize enter.');
     var majorBrand = this.props.majorBrand,

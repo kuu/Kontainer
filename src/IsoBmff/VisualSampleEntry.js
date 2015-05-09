@@ -31,6 +31,7 @@ class VisualSampleEntry extends SampleEntry {
     base += Writer.writeNumber(Math.min(compressorName.length, 31), buffer, base, 1);
     base += Writer.writeString(compressorName, buffer, base, 31);
     base += Writer.writeNumber(depth, buffer, base, 2);
+    base += Writer.writeNumber(-1, buffer, base, 2); // pre_defined=-1 (16)
 
     super.setSize(base - offset, buffer, offset);
 
@@ -76,6 +77,8 @@ class VisualSampleEntry extends SampleEntry {
 
     [readBytesNum, depth] = Reader.readNumber(buffer, base, 2);
     base += readBytesNum;
+
+    base += 2; // skip pre_defined
 
     props.width = width;
     props.height = height;

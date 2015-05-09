@@ -216,8 +216,8 @@ AVCConfigurationBox.defaultProps = {
 };
 
 AVCConfigurationBox.spec = {
-  container: 'stsd',
-  quantity: Box.QUANTITY_ANY_NUMBER,
+  container: 'avc1',
+  quantity: Box.QUANTITY_EXACTORY_ONE,
   mandatoryBoxList: []
 };
 

@@ -35,7 +35,12 @@ describe('File', function () {
                         lengthSize: 1
                       })
                     )
-                  )
+                  ),
+                  IsoBmff.createElement('stts', {
+                    entries: [
+                      {sampleCount: 14, sampleDelta: 10}
+                    ]
+                  })
                 )
               )
             )
@@ -47,7 +52,7 @@ describe('File', function () {
     102, 116, 121, 112, // type='ftyp'
     105, 115, 111, 109, // major_brand='isom'
     0, 0, 0, 0, // minor_version=0
-    0, 0, 1, 255, // size=511
+    0, 0, 2, 23, // size=535
     109, 111, 111, 118, // type='moov'
     0, 0, 0, 108, // size=108
     109, 118, 104, 100, // type='mvhd'
@@ -76,7 +81,7 @@ describe('File', function () {
     0, 0, 0, 0, // pre_defined(32)
     0, 0, 0, 0, // pre_defined(32)
     0, 0, 0, 4, // next_track_ID=4
-    0, 0, 1, 139, // size=395
+    0, 0, 1, 163, // size=419
     116, 114, 97, 107, // type='trak'
     0, 0, 0, 92, // size=92
     116, 107, 104, 100, // type='tkhd'
@@ -101,7 +106,7 @@ describe('File', function () {
     64, 0, 0, 0, // matrix[8]=16384
     0, 0, 2, 128, // width=640
     0, 0, 1, 224, // height=480
-    0, 0, 1, 39, // size=295
+    0, 0, 1, 63, // size=319
     109, 100, 105, 97, // type='mdia'
     0, 0, 0, 32, // size=32
     109, 100, 104, 100, // type='mdhd'
@@ -120,7 +125,7 @@ describe('File', function () {
     0, 0, 0, 0, // reserved(32)
     0, 0, 0, 0, // reserved(32)
     97, 118, 99, 0, // name='avc'
-    0, 0, 0, 219, // size=219
+    0, 0, 0, 243, // size=243
     109, 105, 110, 102, // type='minf'
     0, 0, 0, 20, // size=20
     118, 109, 104, 100, // type='vmhd'
@@ -145,7 +150,7 @@ describe('File', function () {
     101, 0,
     47, 100, 97, 116, // location='/data'
     97, 0,
-    0, 0, 0, 125, // size=125
+    0, 0, 0, 149, // size=149
     115, 116, 98, 108, // type='stbl'
     0, 0, 0, 117, // size=117
     115, 116, 115, 100, // type='stsd'
@@ -176,8 +181,13 @@ describe('File', function () {
     0, 0, 0, 15, // size=15
     97, 118, 99, 67, // type='avcC'
     1, 66, 0, 13, // configurationVersion=1, profile='baseline', compatibility_flag=0, level=1.3
-    252, 224, 0 // lengthSize=1, numOfSPS=0, npmOfPPS=0
-
+    252, 224, 0, // lengthSize=1, numOfSPS=0, npmOfPPS=0
+    0, 0, 0, 24, // size=24
+    115, 116, 116, 115, // type='stts'
+    0, 0, 0, 0, // version=0, flags=0
+    0, 0, 0, 1, // entry_count=1
+    0, 0, 0, 14, // sample_count=14
+    0, 0, 0, 10 // sample_delta=10
   ];
 
   beforeEach(function() {

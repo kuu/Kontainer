@@ -25,7 +25,8 @@ var clazz = {
   'stbl': require('./SampleTableBox'),
   'stsd': require('./SampleDescriptionBox'),
   'avc1': require('./AVCSampleEntry'),
-  'avcC': require('./AVCConfigurationBox')
+  'avcC': require('./AVCConfigurationBox'),
+  'stts': require('./TimeToSampleBox')
 };
 
 function validateChild(context, child) {

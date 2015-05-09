@@ -12,7 +12,7 @@ SampleTableBox.spec = {
   container: 'minf',
   quantity: Box.QUANTITY_EXACTLY_ONE,
   //mandatoryBoxList: ['stsd', 'stts', ['stsz', 'stz2'], 'stsc', ['stco', 'co64']]
-  mandatoryBoxList: ['stsd', 'stts']
+  mandatoryBoxList: ['stsd', 'stts', ['stsz', 'stz2']]
 };
 
 module.exports = SampleTableBox;

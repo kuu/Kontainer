@@ -141,6 +141,9 @@ var defaultPropsFormatter = {
   },
   array: (a) => {
     var str = '[ ';
+    if (a.length > 100) {
+      return str + `array of length=${a.length}]`;
+    }
     a.forEach(v => {
       if (v instanceof Array) {
         str += defaultPropsFormatter.array(v);

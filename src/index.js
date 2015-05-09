@@ -59,6 +59,47 @@ function traverse(context, element, buffer, offset=0) {
   return instance.getSize();
 }
 
+function printProps(context, element) {
+  var type, props, children,
+      indent = context.indent,
+      formatter = context.formatter;
+
+  if (!element) {
+    console.warn('Kontainer.renderToString: null element.');
+    return;
+  }
+
+  type = element.type;
+  props = element.props;
+  children = props.children;
+
+  //console.log(`printProps enter. type=${type.COMPACT_NAME}`);
+
+  context.string += formatter.header(indent, type.COMPACT_NAME);
+
+  // Write self to the string.
+  Object.keys(props).forEach(key => {
+    if (key === 'children' || key === 'type') {
+      return;
+    }
+    if (key === 'extendedType' && props.type !== 'uuid') {
+      return;
+    }
+    context.string += formatter.body(indent, key, props[key]);
+  });
+
+  // Write children to the array buffer.
+  context.indent++;
+  children.forEach(child => {
+    printProps(context, child);
+  });
+
+  context.indent--;
+  context.string += formatter.footer(indent, type.COMPACT_NAME);
+
+  //console.log(`printProps exit. type=${type.COMPACT_NAME}`);
+}
+
 function renderToArrayBuffer(element) {
   var size, buffer, context = {};
 
@@ -76,8 +117,38 @@ function renderToArrayBuffer(element) {
   return buffer.buffer;
 }
 
+var defaultPropsFormatter = {
+  padding: (num) => {
+    var str = '';
+    for (var i = 0; i < num; i++) {
+      str += '\t';
+    }
+    return str;
+  },
+  header: (indentNum, typeName) => {
+    return defaultPropsFormatter.padding(indentNum) + '[' + typeName + '] >>>> start' + '\n';
+  },
+  footer: (indentNum, typeName) => {
+    return defaultPropsFormatter.padding(indentNum) + '[' + typeName + '] <<<< end' + '\n';
+  },
+  body: (indentNum, key, value) => {
+    return defaultPropsFormatter.padding(indentNum) + '\t' + key + ': ' + value + '\n';
+  }
+};
+
+function renderToString(element, propsFormatter) {
+  var context = {
+    string: '',
+    indent: 0,
+    formatter: propsFormatter || defaultPropsFormatter
+  };
+  printProps(context, element);
+  return context.string;
+}
+
 module.exports = {
   renderToArrayBuffer: renderToArrayBuffer,
+  renderToString: renderToString,
   IsoBmff: IsoBmff,
   PropTypes: PropTypes,
   Writer: Writer

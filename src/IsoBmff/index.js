@@ -157,19 +157,20 @@ function parse(buffer, offset) {
   boxClass = clazz[boxType];
   if (!boxClass) {
     console.error('IsoBmff.createElementFromArrayBuffer: Unsupported type - ' + boxType);
-    return [0, null];
+    return [boxSize, null];
   }
 
   [readBytesNum, props] = boxClass.parse(buffer, offset);
   base += readBytesNum;
   if (!props) {
     console.error('IsoBmff.createElementFromArrayBuffer: Failed to parse.');
-    return [0, null];
+    return [boxSize, null];
   }
 
   while (base < boxEnd) {
     [readBytesNum, element] = parse(buffer, base);
     if (!element) {
+      base += readBytesNum;
       break;
     }
     children.push(element);
@@ -194,6 +195,7 @@ function createElementFromArrayBuffer(buffer, offset=0) {
   while (base < endOfBuffer) {
     [readBytesNum, element] = parse(new Uint8Array(buffer), base);
     if (!element) {
+      base += readBytesNum;
       break;
     }
     list.push(element);

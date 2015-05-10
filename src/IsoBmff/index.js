@@ -31,7 +31,9 @@ var clazz = {
   'stz2': require('./CompactSampleSizeBox'),
   'stsc': require('./SampleToChunkBox'),
   'stco': require('./ChunkOffsetBox'),
-  'mp4a': require('./MP4AudioSampleEntry')
+  'mp4a': require('./MP4AudioSampleEntry'),
+  'esds': require('./ESDBox'),
+  'mdat': require('./MediaDataBox')
 };
 
 function validateChild(context, child) {

@@ -127,10 +127,10 @@ var defaultPropsFormatter = {
   },
   value: (v) => {
     var str;
-    if (typeof v === 'object' && !(v instanceof Date)) {
+    if (typeof v === 'object' && !(v instanceof Date) && !(v instanceof ArrayBuffer)) {
       str = '{';
       Object.keys(v).forEach(key => {
-        str += (key + ': ' + v[key] + ', ');
+        str += (key + ': ' + defaultPropsFormatter.value(v[key]) + ', ');
       });
       return str + '}';
     }

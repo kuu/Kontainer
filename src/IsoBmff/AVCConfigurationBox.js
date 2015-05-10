@@ -87,7 +87,7 @@ class AVCConfigurationBox extends Box {
     base += Writer.writeNumber(0xE0 | sequenceParameterSets.length, buffer, base, 1);
     sequenceParameterSets.forEach(sps => {
       length = sps.length;
-      data = sps.data;
+      data = new Uint8Array(sps.data);
       base += Writer.writeNumber(length, buffer, base, 2);
       for (i = 0; i < length; i++) {
         buffer[base++] = data[i];
@@ -96,7 +96,7 @@ class AVCConfigurationBox extends Box {
     base += Writer.writeNumber(pictureParameterSets.length, buffer, base, 1);
     pictureParameterSets.forEach(pps => {
       length = pps.length;
-      data = pps.data;
+      data = new Uint8Array(pps.data);
       base += Writer.writeNumber(length, buffer, base, 2);
       for (i = 0; i < length; i++) {
         buffer[base++] = data[i];
@@ -148,7 +148,7 @@ class AVCConfigurationBox extends Box {
       for (j = 0; j < length; j++) {
         data[i] = buffer[base++];
       }
-      sequenceParameterSets.push({length: length, data: data});
+      sequenceParameterSets.push({length: length, data: data.buffer});
     }
 
     [readBytesNum, numOfParameterSets] = Reader.readNumber(buffer, base, 1);
@@ -162,7 +162,7 @@ class AVCConfigurationBox extends Box {
       for (j = 0; j < length; j++) {
         data[i] = buffer[base++];
       }
-      pictureParameterSets.push({length: length, data: data});
+      pictureParameterSets.push({length: length, data: data.buffer});
     }
 
     props.configurationVersion = configurationVersion;

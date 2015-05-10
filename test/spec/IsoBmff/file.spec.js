@@ -41,7 +41,8 @@ describe('File', function () {
                       {sampleCount: 14, sampleDelta: 10}
                     ]
                   }),
-                  IsoBmff.createElement('stsz', {sampleSize: 5})
+                  IsoBmff.createElement('stsz', {sampleSize: 5}),
+                  IsoBmff.createElement('stsc')
                 )
               )
             )
@@ -53,7 +54,7 @@ describe('File', function () {
     102, 116, 121, 112, // type='ftyp'
     105, 115, 111, 109, // major_brand='isom'
     0, 0, 0, 0, // minor_version=0
-    0, 0, 2, 43, // size=555
+    0, 0, 2, 59, // size=571
     109, 111, 111, 118, // type='moov'
     0, 0, 0, 108, // size=108
     109, 118, 104, 100, // type='mvhd'
@@ -82,7 +83,7 @@ describe('File', function () {
     0, 0, 0, 0, // pre_defined(32)
     0, 0, 0, 0, // pre_defined(32)
     0, 0, 0, 4, // next_track_ID=4
-    0, 0, 1, 183, // size=439
+    0, 0, 1, 199, // size=455
     116, 114, 97, 107, // type='trak'
     0, 0, 0, 92, // size=92
     116, 107, 104, 100, // type='tkhd'
@@ -107,7 +108,7 @@ describe('File', function () {
     64, 0, 0, 0, // matrix[8]=16384
     2, 128, 0, 0, // width=640
     1, 224, 0, 0, // height=480
-    0, 0, 1, 83, // size=339
+    0, 0, 1, 99, // size=355
     109, 100, 105, 97, // type='mdia'
     0, 0, 0, 32, // size=32
     109, 100, 104, 100, // type='mdhd'
@@ -126,7 +127,7 @@ describe('File', function () {
     0, 0, 0, 0, // reserved(32)
     0, 0, 0, 0, // reserved(32)
     97, 118, 99, 0, // name='avc'
-    0, 0, 1, 7, // size=263
+    0, 0, 1, 23, // size=279
     109, 105, 110, 102, // type='minf'
     0, 0, 0, 20, // size=20
     118, 109, 104, 100, // type='vmhd'
@@ -151,7 +152,7 @@ describe('File', function () {
     101, 0,
     47, 100, 97, 116, // location='/data'
     97, 0,
-    0, 0, 0, 169, // size=169
+    0, 0, 0, 185, // size=185
     115, 116, 98, 108, // type='stbl'
     0, 0, 0, 117, // size=117
     115, 116, 115, 100, // type='stsd'
@@ -193,7 +194,11 @@ describe('File', function () {
     115, 116, 115, 122, // type='stsz'
     0, 0, 0, 0, // version=0, flags=0
     0, 0, 0, 5, // sample_size=5
-    0, 0, 0, 0 // sample_count=0
+    0, 0, 0, 0, // sample_count=0
+    0, 0, 0, 16, // size=16
+    115, 116, 115, 99, // type='stsc'
+    0, 0, 0, 0, // version=0, flags=0
+    0, 0, 0, 0 // entry_count=0
   ];
 
   beforeEach(function() {

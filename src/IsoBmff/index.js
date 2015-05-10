@@ -28,7 +28,8 @@ var clazz = {
   'avcC': require('./AVCConfigurationBox'),
   'stts': require('./TimeToSampleBox'),
   'stsz': require('./SampleSizeBox'),
-  'stz2': require('./CompactSampleSizeBox')
+  'stz2': require('./CompactSampleSizeBox'),
+  'stsc': require('./SampleToChunkBox')
 };
 
 function validateChild(context, child) {

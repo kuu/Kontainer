@@ -33,7 +33,9 @@ var clazz = {
   'stco': require('./ChunkOffsetBox'),
   'mp4a': require('./MP4AudioSampleEntry'),
   'esds': require('./ESDBox'),
-  'mdat': require('./MediaDataBox')
+  'mdat': require('./MediaDataBox'),
+  'btrt': require('./MPEG4BitRateBox'),
+  'stss': require('./SyncSampleBox')
 };
 
 function validateChild(context, child) {

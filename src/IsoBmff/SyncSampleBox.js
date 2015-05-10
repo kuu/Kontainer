@@ -4,13 +4,13 @@ var Box = require('./Box'),
     Writer = require('../core/Writer'),
     Reader = require('../core/Reader');
 
-class TimeToSampleBox extends FullBox {
+class SyncSampleBox extends FullBox {
   constructor(props) {
-    super(TimeToSampleBox.COMPACT_NAME, props, props.version, 0);
+    super(SyncSampleBox.COMPACT_NAME, props, props.version, 0);
   }
 
   serialize(buffer, offset=0) {
-    //console.log('--- TimeToSampleBox.serialize enter.');
+    //console.log('--- SyncSampleBox.serialize enter.');
     var props = this.props,
         entries = props.entries,
         entryCount = entries.length,
@@ -20,21 +20,18 @@ class TimeToSampleBox extends FullBox {
     base += Writer.writeNumber(entryCount, buffer, base, 4);
 
     for (var i = 0; i < entryCount; i++) {
-      base += Writer.writeNumber(entries[i].sampleCount, buffer, base, 4);
-      base += Writer.writeNumber(entries[i].sampleDelta, buffer, base, 4);
+      base += Writer.writeNumber(entries[i], buffer, base, 4);
     }
 
     super.setSize(base - offset, buffer, offset);
 
-    //console.log(`--- TimeToSampleBox.serialize exit. size=${this.size}`);
+    //console.log(`--- SyncSampleBox.serialize exit. size=${this.size}`);
     return this.size;
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
-        readBytesNum, props,
-        entryCount, sampleCount, sampleDelta,
-        entries = [];
+    var base = offset, readBytesNum, props,
+        entryCount, sampleNumber, entries = [];
 
     [readBytesNum, props] = FullBox.parse(buffer, base);
     base += readBytesNum;
@@ -43,16 +40,9 @@ class TimeToSampleBox extends FullBox {
     base += readBytesNum;
 
     for (var i = 0; i < entryCount; i++) {
-      [readBytesNum, sampleCount] = Reader.readNumber(buffer, base, 4);
+      [readBytesNum, sampleNumber] = Reader.readNumber(buffer, base, 4);
       base += readBytesNum;
-
-      [readBytesNum, sampleDelta] = Reader.readNumber(buffer, base, 4);
-      base += readBytesNum;
-
-      entries.push({
-        sampleCount: sampleCount,
-        sampleDelta: sampleDelta
-      });
+      entries.push(sampleNumber);
     }
 
     props.entries = entries;
@@ -61,26 +51,23 @@ class TimeToSampleBox extends FullBox {
   }
 }
 
-TimeToSampleBox.COMPACT_NAME = 'stts';
+SyncSampleBox.COMPACT_NAME = 'stss';
 
-TimeToSampleBox.propTypes = {
+SyncSampleBox.propTypes = {
   version: PropTypes.number,
   entries: PropTypes.arrayOf(
-    PropTypes.shape({
-      sampleCount: PropTypes.number,
-      sampleDelta: PropTypes.number
-    })
+    PropTypes.number
   ).isRequired
 };
 
-TimeToSampleBox.defaultProps = {
+SyncSampleBox.defaultProps = {
   version: 0
 };
 
-TimeToSampleBox.spec = {
+SyncSampleBox.spec = {
   container: 'stbl',
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
 
-module.exports = TimeToSampleBox;
+module.exports = SyncSampleBox;

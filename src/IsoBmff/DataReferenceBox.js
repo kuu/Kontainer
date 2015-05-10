@@ -54,7 +54,6 @@ class DataReferenceBox extends FullBox {
     [readBytesNum, entryCount] = Reader.readNumber(buffer, base, 4);
     base += readBytesNum;
 
-    props.flags = DataReferenceBox.decodeFlags(props.flags);
     props.entryCount = entryCount;
 
     return [base - offset, props];

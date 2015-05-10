@@ -30,7 +30,8 @@ var clazz = {
   'stsz': require('./SampleSizeBox'),
   'stz2': require('./CompactSampleSizeBox'),
   'stsc': require('./SampleToChunkBox'),
-  'stco': require('./ChunkOffsetBox')
+  'stco': require('./ChunkOffsetBox'),
+  'mp4a': require('./MP4AudioSampleEntry')
 };
 
 function validateChild(context, child) {
@@ -161,7 +162,7 @@ function parse(buffer, offset) {
 
   boxClass = clazz[boxType];
   if (!boxClass) {
-    console.error('IsoBmff.createElementFromArrayBuffer: Unsupported type - ' + boxType);
+    console.error(`IsoBmff.createElementFromArrayBuffer: Unsupported type - "${boxType}"`);
     return [boxSize, null];
   }
 

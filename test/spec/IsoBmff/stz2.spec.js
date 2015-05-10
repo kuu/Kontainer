@@ -1,6 +1,6 @@
 import customMatchers from '../../helper/matcher';
 
-/*global describe, it, expect, beforeEach */
+/*global describe, it, expect */
 describe('CompactSampleSizeBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -33,10 +33,6 @@ describe('CompactSampleSizeBox', function () {
         0, 5
       ];
 
-  beforeEach(function() {
-    this.addMatchers(customMatchers);
-  });
-
   it('handles 4 bit field size', function () {
     var stz2Element = IsoBmff.createElement('stz2', {fieldSize: 4, sampleSizeEntries: [1, 2, 3, 4, 5]});
     var buffer = Kontainer.renderToArrayBuffer(stz2Element);
@@ -48,7 +44,7 @@ describe('CompactSampleSizeBox', function () {
     }
     var element = IsoBmff.createElementFromArrayBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(element).toHaveTheSamePropsAs(stz2Element);
+    expect(customMatchers.toHaveTheSamePropsAs(stz2Element, element)).toBe(true);
   });
 
   it('handles 8 bit field size', function () {
@@ -62,7 +58,7 @@ describe('CompactSampleSizeBox', function () {
     }
     var element = IsoBmff.createElementFromArrayBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(element).toHaveTheSamePropsAs(stz2Element);
+    expect(customMatchers.toHaveTheSamePropsAs(stz2Element, element)).toBe(true);
   });
 
   it('handles 16 bit field size', function () {
@@ -76,6 +72,6 @@ describe('CompactSampleSizeBox', function () {
     }
     var element = IsoBmff.createElementFromArrayBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(element).toHaveTheSamePropsAs(stz2Element);
+    expect(customMatchers.toHaveTheSamePropsAs(stz2Element, element)).toBe(true);
   });
 });

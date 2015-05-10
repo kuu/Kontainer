@@ -1,6 +1,6 @@
 import customMatchers from '../../helper/matcher';
 
-/*global describe, it, expect, beforeEach */
+/*global describe, it, expect */
 describe('CompactSampleSizeBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -23,10 +23,6 @@ describe('CompactSampleSizeBox', function () {
         0, 0, 0, 3
       ];
 
-  beforeEach(function() {
-    this.addMatchers(customMatchers);
-  });
-
   it('supports constant size', function () {
     var stszElement = IsoBmff.createElement('stsz', {sampleSize: 5});
     var buffer = Kontainer.renderToArrayBuffer(stszElement);
@@ -38,7 +34,7 @@ describe('CompactSampleSizeBox', function () {
     }
     var element = IsoBmff.createElementFromArrayBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(element).toHaveTheSamePropsAs(stszElement);
+    expect(customMatchers.toHaveTheSamePropsAs(stszElement, element)).toBe(true);
   });
 
   it('supports variable size', function () {
@@ -52,6 +48,6 @@ describe('CompactSampleSizeBox', function () {
     }
     var element = IsoBmff.createElementFromArrayBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(element).toHaveTheSamePropsAs(stszElement);
+    expect(customMatchers.toHaveTheSamePropsAs(stszElement, element)).toBe(true);
   });
 });

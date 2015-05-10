@@ -1,6 +1,6 @@
 import customMatchers from '../../helper/matcher';
 
-/*global describe, it, expect, beforeEach */
+/*global describe, it, expect */
 describe('SampleToChunkBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -27,10 +27,6 @@ describe('SampleToChunkBox', function () {
         0, 0, 0, 3 // sample_description_index=3
       ];
 
-  beforeEach(function() {
-    this.addMatchers(customMatchers);
-  });
-
   it('supports zero entry', function () {
     var stscElement = IsoBmff.createElement('stsc');
     var buffer = Kontainer.renderToArrayBuffer(stscElement);
@@ -42,7 +38,7 @@ describe('SampleToChunkBox', function () {
     }
     var element = IsoBmff.createElementFromArrayBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(element).toHaveTheSamePropsAs(stscElement);
+    expect(customMatchers.toHaveTheSamePropsAs(stscElement, element)).toBe(true);
   });
 
   it('supports variable size', function () {
@@ -77,6 +73,6 @@ describe('SampleToChunkBox', function () {
     }
     var element = IsoBmff.createElementFromArrayBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(element).toHaveTheSamePropsAs(stscElement);
+    expect(customMatchers.toHaveTheSamePropsAs(stscElement, element)).toBe(true);
   });
 });

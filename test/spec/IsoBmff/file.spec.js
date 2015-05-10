@@ -1,6 +1,6 @@
 import customMatchers from '../../helper/matcher';
 
-/*global describe, it, expect, beforeEach */
+/*global describe, it, expect */
 describe('File', function () {
   var Kontainer = require('../../../src/');
   var IsoBmff = Kontainer.IsoBmff,
@@ -206,10 +206,6 @@ describe('File', function () {
     0, 0, 0, 0 // entry_count=0
   ];
 
-  beforeEach(function() {
-    this.addMatchers(customMatchers);
-  });
-
   it('generates a binary data from KontainerElements', function () {
     var buffer, elem;
 
@@ -233,7 +229,7 @@ describe('File', function () {
       //console.log(`array[${i}]=${array[i]}`);
     }
     elem = IsoBmff.createElementFromArrayBuffer(buffer);
-    expect(elem).toHaveTheSamePropsAs(topLevelElement);
+    expect(customMatchers.toHaveTheSamePropsAs(topLevelElement, elem)).toBe(true);
   });
 
   it('parses a binary data into KontainerElements', function () {

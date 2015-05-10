@@ -1,12 +1,23 @@
 export default {
-  toHaveTheSamePropsAs: function (util, customEqualityTesters) {
-    return {
-      compare: function (actual, expected) {
-        if (expected === undefined) {
-          expected = {};
-        }
-        var result = {},
-            checkProps = function (actualProps, expectedProps) {
+  toHaveTheSamePropsAs: (expected, actual) => {
+    var isEqual = (a, b) => {
+          //console.log('-----');
+          //console.log(a);
+          //console.log(b);
+          if (a instanceof Date && b instanceof Date) {
+            return a.getTime() === b.getTime();
+          } else if (typeof a === 'object' && typeof b === 'object') {
+            return Object.keys(a).every(key => isEqual(a[key], b[key]));
+          }
+          return a === b;
+        },
+        checkEquality = (a, b) => {
+          if (a instanceof Array && b instanceof Array) {
+            return a.every((item, i) => checkEquality(item, b[i]));
+          }
+          return isEqual(a, b);
+        },
+        checkProps = (actualProps, expectedProps) => {
           return Object.keys(expectedProps).every(key => {
             var expectedChildren, actualChildren;
 
@@ -24,17 +35,13 @@ export default {
                 return checkProps(actualChild.props, expectedChild.props);
               });
             }
-            return util.equals(expectedProps[key], actualProps[key], customEqualityTesters);
+            return checkEquality(expectedProps[key], actualProps[key]);
           });
         };
-        result.pass = checkProps(actual.props, expected.props);
-        if (result.pass) {
-          result.message = "Expected KontainerElement has the same props as the actual one's.";
-        } else {
-          result.message = "Expected KontainerElement has different props than the actual one's.";
-        }
-        return result;
-      }
-    };
+
+    if (!expected || !actual) {
+      return false;
+    }
+    return checkProps(actual.props, expected.props);
   }
 };

@@ -1,6 +1,6 @@
 import customMatchers from '../../helper/matcher';
 
-/*global describe, it, expect, beforeEach */
+/*global describe, it, expect */
 describe('ChunkOffsetBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -21,10 +21,6 @@ describe('ChunkOffsetBox', function () {
         0, 0, 0, 3 // chunk_offset=3
       ];
 
-  beforeEach(function() {
-    this.addMatchers(customMatchers);
-  });
-
   it('supports zero entry', function () {
     var stcoElement = IsoBmff.createElement('stco');
     var buffer = Kontainer.renderToArrayBuffer(stcoElement);
@@ -36,7 +32,7 @@ describe('ChunkOffsetBox', function () {
     }
     var element = IsoBmff.createElementFromArrayBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(element).toHaveTheSamePropsAs(stcoElement);
+    expect(customMatchers.toHaveTheSamePropsAs(stcoElement, element)).toBe(true);
   });
 
   it('supports multiple entries', function () {
@@ -53,6 +49,6 @@ describe('ChunkOffsetBox', function () {
     }
     var element = IsoBmff.createElementFromArrayBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(element).toHaveTheSamePropsAs(stcoElement);
+    expect(customMatchers.toHaveTheSamePropsAs(stcoElement, element)).toBe(true);
   });
 });

@@ -56,7 +56,7 @@ class CompactSampleSizeBox extends FullBox {
     [readBytesNum, fieldSize] = Reader.readNumber(buffer, base, 1);
     base += readBytesNum;
 
-    if (fieldSize !== 4 || fieldSize !== 8 || fieldSize !== 16) {
+    if (fieldSize !== 4 && fieldSize !== 8 && fieldSize !== 16) {
       fieldSize = 8;
     }
 
@@ -80,7 +80,7 @@ class CompactSampleSizeBox extends FullBox {
       }
     }
 
-    props.sampleSize = fieldSize;
+    props.fieldSize = fieldSize;
     props.sampleSizeEntries = sampleSizeEntries;
 
     return [base - offset, props];

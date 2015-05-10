@@ -29,7 +29,8 @@ var clazz = {
   'stts': require('./TimeToSampleBox'),
   'stsz': require('./SampleSizeBox'),
   'stz2': require('./CompactSampleSizeBox'),
-  'stsc': require('./SampleToChunkBox')
+  'stsc': require('./SampleToChunkBox'),
+  'stco': require('./ChunkOffsetBox')
 };
 
 function validateChild(context, child) {

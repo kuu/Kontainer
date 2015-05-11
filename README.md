@@ -43,18 +43,20 @@ Each MP4 Box is represented as a KontainerElement which is similar to ReactEleme
     buffer = Kontainer.renderToBuffer(element);
 
     // IsoBmff.createElementFromBuffer()
-    //   Returns: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream
+    //   Accepts: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream [, offset=0]
     //   Returns: KontainerElement.
     element = IsoBmff.createElementFromBuffer(buffer);
 
     
-    // Accepts a KontainerElement and returns a string that represetns the file structure.
+    // Kontainer.renderToString();
+    //   Accepts: KontainerElement[, Formatter]
+    //   Returns: A string that represetns the structure of media file.
     string = Kontainer.renderToString(element);
 ```
 
 ## CLI
 
-A simple parser for displaying the structure of a media file.
+A simple parser for displaying the structure of media file.
 
 ```
 Usage:

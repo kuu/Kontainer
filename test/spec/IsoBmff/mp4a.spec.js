@@ -14,7 +14,7 @@ describe('MP4AudioSampleEntry', function () {
         0, 0, 0, 0,
         0, 1, 0, 16, // channel_count=1, sample_size=16
         0, 0, 0, 0, // reserved(32)
-        172, 68, 0, 1 // sample_rate=44.1kHz
+        172, 68, 0, 0 // sample_rate=44.1kHz
       ],
       value2 = [
         0, 0, 0, 36, // size=36
@@ -23,7 +23,7 @@ describe('MP4AudioSampleEntry', function () {
         0, 0, 0, 2, // data_reference_index=2
         0, 0, 0, 0, // reserved(32)[2]
         0, 0, 0, 0,
-        0, 1, 0, 24, // channel_count=1, sample_size=24
+        0, 2, 0, 24, // channel_count=2, sample_size=24
         0, 0, 0, 0, // reserved(32)
         187, 128, 0, 0 // sample_rate=48kHz
       ];

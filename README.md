@@ -8,7 +8,7 @@ Kontainer aims to fully support the MP4 (ISO Base Media file format: ISO/IEC 144
 ## Install
 
 ```
-$ npm install -g kontainer
+$ npm install -g kontainer-js
 ```
 
 ## API
@@ -17,7 +17,7 @@ Each MP4 Box is represented as a KontainerElement which is similar to ReactEleme
 (TODO: Support JSX.)
 
 ```js
-    var Kontainer = require('kontainer'),
+    var Kontainer = require('kontainer-js'),
         IsoBmff = Kontainer.IsoBmff,
         element, buffer, string;
 

@@ -29,8 +29,7 @@
     "transpile-test": "npm run clean-test && babel test/ --out-dir transpiled/test/",
     "test": "npm run lint && npm run test-node && npm run test-browser",
     "test-node": "npm run transpile && jasmine-node transpiled/test/spec/",
-    "test-browser": "karma start karma.conf.js",
-    "install": "npm test"
+    "test-browser": "karma start karma.conf.js"
   },
   "author": "Kuu Miyazaki",
   "license": "MIT",

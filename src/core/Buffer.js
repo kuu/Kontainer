@@ -1,6 +1,6 @@
 class Buffer {
   constructor(length) {
-    if (global.Buffer) {
+    if (global && global.Buffer) {
       this.buffer = new global.Buffer(length);
     } else {
       this.buffer = new Uint8Array(length);

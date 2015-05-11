@@ -119,6 +119,18 @@ function renderToBuffer(element) {
 }
 
 var defaultPropsFormatter = {
+  buffer: (v) => {
+    if (global && global.Buffer) {
+      return `[Buffer length=${v.length}]`;
+    }
+    return v;
+  },
+  isBuffer: (v) => {
+    if (global && global.Buffer) {
+      return (v instanceof global.Buffer);
+    }
+    return (v instanceof ArrayBuffer);
+  },
   padding: (num) => {
     var str = '';
     for (var i = 0; i < num; i++) {
@@ -128,7 +140,7 @@ var defaultPropsFormatter = {
   },
   value: (v) => {
     var str;
-    if (typeof v === 'object' && !(v instanceof Date) && !(v instanceof ArrayBuffer)) {
+    if (typeof v === 'object' && !(v instanceof Date) && !defaultPropsFormatter.isBuffer(v)) {
       str = '{';
       Object.keys(v).forEach(key => {
         str += (key + ': ' + defaultPropsFormatter.value(v[key]) + ', ');
@@ -137,6 +149,9 @@ var defaultPropsFormatter = {
     }
     if (typeof v === 'string') {
       return '"' + v + '"';
+    }
+    if (defaultPropsFormatter.isBuffer(v)) {
+      return defaultPropsFormatter.buffer(v);
     }
     return v;
   },

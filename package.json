@@ -2,7 +2,10 @@
   "name": "Kontainer",
   "version": "1.0.0",
   "description": "A media file format generator/parser that exposes a React-like API.",
-  "repository": "https://github.com/kuu/Kontainer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kuu/Kontainer.git"
+  },
   "main": "index.js",
   "bin": {
     "kontainer": "bin/kontainer.js"

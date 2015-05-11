@@ -30,7 +30,9 @@ Each MP4 Box is represented as a KontainerElement which is similar to ReactEleme
         IsoBmff.createElement('mvhd', {creationTime: new Date(0), modificationTime: new Date(0), timeScale: 1, nextTrackId: 4}),
         IsoBmff.createElement('trak', null,
           IsoBmff.createElement('tkhd', {creationTime: new Date(0), modificationTime: new Date(0), trackId: 1, width: 640, height: 480}),
-          IsoBmff.createElement('mdia')
+          IsoBmff.createElement('mdia', null,
+            ...
+          )
         )
       )
     );

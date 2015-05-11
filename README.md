@@ -1,7 +1,7 @@
 # Kontainer
 A media file format generator/parser that exposes a React-like API.
 
-![logo](logo.png)
+![logo](logo.svg)
 
 Kontainer aims to fully support the MP4 (ISO Base Media file format: ISO/IEC 14496-12) and WebM file format.
 
@@ -19,26 +19,30 @@ Each MP4 Box is represented as a KontainerElement which is similar to ReactEleme
 ```js
     var Kontainer = require('kontainer'),
         IsoBmff = Kontainer.IsoBmff,
-        buffer, element, string;
+        element, buffer, string;
 
-    // Kontainer.renderToBuffer()
-    // Accepts a KontainerElement and returns a Buffer (in node) or ArrayBuffer (in browser.)
-    // Each element accepts a 'props' object that holds parameters.
-    //
-    buffer = Kontainer.renderToBuffer(
-      IsoBmff.createElement('file', null,
-        IsoBmff.createElement('ftyp', {majorBrand: 'isom'}),
-        IsoBmff.createElement('moov', null,
-          IsoBmff.createElement('mvhd', {creationTime: new Date(0), modificationTime: new Date(0), timeScale: 1, nextTrackId: 4}),
-          IsoBmff.createElement('trak', null,
-            IsoBmff.createElement('tkhd', {creationTime: new Date(0), modificationTime: new Date(0), trackId: 1, width: 640, height: 480}),
-            IsoBmff.createElement('mdia')
-          )
+    // IsoBmff.createElement()
+    //   Accepts: Box type, props, children...
+    //   Returns: KontainerElement
+    element = IsoBmff.createElement('file', null,
+      IsoBmff.createElement('ftyp', {majorBrand: 'isom'}),
+      IsoBmff.createElement('moov', null,
+        IsoBmff.createElement('mvhd', {creationTime: new Date(0), modificationTime: new Date(0), timeScale: 1, nextTrackId: 4}),
+        IsoBmff.createElement('trak', null,
+          IsoBmff.createElement('tkhd', {creationTime: new Date(0), modificationTime: new Date(0), trackId: 1, width: 640, height: 480}),
+          IsoBmff.createElement('mdia')
         )
       )
     );
 
-    // Accepts a Buffer or ArrayBuffer and returns a KontainerElement.
+    // Kontainer.renderToBuffer()
+    //   Accepts: KontainerElement
+    //   Returns: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream
+    buffer = Kontainer.renderToBuffer(element);
+
+    // IsoBmff.createElementFromBuffer()
+    //   Returns: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream
+    //   Returns: KontainerElement.
     element = IsoBmff.createElementFromBuffer(buffer);
 
     
@@ -48,14 +52,14 @@ Each MP4 Box is represented as a KontainerElement which is similar to ReactEleme
 
 ## CLI
 
-A simple parser for displaying the file structure.
+A simple parser for displaying the structure of a media file.
 
 ```
 Usage:
     kontainer filePath [options]
 
 Example:
-    kontainer /path/to/file --mp4
+    kontainer /path/to/mediafile --mp4
 Options:
   -h, --help    Print help
   -v, --version Print version

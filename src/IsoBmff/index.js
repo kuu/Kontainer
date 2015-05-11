@@ -150,7 +150,7 @@ function parse(buffer, offset) {
   // Read the Box params as we don't know the type.
   [readBytesNum, props] = Box.parse(buffer, offset);
   if (!props) {
-    console.error('IsoBmff.createElementFromArrayBuffer: Failed to parse.');
+    console.error('IsoBmff.createElementFromBuffer: Failed to parse.');
     return [0, null];
   }
 
@@ -166,14 +166,14 @@ function parse(buffer, offset) {
 
   boxClass = clazz[boxType];
   if (!boxClass) {
-    console.error(`IsoBmff.createElementFromArrayBuffer: Unsupported type - "${boxType}"`);
+    console.error(`IsoBmff.createElementFromBuffer: Unsupported type - "${boxType}"`);
     return [boxSize, null];
   }
 
   [readBytesNum, props] = boxClass.parse(buffer, offset);
   base += readBytesNum;
   if (!props) {
-    console.error('IsoBmff.createElementFromArrayBuffer: Failed to parse.');
+    console.error('IsoBmff.createElementFromBuffer: Failed to parse.');
     return [boxSize, null];
   }
 
@@ -189,37 +189,34 @@ function parse(buffer, offset) {
   return [base - offset, MediaFormat.createElement(boxClass, props, children)];
 }
 
-function createElementFromArrayBuffer(buffer, offset=0) {
-  var base, endOfBuffer, readBytesNum, element, list;
+function createElementFromBuffer(buffer, offset=0) {
+  var base = offset, endOfBuffer, readBytesNum,
+      element, elementList = [];
 
-  if (buffer instanceof ArrayBuffer === false) {
-    console.error('IsoBmff.createElementFromArrayBuffer: Not an ArrayBuffer.');
-    return null;
+  if (buffer instanceof ArrayBuffer) {
+    buffer = new Uint8Array(buffer);
   }
-
-  base = offset;
-  endOfBuffer = base + buffer.byteLength;
-  list = [];
+  endOfBuffer = base + buffer.length;
 
   while (base < endOfBuffer) {
-    [readBytesNum, element] = parse(new Uint8Array(buffer), base);
+    [readBytesNum, element] = parse(buffer, base);
     if (!element) {
       base += readBytesNum;
       break;
     }
-    list.push(element);
+    elementList.push(element);
     base += readBytesNum;
   }
-  //console.log(`IsoBmff.createElementFromArrayBuffer: Done. ${base - offset} bytes read.`);
-  if (list.length === 0) {
+  //console.log(`IsoBmff.createElementFromBuffer: Done. ${base - offset} bytes read.`);
+  if (elementList.length === 0) {
     return null;
-  } else if (list.length === 1) {
-    return list[0];
+  } else if (elementList.length === 1) {
+    return elementList[0];
   }
-  return MediaFormat.createElement(clazz.file, null, list);
+  return MediaFormat.createElement(clazz.file, null, elementList);
 }
 
 module.exports = {
   createElement: createElement,
-  createElementFromArrayBuffer: createElementFromArrayBuffer
+  createElementFromBuffer: createElementFromBuffer
 };

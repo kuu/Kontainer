@@ -1,7 +1,8 @@
 var Box = require('./Box'),
     PropTypes = require('../core/PropTypes'),
     Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+    Reader = require('../core/Reader'),
+    Buffer = require('../core/Buffer');
 
 class AVCConfigurationBox extends Box {
   constructor(props) {
@@ -87,7 +88,7 @@ class AVCConfigurationBox extends Box {
     base += Writer.writeNumber(0xE0 | sequenceParameterSets.length, buffer, base, 1);
     sequenceParameterSets.forEach(sps => {
       length = sps.length;
-      data = new Uint8Array(sps.data);
+      data = sps.data;
       base += Writer.writeNumber(length, buffer, base, 2);
       for (i = 0; i < length; i++) {
         buffer[base++] = data[i];
@@ -96,7 +97,7 @@ class AVCConfigurationBox extends Box {
     base += Writer.writeNumber(pictureParameterSets.length, buffer, base, 1);
     pictureParameterSets.forEach(pps => {
       length = pps.length;
-      data = new Uint8Array(pps.data);
+      data = pps.data;
       base += Writer.writeNumber(length, buffer, base, 2);
       for (i = 0; i < length; i++) {
         buffer[base++] = data[i];
@@ -110,7 +111,7 @@ class AVCConfigurationBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props, i, j, length, data,
+    var base = offset, readBytesNum, props, i, j, length, data, buf,
         configurationVersion, avcProfileIndication, profileCompatibility,
         avcLevelIndication, lengthSizeMinusOne,
         numOfParameterSets,
@@ -144,11 +145,12 @@ class AVCConfigurationBox extends Box {
       [readBytesNum, length] = Reader.readNumber(buffer, base, 1);
       base += readBytesNum;
 
-      data = new Uint8Array(length);
+      buf = new Buffer(length);
+      data = buf.getView();
       for (j = 0; j < length; j++) {
         data[i] = buffer[base++];
       }
-      sequenceParameterSets.push({length: length, data: data.buffer});
+      sequenceParameterSets.push({length: length, data: buf.getData()});
     }
 
     [readBytesNum, numOfParameterSets] = Reader.readNumber(buffer, base, 1);
@@ -158,11 +160,12 @@ class AVCConfigurationBox extends Box {
       [readBytesNum, length] = Reader.readNumber(buffer, base, 1);
       base += readBytesNum;
 
-      data = new Uint8Array(length);
+      buf = new Buffer(length);
+      data = buf.getView();
       for (j = 0; j < length; j++) {
         data[i] = buffer[base++];
       }
-      pictureParameterSets.push({length: length, data: data.buffer});
+      pictureParameterSets.push({length: length, data: buf.getData()});
     }
 
     props.configurationVersion = configurationVersion;

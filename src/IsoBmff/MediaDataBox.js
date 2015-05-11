@@ -1,5 +1,6 @@
 var Box = require('./Box'),
-    PropTypes = require('../core/PropTypes');
+    PropTypes = require('../core/PropTypes'),
+    Buffer = require('../core/Buffer');
 
 class MediaDataBox extends Box {
   constructor(props) {
@@ -8,7 +9,7 @@ class MediaDataBox extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- MediaDataBox.serialize enter.');
-    var data = new Uint8Array(this.props.data),
+    var data = this.props.data,
         base = offset;
 
     base += super.serialize(buffer, base);
@@ -25,17 +26,19 @@ class MediaDataBox extends Box {
 
   static parse(buffer, offset=0) {
     var base = offset, readBytesNum, props,
-        toBeRead, data;
+        toBeRead, data, buf;
 
     [readBytesNum, props] = Box.parse(buffer, base);
     base += readBytesNum;
     toBeRead = props.size - readBytesNum;
-    data = new Uint8Array(toBeRead);
+
+    buf = new Buffer(toBeRead);
+    data = buf.getView();
 
     for (var i = 0; i < toBeRead; i++) {
       data[i] = buffer[base++];
     }
-    props.data = data.buffer;
+    props.data = buf.getData();
 
     return [base - offset, props];
   }

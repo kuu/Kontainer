@@ -1,6 +1,7 @@
 var IsoBmff = require('./IsoBmff/'),
     PropTypes = require('./core/PropTypes'),
-    Writer = require('./core/Writer');
+    Writer = require('./core/Writer'),
+    Buffer = require('./core/Buffer');
 
 require("babel/polyfill");
 
@@ -9,7 +10,7 @@ function traverse(context, element, buffer, offset=0) {
       propTypes, base = offset, err;
 
   if (!element) {
-    console.warn('Kontainer.renderToArrayBuffer: null element.');
+    console.warn('Kontainer.renderToBuffer: null element.');
     return 0;
   }
 
@@ -31,14 +32,14 @@ function traverse(context, element, buffer, offset=0) {
         }
         return true;
       })) {
-        console.error('Kontainer.renderToArrayBuffer: Prop validation failed: ' + err.message);
+        console.error('Kontainer.renderToBuffer: Prop validation failed: ' + err.message);
         return 0;
       }
     }
     // Validate context
     err = type.validate(context, props);
     if (err) {
-      console.error('Kontainer.renderToArrayBuffer: Context validation failed: ' + err.message);
+      console.error('Kontainer.renderToBuffer: Context validation failed: ' + err.message);
     }
     // Instantiation
     instance = element.instance = new type(props);
@@ -100,7 +101,7 @@ function printProps(context, element) {
   //console.log(`printProps exit. type=${type.COMPACT_NAME}`);
 }
 
-function renderToArrayBuffer(element) {
+function renderToBuffer(element) {
   var size, buffer, context = {};
 
   // Culculate the entire byte size.
@@ -111,10 +112,10 @@ function renderToArrayBuffer(element) {
   }
 
   // Write to the array buffer.
-  buffer = new Uint8Array(size);
-  traverse(context, element, buffer);
+  buffer = new Buffer(size);
+  traverse(context, element, buffer.getView());
 
-  return buffer.buffer;
+  return buffer.getData();
 }
 
 var defaultPropsFormatter = {
@@ -182,7 +183,7 @@ function renderToString(element, propsFormatter) {
 }
 
 module.exports = {
-  renderToArrayBuffer: renderToArrayBuffer,
+  renderToBuffer: renderToBuffer,
   renderToString: renderToString,
   IsoBmff: IsoBmff,
   PropTypes: PropTypes,

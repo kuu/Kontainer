@@ -44,19 +44,12 @@ if (!filePath) {
 }
 
 fs.readFile(filePath, function (err, buffer) {
-  var b;
-
   if (err) {
     console.error('[kontainer] Unable to open - ' + filePath);
     return;
   }
 
-  b = new Uint8Array(buffer.length);
-  for (var i = 0; i < buffer.length; ++i) {
-    b[i] = buffer[i];
-  }
-
-  element = Kontainer.IsoBmff.createElementFromArrayBuffer(b.buffer);
+  element = Kontainer.IsoBmff.createElementFromBuffer(buffer);
 
   if (!element) {
     console.error('[kontainer] Unsupported format.');

@@ -1,6 +1,7 @@
 var Box = require('./Box'),
     FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes');
+    PropTypes = require('../core/PropTypes'),
+    Buffer = require('../core/Buffer');
 
 class ESDBox extends FullBox {
   constructor(props) {
@@ -10,7 +11,7 @@ class ESDBox extends FullBox {
   serialize(buffer, offset=0) {
     //console.log('--- ESDBox.serialize enter.');
     var props = this.props,
-        esDescriptor = new Uint8Array(props.esDescriptor),
+        esDescriptor = props.esDescriptor,
         base = offset;
 
     base += super.serialize(buffer, base);
@@ -26,17 +27,18 @@ class ESDBox extends FullBox {
 
   static parse(buffer, offset=0) {
     var base = offset, readBytesNum, props,
-        toBeRead, esDescriptor;
+        toBeRead, esDescriptor, buf;
 
     [readBytesNum, props] = FullBox.parse(buffer, base);
     base += readBytesNum;
     toBeRead = props.size - readBytesNum;
-    esDescriptor = new Uint8Array(toBeRead);
+    buf = new Buffer(toBeRead);
+    esDescriptor = buf.getView();
 
     for (var i = 0; i < toBeRead; i++) {
       esDescriptor[i] = buffer[base++];
     }
-    props.esDescriptor = esDescriptor.buffer;
+    props.esDescriptor = buf.getData();
     return [base - offset, props];
   }
 }

@@ -29,14 +29,19 @@ describe('SampleToChunkBox', function () {
 
   it('supports zero entry', function () {
     var stscElement = IsoBmff.createElement('stsc');
-    var buffer = Kontainer.renderToArrayBuffer(stscElement);
+    var buffer = Kontainer.renderToBuffer(stscElement);
     expect(buffer).not.toBe(null);
-    var array = new Uint8Array(buffer);
+    var array;
+    if (buffer instanceof ArrayBuffer) {
+      array = new Uint8Array(buffer);
+    } else {
+      array = buffer;
+    }
     expect(array.length).toBe(value1.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value1[i]);
     }
-    var element = IsoBmff.createElementFromArrayBuffer(buffer);
+    var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(stscElement, element)).toBe(true);
   });
@@ -64,14 +69,19 @@ describe('SampleToChunkBox', function () {
         ]
       }
     );
-    var buffer = Kontainer.renderToArrayBuffer(stscElement);
+    var buffer = Kontainer.renderToBuffer(stscElement);
     expect(buffer).not.toBe(null);
-    var array = new Uint8Array(buffer);
+    var array;
+    if (buffer instanceof ArrayBuffer) {
+      array = new Uint8Array(buffer);
+    } else {
+      array = buffer;
+    }
     expect(array.length).toBe(value2.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value2[i]);
     }
-    var element = IsoBmff.createElementFromArrayBuffer(buffer);
+    var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(stscElement, element)).toBe(true);
   });

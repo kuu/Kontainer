@@ -30,14 +30,19 @@ describe('MP4AudioSampleEntry', function () {
 
   it('supports mono/16bit/48kHz', function () {
     var mp4aElement = IsoBmff.createElement('mp4a', {dataReferenceIndex: 1});
-    var buffer = Kontainer.renderToArrayBuffer(mp4aElement);
+    var buffer = Kontainer.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
-    var array = new Uint8Array(buffer);
+    var array;
+    if (buffer instanceof ArrayBuffer) {
+      array = new Uint8Array(buffer);
+    } else {
+      array = buffer;
+    }
     expect(array.length).toBe(value1.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value1[i]);
     }
-    var element = IsoBmff.createElementFromArrayBuffer(buffer);
+    var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(mp4aElement, element)).toBe(true);
   });
@@ -47,14 +52,19 @@ describe('MP4AudioSampleEntry', function () {
       'mp4a',
       { dataReferenceIndex: 2, channelCount: 2, sampleSize: 24, sampleRate: 48000 }
     );
-    var buffer = Kontainer.renderToArrayBuffer(mp4aElement);
+    var buffer = Kontainer.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
-    var array = new Uint8Array(buffer);
+    var array;
+    if (buffer instanceof ArrayBuffer) {
+      array = new Uint8Array(buffer);
+    } else {
+      array = buffer;
+    }
     expect(array.length).toBe(value2.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value2[i]);
     }
-    var element = IsoBmff.createElementFromArrayBuffer(buffer);
+    var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(mp4aElement, element)).toBe(true);
   });

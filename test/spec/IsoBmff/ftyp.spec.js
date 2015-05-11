@@ -19,13 +19,18 @@ describe('FileTypeBox', function () {
       ];
 
   it('requires major_brand', function () {
-    var buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('ftyp'));
+    var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp'));
     expect(buffer).toBe(null);
   });
 
   it('can be initialized with the default values', function () {
-    var buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'isom'}));
-    var array = new Uint8Array(buffer);
+    var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'isom'}));
+    var array;
+    if (buffer instanceof ArrayBuffer) {
+      array = new Uint8Array(buffer);
+    } else {
+      array = buffer;
+    }
     expect(array.length).toBe(defaultValue.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(defaultValue[i]);
@@ -33,8 +38,13 @@ describe('FileTypeBox', function () {
   });
 
   it('can be initialized with the specified values', function () {
-    var buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}));
-    var array = new Uint8Array(buffer);
+    var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}));
+    var array;
+    if (buffer instanceof ArrayBuffer) {
+      array = new Uint8Array(buffer);
+    } else {
+      array = buffer;
+    }
     expect(array.length).toBe(avc1Value.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(avc1Value[i]);

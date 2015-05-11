@@ -207,39 +207,53 @@ describe('File', function () {
   ];
 
   it('generates a binary data from KontainerElements', function () {
-    var buffer, elem;
+    var buffer, elem, array;
 
-    buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('file', null,
+    buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null,
       IsoBmff.createElement('ftyp', {majorBrand: 'isom'})
     ));
     expect(buffer).toBe(null);
-    buffer = Kontainer.renderToArrayBuffer(IsoBmff.createElement('file', null,
+    buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null,
       IsoBmff.createElement('moov', null,
         IsoBmff.createElement('mvhd')
       )
     ));
     expect(buffer).toBe(null);
 
-    buffer = Kontainer.renderToArrayBuffer(topLevelElement);
+    buffer = Kontainer.renderToBuffer(topLevelElement);
     expect(buffer).not.toBe(null);
-    var array = new Uint8Array(buffer);
+    if (buffer instanceof ArrayBuffer) {
+      array = new Uint8Array(buffer);
+    } else {
+      array = buffer;
+    }
     expect(array.length).toBe(value.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value[i]);
       //console.log(`array[${i}]=${array[i]}`);
     }
-    elem = IsoBmff.createElementFromArrayBuffer(buffer);
+    elem = IsoBmff.createElementFromBuffer(buffer);
     expect(customMatchers.toHaveTheSamePropsAs(topLevelElement, elem)).toBe(true);
   });
 
   it('parses a binary data into KontainerElements', function () {
-    var b = new Uint8Array(value), elem, buf, array;
+    var b, elem, buf, array;
 
-    elem = IsoBmff.createElementFromArrayBuffer(b.buffer);
+    if (global.Buffer) {
+      b = new global.Buffer(value);
+    } else {
+      buf = new Uint8Array(value);
+      b = buf.buffer;
+    }
+    elem = IsoBmff.createElementFromBuffer(b);
     expect(elem).not.toBe(null);
-    buf = Kontainer.renderToArrayBuffer(elem);
+    buf = Kontainer.renderToBuffer(elem);
     expect(buf).not.toBe(null);
-    array = new Uint8Array(buf);
+    if (buf instanceof ArrayBuffer) {
+      array = new Uint8Array(buf);
+    } else {
+      array = buf;
+    }
     expect(array.length).toBe(value.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value[i]);

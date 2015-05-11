@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/kuu/Kontainer.git"
   },
-  "main": "index.js",
+  "main": "transpiled/src/index.js",
   "bin": {
     "kontainer": "bin/kontainer.js"
   },

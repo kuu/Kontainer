@@ -74,9 +74,21 @@ function writeString(str, buffer, offset, length) {
 }
 
 function writeNumber(num, buffer, offset, length=4) {
-  var base = offset, byte;
+  var base = offset, left = 0, leftLen, byte, i;
 
-  for (var i = length - 1; i >= 0; i--) {
+  if (num > 4294967295 && length > 4) {
+    // 64bit
+    left = num / 4294967296;
+    num |= 0;
+    leftLen = length - 4;
+    length = 4;
+    for (i = leftLen - 1; i >= 0; i--) {
+      byte = (left >> (8 * i)) & 0xFF;
+      writeByte(byte, buffer, base++);
+    }
+  }
+
+  for (i = length - 1; i >= 0; i--) {
     byte = (num >> (8 * i)) & 0xFF;
     writeByte(byte, buffer, base++);
   }

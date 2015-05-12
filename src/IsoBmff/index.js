@@ -35,7 +35,10 @@ var clazz = {
   'esds': require('./ESDBox'),
   'mdat': require('./MediaDataBox'),
   'btrt': require('./MPEG4BitRateBox'),
-  'stss': require('./SyncSampleBox')
+  'stss': require('./SyncSampleBox'),
+  'mvex': require('./MovieExtendsBox'),
+  'mehd': require('./MovieExtendsHeaderBox'),
+  'trex': require('./TrackExtendsBox')
 };
 
 function validateChild(context, child) {

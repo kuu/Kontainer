@@ -62,15 +62,23 @@ function readString(buffer, offset, length) {
 }
 
 function readNumber(buffer, offset, length=4) {
-  var base = offset, num = 0;
+  var base = offset, num = 0, left = 0, leftLen, i;
 
   length = Math.min(length, 8);
 
-  for (var i = length - 1; i >= 0; i--) {
+  if (length > 4) {
+    leftLen = length - 4;
+    length = 4;
+    for (i = leftLen- 1; i >= 0; i--) {
+      left |= (buffer[base++] << (8 * i));
+    }
+    left *= 4294967296;
+  }
+  for (i = length - 1; i >= 0; i--) {
     num |= (buffer[base++] << (8 * i));
   }
 
-  return [base - offset, num];
+  return [base - offset, left + num];
 }
 
 function readFixedNumber(buffer, offset, length=4) {

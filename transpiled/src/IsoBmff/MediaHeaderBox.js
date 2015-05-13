@@ -156,7 +156,7 @@ MediaHeaderBox.defaultProps = {
   version: 0,
   creationTime: null,
   modificationTime: null,
-  duration: 4294967295 | 0,
+  duration: 4294967295,
   language: 'eng'
 };
 

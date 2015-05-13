@@ -204,7 +204,7 @@ MovieHeaderBox.defaultProps = {
   version: 0,
   creationTime: null,
   modificationTime: null,
-  duration: 4294967295 | 0,
+  duration: 4294967295,
   rate: 1,
   volume: 1,
   matrix: [1, 0, 0, 0, 1, 0, 0, 0, 16384]

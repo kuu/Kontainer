@@ -30,7 +30,7 @@ describe('TrackExtendsBox', function () {
     var trexElement = IsoBmff.createElement('trex', {
       trackId: 1,
       defaultSampleDescriptionIndex: 2,
-      defaultSampleDuration: 0xFFFFFFFF | 0,
+      defaultSampleDuration: 0xFFFFFFFF,
       defaultSampleSize: 65536,
       defaultSampleFlags: {
         sampleDependsOn: 'unknown',

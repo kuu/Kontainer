@@ -42,7 +42,7 @@ describe('MovieFragmentHeaderBox', function () {
   });
 
   it('supports the largest sequence number.', function () {
-    var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 4294967295 | 0 });
+    var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 4294967295 });
     var buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
     var array;

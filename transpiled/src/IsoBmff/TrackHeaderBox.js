@@ -282,7 +282,7 @@ TrackHeaderBox.defaultProps = {
   },
   creationTime: null,
   modificationTime: null,
-  duration: 4294967295 | 0,
+  duration: 4294967295,
   layer: 0,
   alternateGroup: 0,
   volume: 1,

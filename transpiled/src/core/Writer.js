@@ -77,25 +77,21 @@ function writeNumber(num, buffer, offset) {
   var length = arguments[3] === undefined ? 4 : arguments[3];
 
   var base = offset,
-      left = 0,
-      leftLen,
       byte,
-      i;
+      i,
+      left = num / 4294967296,
+      right = num % 4294967296;
 
   if (num > 4294967295 && length > 4) {
-    // 64bit
-    left = num / 4294967296;
-    num |= 0;
-    leftLen = length - 4;
-    length = 4;
-    for (i = leftLen - 1; i >= 0; i--) {
+    for (i = length - 4 - 1; i >= 0; i--) {
       byte = left >> 8 * i & 255;
       writeByte(byte, buffer, base++);
     }
+    length = 4;
   }
 
   for (i = length - 1; i >= 0; i--) {
-    byte = num >> 8 * i & 255;
+    byte = right >> 8 * i & 255;
     writeByte(byte, buffer, base++);
   }
 

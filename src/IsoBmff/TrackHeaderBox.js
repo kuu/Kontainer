@@ -177,7 +177,7 @@ TrackHeaderBox.defaultProps = {
   },
   creationTime: null,
   modificationTime: null,
-  duration: 0xFFFFFFFF | 0,
+  duration: 0xFFFFFFFF,
   layer: 0,
   alternateGroup: 0,
   volume: 1.0,

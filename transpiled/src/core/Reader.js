@@ -75,27 +75,27 @@ function readNumber(buffer, offset) {
   var length = arguments[2] === undefined ? 4 : arguments[2];
 
   var base = offset,
-      num = 0,
       left = 0,
-      leftLen,
+      right = 0,
       i;
 
   length = Math.min(length, 8);
 
   if (length > 4) {
-    leftLen = length - 4;
-    length = 4;
-    for (i = leftLen - 1; i >= 0; i--) {
+    for (i = length - 4 - 1; i >= 0; i--) {
       left |= buffer[base++] << 8 * i;
     }
     left >>>= 0; // signed => unsigned
     left *= 4294967296;
-  }
-  for (i = length - 1; i >= 0; i--) {
-    num |= buffer[base++] << 8 * i;
+    length = 4;
   }
 
-  return [base - offset, left + num];
+  for (i = length - 1; i >= 0; i--) {
+    right |= buffer[base++] << 8 * i;
+  }
+  right >>>= 0; // signed => unsigned
+
+  return [base - offset, left + right];
 }
 
 function readFixedNumber(buffer, offset) {

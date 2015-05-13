@@ -7,24 +7,24 @@ var _helperMatcher = require('../../helper/matcher');
 var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
 
 /*global describe, it, expect */
-describe('MovieExtendsHeaderBox', function () {
+describe('MovieFragmentHeaderBox', function () {
   var Kontainer = require('../../../src/');
 
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [0, 0, 0, 16, // size=16
-  109, 101, 104, 100, // type='mehd'
+  109, 102, 104, 100, // type='mfhd'
   0, 0, 0, 0, // version=0, flags=0
-  1, 0, 0, 0 // fragment_duration=16777216
+  0, 0, 0, 0 // sequence_number=0
   ],
-      value2 = [0, 0, 0, 20, // size=20
-  109, 101, 104, 100, // type='mehd'
-  1, 0, 0, 0, // version=1, flags=0
-  0, 0, 0, 1, // fragment_duration=4294967296
-  0, 0, 0, 0];
+      value2 = [0, 0, 0, 16, // size=16
+  109, 102, 104, 100, // type='mfhd'
+  0, 0, 0, 0, // version=0, flags=0
+  255, 255, 255, 255 // sequence_number=0xFFFFFFFF
+  ];
 
-  it('supports 32 bit duration', function () {
-    var mehdElement = IsoBmff.createElement('mehd', { fragmentDuration: 16777216 });
-    var buffer = Kontainer.renderToBuffer(mehdElement);
+  it('supports the smallest sequence number.', function () {
+    var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 0 });
+    var buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -38,12 +38,12 @@ describe('MovieExtendsHeaderBox', function () {
     }
     var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(mehdElement, element)).toBe(true);
+    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(mfhdElement, element)).toBe(true);
   });
 
-  it('supports 64 bit duration', function () {
-    var mehdElement = IsoBmff.createElement('mehd', { version: 1, fragmentDuration: 4294967296 });
-    var buffer = Kontainer.renderToBuffer(mehdElement);
+  it('supports the largest sequence number.', function () {
+    var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 4294967295 | 0 });
+    var buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -57,6 +57,6 @@ describe('MovieExtendsHeaderBox', function () {
     }
     var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(mehdElement, element)).toBe(true);
+    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(mfhdElement, element)).toBe(true);
   });
 });

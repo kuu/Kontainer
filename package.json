@@ -1,6 +1,6 @@
 {
   "name": "kontainer-js",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A media file format generator/parser that exposes a React-like API.",
   "repository": {
     "type": "git",
@@ -33,6 +33,16 @@
   },
   "author": "Kuu Miyazaki",
   "license": "MIT",
+  "keywords": [
+    "multimedia",
+    "file format",
+    "container format",
+    "video",
+    "audio",
+    "MP4",
+    "ISO BMFF",
+    "ISO/IEC 14496-12"
+  ],
   "devDependencies": {
     "babel-eslint": "^3.0.1",
     "babelify": "^6.0.2",

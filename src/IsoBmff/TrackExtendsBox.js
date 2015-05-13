@@ -12,6 +12,10 @@ class TrackExtendsBox extends FullBox {
   static encodeDefaultSampleFlags(flags) {
     var f = 0;
 
+    if (!flags) {
+      return void 0;
+    }
+
     if (flags.sampleDependsOn === 'unknown') {
       f |= (0 << 6);
     } else if (flags.sampleDependsOn === 'non-I-picture') {
@@ -146,19 +150,21 @@ class TrackExtendsBox extends FullBox {
 
 TrackExtendsBox.COMPACT_NAME = 'trex';
 
+TrackExtendsBox.DEFAULT_SAMPLE_FLAGS_PROPTYPES = PropTypes.shape({
+  sampleDependsOn: PropTypes.oneOf(['unknown', 'non-I-picture', 'I-picture']),
+  sampleIsDependedOn: PropTypes.oneOf(['unknown', 'non-disposable', 'disposable']),
+  sampleHasRedundancy: PropTypes.oneOf(['unknown', 'redundant', 'no-redundant']),
+  samplePaddingValue: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6, 7]),
+  sampleIsDifferenceSample: PropTypes.bool,
+  sampleDegradationPriority: PropTypes.number
+});
+
 TrackExtendsBox.propTypes = {
   trackId: PropTypes.number.isRequired,
   defaultSampleDescriptionIndex: PropTypes.number.isRequired,
   defaultSampleDuration: PropTypes.number.isRequired,
   defaultSampleSize: PropTypes.number.isRequired,
-  defaultSampleFlags: PropTypes.shape({
-    sampleDependsOn: PropTypes.oneOf(['unknown', 'non-I-picture', 'I-picture']),
-    sampleIsDependedOn: PropTypes.oneOf(['unknown', 'non-disposable', 'disposable']),
-    sampleHasRedundancy: PropTypes.oneOf(['unknown', 'redundant', 'no-redundant']),
-    samplePaddingValue: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6, 7]),
-    sampleIsDifferenceSample: PropTypes.bool,
-    sampleDegradationPriority: PropTypes.number
-  }).isRequired
+  defaultSampleFlags: TrackExtendsBox.DEFAULT_SAMPLE_FLAGS_PROPTYPES.isRequired
 };
 
 TrackExtendsBox.defaultProps = {

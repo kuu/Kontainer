@@ -88,6 +88,7 @@ function readNumber(buffer, offset) {
     for (i = leftLen - 1; i >= 0; i--) {
       left |= buffer[base++] << 8 * i;
     }
+    left >>>= 0; // signed => unsigned
     left *= 4294967296;
   }
   for (i = length - 1; i >= 0; i--) {

@@ -40,7 +40,11 @@ var clazz = {
   'stss': require('./SyncSampleBox'),
   'mvex': require('./MovieExtendsBox'),
   'mehd': require('./MovieExtendsHeaderBox'),
-  'trex': require('./TrackExtendsBox')
+  'trex': require('./TrackExtendsBox'),
+  'moof': require('./MovieFragmentBox'),
+  'mfhd': require('./MovieFragmentHeaderBox'),
+  'traf': require('./TrackFragmentBox'),
+  'tfhd': require('./TrackFragmentHeaderBox')
 };
 
 function validateChild(context, child) {

@@ -2,6 +2,7 @@
 
 var IsoBmff = require('./IsoBmff/'),
     PropTypes = require('./core/PropTypes'),
+    Reader = require('./core/Reader'),
     Writer = require('./core/Writer'),
     Buffer = require('./core/Buffer');
 
@@ -215,5 +216,6 @@ module.exports = {
   renderToString: renderToString,
   IsoBmff: IsoBmff,
   PropTypes: PropTypes,
+  Reader: Reader,
   Writer: Writer
 };

@@ -71,13 +71,21 @@ function readString(buffer, offset, length) {
   return [base - offset, str];
 }
 
+function isNegative(value, length) {
+  return !!(value & 1 << length * 8 - 1);
+}
+
 function readNumber(buffer, offset) {
   var length = arguments[2] === undefined ? 4 : arguments[2];
+  var signed = arguments[3] === undefined ? false : arguments[3];
 
   var base = offset,
       left = 0,
       right = 0,
-      i;
+      i,
+      negative,
+      mask,
+      result;
 
   length = Math.min(length, 8);
 
@@ -85,7 +93,8 @@ function readNumber(buffer, offset) {
     for (i = length - 4 - 1; i >= 0; i--) {
       left |= buffer[base++] << 8 * i;
     }
-    left >>>= 0; // signed => unsigned
+    left >>>= 0;
+    negative = isNegative(left, length - 4);
     left *= 4294967296;
     length = 4;
   }
@@ -93,9 +102,29 @@ function readNumber(buffer, offset) {
   for (i = length - 1; i >= 0; i--) {
     right |= buffer[base++] << 8 * i;
   }
-  right >>>= 0; // signed => unsigned
+  right >>>= 0;
 
-  return [base - offset, left + right];
+  result = left + right;
+
+  if (signed) {
+    if (negative === void 0) {
+      negative = isNegative(result, length);
+    }
+
+    if (negative) {
+      // negative value
+      mask = (1 << length * 8) - 1;
+      result = -((~result & mask) + 1);
+    }
+  }
+
+  if (result < 0) {
+    result = Math.max(result, -Number.MAX_SAFE_INTEGER);
+  } else {
+    result = Math.min(result, Number.MAX_SAFE_INTEGER);
+  }
+
+  return [base - offset, result];
 }
 
 function readFixedNumber(buffer, offset) {

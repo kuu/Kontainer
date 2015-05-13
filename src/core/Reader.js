@@ -61,12 +61,17 @@ function readString(buffer, offset, length) {
   return [base - offset, str];
 }
 
-function isNegative(value, length) {
-  return !!(value & (1 << (length * 8 - 1)));
+function isNegative(value, bitLength) {
+  return !!(value & (1 << (bitLength - 1)));
+}
+
+function convertToNegative(value, bitLength) {
+  var mask = (1 << bitLength) - 1;
+  return -((~value & mask) + 1);
 }
 
 function readNumber(buffer, offset, length=4, signed=false) {
-  var base = offset, left = 0, right = 0, i, negative, mask, result;
+  var base = offset, left = 0, right = 0, i, negative, result;
 
   length = Math.min(length, 8);
 
@@ -75,7 +80,7 @@ function readNumber(buffer, offset, length=4, signed=false) {
       left |= (buffer[base++] << (8 * i));
     }
     left >>>= 0;
-    negative = isNegative(left, length - 4);
+    negative = isNegative(left, (length - 4) * 8);
     left *= 4294967296;
     length = 4;
   }
@@ -89,13 +94,11 @@ function readNumber(buffer, offset, length=4, signed=false) {
 
   if (signed) {
     if (negative === void 0) {
-      negative = isNegative(result, length);
+      negative = isNegative(result, length * 8);
     }
 
     if (negative) {
-      // negative value
-      mask = (1 << (length * 8)) - 1;
-      result = -((~result & mask) + 1);
+      result = convertToNegative(result, length * 8);
     }
   }
 
@@ -108,6 +111,57 @@ function readNumber(buffer, offset, length=4, signed=false) {
   return [base - offset, result];
 }
 
+function readBits(buffer, byteOffset, bitOffset, bitsToRead) {
+  var base = byteOffset,
+      endOfBuffer = base + buffer.length,
+      readBitsNum = 0, num = 0, byte, i;
+
+  while (base < endOfBuffer && readBitsNum < bitsToRead) {
+    byte = buffer[base];
+    for (i = bitOffset; i < 8 && readBitsNum < bitsToRead; i++, readBitsNum++) {
+      num <<= 1;
+      num |= ((byte >> i) & 0x01);
+    }
+    bitOffset = 0;
+    if (i === 8) {
+      base++;
+    }
+  }
+  num >>>= 0;
+  return [base - byteOffset, num, 8 - i];
+}
+
+function readFixedNumber(buffer, offset, length=4, signed=false) {
+  var base = offset, readBytesNum, left, right,
+      halfBits = Math.min(length, 8) * 8 / 2,
+      unreadBitsNum = 0, result;
+
+  [readBytesNum, left, unreadBitsNum] = readBits(buffer, base, unreadBitsNum, halfBits);
+  base += readBytesNum;
+
+  if (signed) {
+    if (isNegative(left, halfBits)) {
+      left = convertToNegative(left, halfBits);
+    }
+  }
+
+  [readBytesNum, right, unreadBitsNum] = readBits(buffer, base, unreadBitsNum, halfBits);
+  base += readBytesNum;
+
+  right /= (halfBits === 32 ? 4294967296 : (1 << halfBits));
+
+  if (left < 0) {
+    left = Math.max(left, -Number.MAX_SAFE_INTEGER);
+    result = left - right;
+  } else {
+    left = Math.min(left, Number.MAX_SAFE_INTEGER);
+    result = left + right;
+  }
+
+  return [base - offset, result];
+}
+
+/*
 function readFixedNumber(buffer, offset, length=4) {
   var base = offset, readBytesNum, left, right,
       half = Math.min(length / 2, 2);
@@ -122,6 +176,7 @@ function readFixedNumber(buffer, offset, length=4) {
 
   return [base - offset, left + right];
 }
+*/
 
 function readIso639Lang(buffer, offset) {
   var base = offset, readBytesNum, num, language = '';

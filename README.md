@@ -15,7 +15,7 @@ $ npm install -g kontainer-js
 
 A media file like MP4 or WebM is composed of nested objects. In Kontainer, each object, e.g. MP4 Box, is represented as a KontainerElement which is similar to ReactElement. (TODO: Support JSX.)
 
-The actual media data (audio and video chunks) and metadata are represented as a 'props' object and need to be passed to createElement().
+The actual media data (audio and video chunks) and metadata are represented as a `props` object and need to be passed to `createElement()`.
 
 ```js
     var Kontainer = require('kontainer-js'),
@@ -40,7 +40,7 @@ The actual media data (audio and video chunks) and metadata are represented as a
     );
 ```
 
-Once an element is created, it can be serialized into a byte stream using renderToBuffer().
+Once an element is created, it can be serialized into a byte stream using `renderToBuffer()`.
 
 ```js
     // Kontainer.renderToBuffer()
@@ -49,7 +49,7 @@ Once an element is created, it can be serialized into a byte stream using render
     buffer = Kontainer.renderToBuffer(element);
 ```
 
-Similarly, you can parse a byte stream and reproduce a KontainerElement as well.
+Similarly, you can parse a byte stream and reproduce a KontainerElement from it.
 
 ```js
     // IsoBmff.createElementFromBuffer()
@@ -59,7 +59,7 @@ Similarly, you can parse a byte stream and reproduce a KontainerElement as well.
 
 ```
 
-And then you can dump the element tree as a text.
+And then you can convert the element tree into a text using `renderToString()`.
 
 ```js
     // Kontainer.renderToString();
@@ -68,8 +68,8 @@ And then you can dump the element tree as a text.
     string = Kontainer.renderToString(element, formatter);
 ```
 
-The formatter is an object with three functions that will be repeatedly called during the tree traversal.
-If you don't specify the formatter object, the default one will be used. But you can implement your own formatter.
+The `formatter` is an optional and when specified, it needs to be an object with three functions that will be repeatedly called during the tree traversal.
+If you don't specify the `formatter` object, the default one will be used.
 
 ```js
     // The formatter needs to be an object with the following functions.

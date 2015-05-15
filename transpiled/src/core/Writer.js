@@ -1,8 +1,23 @@
 'use strict';
 
-function writeByte(byte, buffer, offset) {
+function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }
+
+/*
+import util from './Util.js';
+
+var isNegative = util.isNegative,
+    convertToNegative = util.convertToNegative;
+*/
+
+function writeByte(byte, buffer, offset, _x, or) {
+  var mask = arguments[3] === undefined ? 255 : arguments[3];
+
   if (buffer) {
-    buffer[offset] = byte;
+    if (or) {
+      buffer[offset] |= byte & mask;
+    } else {
+      buffer[offset] = byte & mask;
+    }
   }
 }
 
@@ -98,20 +113,85 @@ function writeNumber(num, buffer, offset) {
   return base - offset;
 }
 
+function makeBitMask(start, len) {
+  var mask = 0;
+  for (var i = start + len - 1; i >= start; i--) {
+    mask |= 1 << i;
+  }
+  return mask;
+}
+
+function writeBits(num, buffer, byteOffset, bitOffset, totalBitsToWrite) {
+  var base = byteOffset,
+      start = bitOffset,
+      remainingBits = totalBitsToWrite,
+      len,
+      mask,
+      byte,
+      oddBitsNum = 0;
+
+  //console.log(`\twriteBits(num=${num} byteOffset=${byteOffset} bitOffset=${bitOffset} totalBitsToWrite=${totalBitsToWrite})`);
+
+  while (remainingBits > 0) {
+    len = Math.min(remainingBits, 8 - start);
+    byte = num >>> Math.max(remainingBits - 8, 0) & 255;
+    mask = makeBitMask(start, len);
+    //console.log(`\t\twriteByte(byte=${(byte << start) & 0xFF} base=${base} mask=${mask} or=${!!start}`);
+    writeByte(byte << start & 255, buffer, base, mask, !!start);
+    remainingBits -= len;
+    oddBitsNum = Math.max(8 - start - len, 0);
+    if (oddBitsNum) {
+      break;
+    }
+    base++;
+    start = 0;
+  }
+
+  //console.log(`\t<<<< return [${base - byteOffset} ${oddBitsNum}];`);
+  return [base - byteOffset, oddBitsNum];
+}
+
 function writeFixedNumber(num, buffer, offset) {
   var length = arguments[3] === undefined ? 4 : arguments[3];
 
   var base = offset,
       left = num > 0 ? Math.floor(num) : Math.ceil(num),
       right = parseFloat('0.' + String(num).split('.')[1]),
-      half = Math.min(length / 2, 2);
+      halfBitsNum = Math.min(length, 8) * 8 / 2,
+      writtenBytesNum = 0,
+      unreadBitsNum = 0;
 
-  base += writeNumber(left, buffer, base, half);
+  //console.log(`writeFixedNumber(${num} ${offset} ${length})`);
 
-  right = Math.floor(right * (1 << half * 8));
+  var _writeBits = writeBits(left, buffer, base, (8 - unreadBitsNum) % 8, halfBitsNum);
 
-  base += writeNumber(right, buffer, base, half);
+  var _writeBits2 = _slicedToArray(_writeBits, 2);
 
+  writtenBytesNum = _writeBits2[0];
+  unreadBitsNum = _writeBits2[1];
+
+  base += writtenBytesNum;
+
+  if (halfBitsNum === 28 && right >= 0.9999999) {
+    // ugly
+    right = 4294967295;
+  } else if (halfBitsNum === 32 && right >= 0.999999) {
+    // ugly
+    right = 4294967295;
+  } else {
+    right = Math.round(right * Math.pow(2, halfBitsNum));
+  }
+
+  var _writeBits3 = writeBits(right, buffer, base, (8 - unreadBitsNum) % 8, halfBitsNum);
+
+  var _writeBits32 = _slicedToArray(_writeBits3, 2);
+
+  writtenBytesNum = _writeBits32[0];
+  unreadBitsNum = _writeBits32[1];
+
+  base += writtenBytesNum;
+
+  //console.log(`<<<< return ${base - offset};`);
   return base - offset;
 }
 

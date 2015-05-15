@@ -1,6 +1,17 @@
 'use strict';
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }
+
+var _UtilJs = require('./Util.js');
+
+var _UtilJs2 = _interopRequireDefault(_UtilJs);
+
+'use strict';
+
+var isNegative = _UtilJs2['default'].isNegative,
+    convertToNegative = _UtilJs2['default'].convertToNegative;
 
 function readCharacter(buffer, offset) {
   var base = offset,
@@ -71,15 +82,6 @@ function readString(buffer, offset, length) {
   return [base - offset, str];
 }
 
-function isNegative(value, bitLength) {
-  return !!(value & 1 << bitLength - 1);
-}
-
-function convertToNegative(value, bitLength) {
-  var mask = (1 << bitLength) - 1;
-  return -((~value & mask) + 1);
-}
-
 function readNumber(buffer, offset) {
   var length = arguments[2] === undefined ? 4 : arguments[2];
   var signed = arguments[3] === undefined ? false : arguments[3];
@@ -129,27 +131,44 @@ function readNumber(buffer, offset) {
   return [base - offset, result];
 }
 
+function makeBitMask(start, len) {
+  var mask = 0;
+  for (var i = 8 - start - 1, il = 8 - start - len; i >= il; i--) {
+    mask |= 1 << i;
+  }
+  return mask;
+}
+
 function readBits(buffer, byteOffset, bitOffset, bitsToRead) {
   var base = byteOffset,
       endOfBuffer = base + buffer.length,
-      readBitsNum = 0,
+      start = bitOffset,
       num = 0,
+      remainingBits = bitsToRead,
+      len,
+      mask,
       byte,
-      i;
+      oddBitsNum = 0;
 
-  while (base < endOfBuffer && readBitsNum < bitsToRead) {
+  console.log('\treadBits(byteOffset=' + byteOffset + ' bitOffset=' + bitOffset + ' bitsToRead=' + bitsToRead + ')');
+
+  while (base < endOfBuffer && remainingBits) {
+    len = Math.min(remainingBits, 8 - start);
     byte = buffer[base];
-    for (i = bitOffset; i < 8 && readBitsNum < bitsToRead; i++, readBitsNum++) {
-      num <<= 1;
-      num |= byte >> i & 1;
+    mask = makeBitMask(start, len);
+    num <<= Math.min(8, len);
+    num |= byte & mask & 255;
+    remainingBits -= len;
+    oddBitsNum = Math.max(8 - start - len, 0);
+    if (oddBitsNum) {
+      break;
     }
-    bitOffset = 0;
-    if (i === 8) {
-      base++;
-    }
+    base++;
+    start = 0;
   }
   num >>>= 0;
-  return [base - byteOffset, num, 8 - i];
+  console.log('\t<<<< return [' + (base - byteOffset) + ' ' + num + ' ' + oddBitsNum + '];');
+  return [base - byteOffset, num, oddBitsNum];
 }
 
 function readFixedNumber(buffer, offset) {
@@ -160,11 +179,13 @@ function readFixedNumber(buffer, offset) {
       readBytesNum,
       left,
       right,
-      halfBits = Math.min(length, 8) * 8 / 2,
+      halfBitsNum = Math.min(length, 8) * 8 / 2,
       unreadBitsNum = 0,
       result;
 
-  var _readBits = readBits(buffer, base, unreadBitsNum, halfBits);
+  console.log('readFixedNumber(offset=' + offset + ' length=' + length + ' signed=' + signed + ')');
+
+  var _readBits = readBits(buffer, base, (8 - unreadBitsNum) % 8, halfBitsNum);
 
   var _readBits2 = _slicedToArray(_readBits, 3);
 
@@ -175,12 +196,12 @@ function readFixedNumber(buffer, offset) {
   base += readBytesNum;
 
   if (signed) {
-    if (isNegative(left, halfBits)) {
-      left = convertToNegative(left, halfBits);
+    if (isNegative(left, halfBitsNum)) {
+      left = convertToNegative(left, halfBitsNum);
     }
   }
 
-  var _readBits3 = readBits(buffer, base, unreadBitsNum, halfBits);
+  var _readBits3 = readBits(buffer, base, (8 - unreadBitsNum) % 8, halfBitsNum);
 
   var _readBits32 = _slicedToArray(_readBits3, 3);
 
@@ -190,7 +211,7 @@ function readFixedNumber(buffer, offset) {
 
   base += readBytesNum;
 
-  right /= halfBits === 32 ? 4294967296 : 1 << halfBits;
+  right /= halfBitsNum === 32 ? 4294967296 : 1 << halfBitsNum;
 
   if (left < 0) {
     left = Math.max(left, -Number.MAX_SAFE_INTEGER);
@@ -199,6 +220,8 @@ function readFixedNumber(buffer, offset) {
     left = Math.min(left, Number.MAX_SAFE_INTEGER);
     result = left + right;
   }
+
+  console.log('<<<< return [' + (base - offset) + ' ' + result + '];');
 
   return [base - offset, result];
 }

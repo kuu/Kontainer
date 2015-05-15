@@ -1,8 +1,19 @@
 'use strict';
 
-function writeByte(byte, buffer, offset) {
+/*
+import util from './Util.js';
+
+var isNegative = util.isNegative,
+    convertToNegative = util.convertToNegative;
+*/
+
+function writeByte(byte, buffer, offset, mask=0xFF, or) {
   if (buffer) {
-    buffer[offset] = byte;
+    if (or) {
+      buffer[offset] |= (byte & mask);
+    } else {
+      buffer[offset] = byte & mask;
+    }
   }
 }
 
@@ -94,18 +105,65 @@ function writeNumber(num, buffer, offset, length=4) {
   return base - offset;
 }
 
+function makeBitMask(start, len) {
+  var mask = 0;
+  for (var i = start + len - 1; i >= start; i--) {
+    mask |= (1 << i);
+  }
+  return mask;
+}
+
+function writeBits(num, buffer, byteOffset, bitOffset, totalBitsToWrite) {
+  var base = byteOffset,
+      start = bitOffset,
+      remainingBits = totalBitsToWrite,
+      len, mask, byte, oddBitsNum = 0;
+
+  //console.log(`\twriteBits(num=${num} byteOffset=${byteOffset} bitOffset=${bitOffset} totalBitsToWrite=${totalBitsToWrite})`);
+
+  while (remainingBits > 0) {
+    len = Math.min(remainingBits, 8 - start);
+    byte = (num >>> Math.max(remainingBits - 8, 0)) & 0xFF;
+    mask = makeBitMask(start, len);
+    //console.log(`\t\twriteByte(byte=${(byte << start) & 0xFF} base=${base} mask=${mask} or=${!!start}`);
+    writeByte((byte << start) & 0xFF, buffer, base, mask, !!start);
+    remainingBits -= len;
+    oddBitsNum = Math.max(8 - start - len, 0);
+    if (oddBitsNum) {
+      break;
+    }
+    base++;
+    start = 0;
+  }
+
+  //console.log(`\t<<<< return [${base - byteOffset} ${oddBitsNum}];`);
+  return [base - byteOffset, oddBitsNum];
+}
+
 function writeFixedNumber(num, buffer, offset, length=4) {
   var base = offset,
       left = num > 0 ? Math.floor(num) : Math.ceil(num),
       right = parseFloat('0.' + String(num).split(".")[1]),
-      half = Math.min(length / 2, 2);
+      halfBitsNum = Math.min(length, 8) * 8 / 2,
+      writtenBytesNum = 0, unreadBitsNum = 0;
 
-  base += writeNumber(left, buffer, base, half);
+  //console.log(`writeFixedNumber(${num} ${offset} ${length})`);
 
-  right = Math.floor(right * (1 << (half * 8)));
+  [writtenBytesNum, unreadBitsNum] = writeBits(left, buffer, base, (8 - unreadBitsNum) % 8, halfBitsNum);
+  base += writtenBytesNum;
 
-  base += writeNumber(right, buffer, base, half);
+  if (halfBitsNum === 28 && right >= 0.9999999) { // ugly
+    right = 0xFFFFFFFF;
+  } else if (halfBitsNum === 32 && right >= 0.999999) { // ugly
+    right = 0xFFFFFFFF;
+  } else {
+    right = Math.round(right * Math.pow(2, halfBitsNum));
+  }
 
+  [writtenBytesNum, unreadBitsNum] = writeBits(right, buffer, base, (8 - unreadBitsNum) % 8, halfBitsNum);
+  base += writtenBytesNum;
+
+  //console.log(`<<<< return ${base - offset};`);
   return base - offset;
 }
 

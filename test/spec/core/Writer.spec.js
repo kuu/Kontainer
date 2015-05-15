@@ -67,12 +67,14 @@ var DEC4 = 15 / 16,
         val: {signedInt: -1, unsignedInt: 281474976710655, signedDecimal: -1 - DEC24, unsignedDecimal: 16777215 + DEC24}
       },
       int56X: {
-        buf: [255, 255, 255, 255, 255, 255, 255],
-        val: {signedInt: -1, unsignedInt: Number.MAX_SAFE_INTEGER, signedDecimal: -1 - DEC28, unsignedDecimal: 268435455 + DEC28}
+        buf: [31, 255, 255, 255, 255, 255, 255],
+        buf2: [255, 255, 255, 255, 255, 255, 255],
+        val: {signedInt: -1, unsignedInt: Number.MAX_SAFE_INTEGER, signedDecimal: -1 - DEC28, unsignedDecimal: 268435455.9999999}
       },
       int64X: {
-        buf: [255, 255, 255, 255, 255, 255, 255, 255],
-        val: {signedInt: -1, unsignedInt: Number.MAX_SAFE_INTEGER, signedDecimal: -1 - DEC32, unsignedDecimal: 4294967295 + DEC32}
+        buf: [0, 31, 255, 255, 255, 255, 255, 255],
+        buf2: [255, 255, 255, 255, 255, 255, 255, 255],
+        val: {signedInt: -1, unsignedInt: Number.MAX_SAFE_INTEGER, signedDecimal: -1 - DEC32, unsignedDecimal: 4294967295.999999}
       },
       int32One: {
         buf: [0, 1, 0, 0],
@@ -80,47 +82,55 @@ var DEC4 = 15 / 16,
       }
     };
 
-describe('Reader', function () {
-
-  var Reader = Kontainer.Reader;
+describe('Writer', function () {
+  var Writer = Kontainer.Writer;
 
   it('reads numbers', function () {
     Object.keys(testData).forEach(key => {
       var entry = testData[key],
-          inputValue = entry.buf,
-          len = inputValue.length,
-          expectedValues = entry.val,
-          readBytesNum, expected, readValue;
+          inputValues = entry.val,
+          expectedValue = entry.buf,
+          len = expectedValue.length,
+          buffer, writtenBytesNum;
 
-      console.log(`[${key}]----`);
+      //console.log(`[${key}]----`);
 
-      [readBytesNum, readValue] = Reader.readNumber(inputValue, 0, len);
-      expect(readBytesNum).toBe(len);
-      expected = expectedValues.unsignedInt;
-      expect(readValue).toBe(expected);
+      if (global && global.Buffer) {
+        buffer = new Buffer(len);
+      } else {
+        buffer = new Uint8Array(len);
+      }
+      writtenBytesNum = Writer.writeNumber(inputValues.unsignedInt, buffer, 0, len);
+      expect(writtenBytesNum).toBe(len);
+      for (var i = 0, il = buffer.length; i < il; i++) {
+        expect(buffer[i]).toBe(expectedValue[i]);
+        //console.log(`\tUINT: expected=${expectedValue[i]} actual=${buffer[i]}`);
+      }
 
-      console.log(`\tUINT: expected=${expected} actual=${readValue}`);
+      if (key === 'int56X' || key === 'int64X') {
+        expectedValue = entry.buf2;
+      }
 
-      [readBytesNum, readValue] = Reader.readNumber(inputValue, 0, len, true);
-      expect(readBytesNum).toBe(len);
-      expected = expectedValues.signedInt;
-      expect(readValue).toBe(expected);
+      writtenBytesNum = Writer.writeFixedNumber(inputValues.unsignedDecimal, buffer, 0, len);
+      expect(writtenBytesNum).toBe(len);
+      for (var i = 0, il = buffer.length; i < il; i++) {
+        expect(buffer[i]).toBe(expectedValue[i]);
+        //console.log(`\tUDEC: expected=${expectedValue[i]} actual=${buffer[i]}`);
+      }
 
-      console.log(`\tINT: expected=${expected} actual=${readValue}`);
+      writtenBytesNum = Writer.writeNumber(inputValues.signedInt, buffer, 0, len);
+      expect(writtenBytesNum).toBe(len);
+      for (var i = 0, il = buffer.length; i < il; i++) {
+        expect(buffer[i]).toBe(expectedValue[i]);
+        //console.log(`\tINT: expected=${expectedValue[i]} actual=${buffer[i]}`);
+      }
 
-      [readBytesNum, readValue] = Reader.readFixedNumber(inputValue, 0, len);
-      expect(readBytesNum).toBe(len);
-      expected = expectedValues.unsignedDecimal;
-      expect(readValue).toBe(expected);
-
-      console.log(`\tUDEC: expected=${expected} actual=${readValue}`);
-
-      [readBytesNum, readValue] = Reader.readFixedNumber(inputValue, 0, len, true);
-      expect(readBytesNum).toBe(len);
-      expected = expectedValues.signedDecimal;
-      expect(readValue).toBe(expected);
-
-      console.log(`\tDEC: expected=${expected} actual=${readValue}`);
+      writtenBytesNum = Writer.writeFixedNumber(inputValues.signedDecimal, buffer, 0, len);
+      expect(writtenBytesNum).toBe(len);
+      for (var i = 0, il = buffer.length; i < il; i++) {
+        expect(buffer[i]).toBe(expectedValue[i]);
+        //console.log(`\tDEC: expected=${expectedValue[i]} actual=${buffer[i]}`);
+      }
     });
   });
 });

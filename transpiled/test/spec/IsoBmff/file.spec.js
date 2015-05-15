@@ -35,15 +35,15 @@ describe('File', function () {
   124, 37, 176, 128, // modification_time=1970,1/1(2082844800)
   0, 0, 0, 1, // timescale=1
   255, 255, 255, 255, // duration=0xFFFFFFFF(default)
-  0, 1, 0, 0, // rate=1.0
+  0, 1, 0, 0, // rate=1.0 !!!
   1, 0, 0, 0, // volume=1.0, reserved(16)
   0, 0, 0, 0, // reserved(32)
   0, 0, 0, 0, // reserved(32)
-  0, 1, 0, 0, // matrix[0]=1.0
+  0, 1, 0, 0, // matrix[0]=1.0 !!!
   0, 0, 0, 0, // matrix[1]=0
   0, 0, 0, 0, // matrix[2]=0
   0, 0, 0, 0, // matrix[3]=0
-  0, 1, 0, 0, // matrix[4]=1.0
+  0, 1, 0, 0, // matrix[4]=1.0 !!!
   0, 0, 0, 0, // matrix[5]=0
   0, 0, 0, 0, // matrix[6]=0
   0, 0, 0, 0, // matrix[7]=0

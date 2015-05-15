@@ -4,7 +4,7 @@ var IsoBmff = require('./IsoBmff/'),
     Writer = require('./core/Writer'),
     Buffer = require('./core/Buffer');
 
-require("babel/polyfill");
+require("babel-core/polyfill");
 
 function traverse(context, element, buffer, offset=0) {
   var type, props, children, instance,

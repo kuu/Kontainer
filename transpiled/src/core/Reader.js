@@ -131,14 +131,6 @@ function readNumber(buffer, offset) {
   return [base - offset, result];
 }
 
-function makeBitMask(start, len) {
-  var mask = 0;
-  for (var i = 8 - start - 1, il = 8 - start - len; i >= il; i--) {
-    mask |= 1 << i;
-  }
-  return mask;
-}
-
 function readBits(buffer, byteOffset, bitOffset, bitsToRead) {
   var base = byteOffset,
       endOfBuffer = base + buffer.length,
@@ -146,20 +138,18 @@ function readBits(buffer, byteOffset, bitOffset, bitsToRead) {
       num = 0,
       remainingBits = bitsToRead,
       len,
-      mask,
       byte,
       oddBitsNum = 0;
 
-  console.log('\treadBits(byteOffset=' + byteOffset + ' bitOffset=' + bitOffset + ' bitsToRead=' + bitsToRead + ')');
+  //console.log(`\treadBits(byteOffset=${byteOffset} bitOffset=${bitOffset} bitsToRead=${bitsToRead})`);
 
   while (base < endOfBuffer && remainingBits) {
-    len = Math.min(remainingBits, 8 - start);
     byte = buffer[base];
-    mask = makeBitMask(start, len);
-    num <<= Math.min(8, len);
-    num |= byte & mask & 255;
-    remainingBits -= len;
+    len = Math.min(remainingBits, 8 - start);
+    num <<= len;
     oddBitsNum = Math.max(8 - start - len, 0);
+    num |= byte >>> oddBitsNum & (1 << len) - 1;
+    remainingBits -= len;
     if (oddBitsNum) {
       break;
     }
@@ -167,7 +157,7 @@ function readBits(buffer, byteOffset, bitOffset, bitsToRead) {
     start = 0;
   }
   num >>>= 0;
-  console.log('\t<<<< return [' + (base - byteOffset) + ' ' + num + ' ' + oddBitsNum + '];');
+  //console.log(`\t<<<< return [${base - byteOffset} ${num} ${oddBitsNum}];`);
   return [base - byteOffset, num, oddBitsNum];
 }
 
@@ -183,7 +173,7 @@ function readFixedNumber(buffer, offset) {
       unreadBitsNum = 0,
       result;
 
-  console.log('readFixedNumber(offset=' + offset + ' length=' + length + ' signed=' + signed + ')');
+  //console.log(`readFixedNumber(offset=${offset} length=${length} signed=${signed})`);
 
   var _readBits = readBits(buffer, base, (8 - unreadBitsNum) % 8, halfBitsNum);
 
@@ -221,7 +211,7 @@ function readFixedNumber(buffer, offset) {
     result = left + right;
   }
 
-  console.log('<<<< return [' + (base - offset) + ' ' + result + '];');
+  //console.log(`<<<< return [${base - offset} ${result}];`);
 
   return [base - offset, result];
 }

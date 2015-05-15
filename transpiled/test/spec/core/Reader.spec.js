@@ -98,7 +98,7 @@ describe('Reader', function () {
           expected,
           readValue;
 
-      console.log('[' + key + ']----');
+      //console.log(`[${key}]----`);
 
       var _Reader$readNumber = Reader.readNumber(inputValue, 0, len);
 
@@ -111,7 +111,7 @@ describe('Reader', function () {
       expected = expectedValues.unsignedInt;
       expect(readValue).toBe(expected);
 
-      console.log('\tUINT: expected=' + expected + ' actual=' + readValue);
+      //console.log(`\tUINT: expected=${expected} actual=${readValue}`);
 
       var _Reader$readNumber3 = Reader.readNumber(inputValue, 0, len, true);
 
@@ -124,7 +124,7 @@ describe('Reader', function () {
       expected = expectedValues.signedInt;
       expect(readValue).toBe(expected);
 
-      console.log('\tINT: expected=' + expected + ' actual=' + readValue);
+      //console.log(`\tINT: expected=${expected} actual=${readValue}`);
 
       var _Reader$readFixedNumber = Reader.readFixedNumber(inputValue, 0, len);
 
@@ -137,7 +137,7 @@ describe('Reader', function () {
       expected = expectedValues.unsignedDecimal;
       expect(readValue).toBe(expected);
 
-      console.log('\tUDEC: expected=' + expected + ' actual=' + readValue);
+      //console.log(`\tUDEC: expected=${expected} actual=${readValue}`);
 
       var _Reader$readFixedNumber3 = Reader.readFixedNumber(inputValue, 0, len, true);
 
@@ -150,7 +150,7 @@ describe('Reader', function () {
       expected = expectedValues.signedDecimal;
       expect(readValue).toBe(expected);
 
-      console.log('\tDEC: expected=' + expected + ' actual=' + readValue);
+      //console.log(`\tDEC: expected=${expected} actual=${readValue}`);
     });
   });
 });

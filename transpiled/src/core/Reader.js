@@ -123,7 +123,7 @@ function readNumber(buffer, offset) {
   }
 
   if (result < 0) {
-    result = Math.max(result, -Number.MAX_SAFE_INTEGER);
+    result = Math.max(result, Number.MIN_SAFE_INTEGER);
   } else {
     result = Math.min(result, Number.MAX_SAFE_INTEGER);
   }
@@ -204,7 +204,7 @@ function readFixedNumber(buffer, offset) {
   right /= halfBitsNum === 32 ? 4294967296 : 1 << halfBitsNum;
 
   if (left < 0) {
-    left = Math.max(left, -Number.MAX_SAFE_INTEGER);
+    left = Math.max(left, Number.MIN_SAFE_INTEGER);
     result = left - right;
   } else {
     left = Math.min(left, Number.MAX_SAFE_INTEGER);

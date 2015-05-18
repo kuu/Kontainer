@@ -15,7 +15,7 @@
   },
   "scripts": {
     "lint": "eslint src/ test/",
-    "clean": "npm run clean-src && npm run clean-test && npm run clean-bundle",
+    "clean": "npm run clean-src && npm run clean-test && npm run clean-browser",
     "clean-src": "rm -fR transpiled/src ; mkdir -p transpiled/src",
     "clean-test": "rm -fR transpiled/test ; mkdir -p transpiled/test",
     "clean-browser": "rm -fR concatenated ; mkdir concatenated ; rm -fR minified ; mkdir minified",

@@ -167,8 +167,6 @@ describe('File', function () {
   it('generates a binary data from KontainerElements', function () {
     var buffer, elem, array;
 
-    buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null, IsoBmff.createElement('ftyp', { majorBrand: 'isom' })));
-    expect(buffer).toBe(null);
     buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null, IsoBmff.createElement('moov', null, IsoBmff.createElement('mvhd'))));
     expect(buffer).toBe(null);
 

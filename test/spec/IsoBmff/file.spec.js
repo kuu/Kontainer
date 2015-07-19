@@ -210,10 +210,6 @@ describe('File', function () {
     var buffer, elem, array;
 
     buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null,
-      IsoBmff.createElement('ftyp', {majorBrand: 'isom'})
-    ));
-    expect(buffer).toBe(null);
-    buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null,
       IsoBmff.createElement('moov', null,
         IsoBmff.createElement('mvhd')
       )

@@ -25,7 +25,7 @@ class File extends Box {
 File.COMPACT_NAME = 'file';
 
 File.spec = {
-  mandatoryBoxList: ['ftyp', 'moov']
+  mandatoryBoxList: []
 };
 
 module.exports = File;

@@ -36,8 +36,12 @@ var MediaDataBox = (function (_Box) {
 
       base += _get(Object.getPrototypeOf(MediaDataBox.prototype), 'serialize', this).call(this, buffer, base);
 
-      for (var i = 0, il = data.length; i < il; i++) {
-        buffer[base++] = data[i];
+      if (buffer) {
+        for (var i = 0, il = data.length; i < il; i++) {
+          buffer[base++] = data[i];
+        }
+      } else {
+        base += data.length;
       }
 
       _get(Object.getPrototypeOf(MediaDataBox.prototype), 'setSize', this).call(this, base - offset, buffer, offset);

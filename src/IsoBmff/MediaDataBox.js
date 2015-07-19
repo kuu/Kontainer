@@ -14,8 +14,12 @@ class MediaDataBox extends Box {
 
     base += super.serialize(buffer, base);
 
-    for (var i = 0, il = data.length; i < il; i++) {
-      buffer[base++] = data[i];
+    if (buffer) {
+      for (var i = 0, il = data.length; i < il; i++) {
+        buffer[base++] = data[i];
+      }
+    } else {
+      base += data.length;
     }
 
     super.setSize(base - offset, buffer, offset);

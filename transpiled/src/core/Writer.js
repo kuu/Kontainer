@@ -97,7 +97,7 @@ function writeNumber(num, buffer, offset) {
       left = num / 4294967296,
       right = num % 4294967296;
 
-  if (num > 4294967295 && length > 4) {
+  if (num >= 0 && length > 4) {
     for (i = length - 4 - 1; i >= 0; i--) {
       byte = left >> 8 * i & 255;
       writeByte(byte, buffer, base++);

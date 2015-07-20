@@ -81,4 +81,11 @@ describe('TrackFragmentHeaderBox', function () {
     expect(element).not.toBe(null);
     expect(_helperMatcher2['default'].toHaveTheSamePropsAs(tfhdElement, element)).toBe(true);
   });
+
+  it('supports base-data-offset', function () {
+    var elem1 = IsoBmff.createElement('tfhd', { trackId: 1, baseDataOffset: 623 });
+    var buffer = Kontainer.renderToBuffer(elem1);
+    var elem2 = IsoBmff.createElementFromBuffer(buffer);
+    expect(elem2.props.baseDataOffset).toBe(623);
+  });
 });

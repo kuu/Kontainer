@@ -232,7 +232,7 @@ var AVCConfigurationBox = (function (_Box) {
       numOfParameterSets &= 0x1F;
 
       for (i = 0; i < numOfParameterSets; i++) {
-        var _Reader$readNumber8 = Reader.readNumber(buffer, base, 1);
+        var _Reader$readNumber8 = Reader.readNumber(buffer, base, 2);
 
         var _Reader$readNumber82 = _slicedToArray(_Reader$readNumber8, 2);
 
@@ -244,9 +244,9 @@ var AVCConfigurationBox = (function (_Box) {
         buf = new Buffer(length);
         data = buf.getView();
         for (j = 0; j < length; j++) {
-          data[i] = buffer[base++];
+          data[j] = buffer[base++];
         }
-        sequenceParameterSets.push({ length: length, data: buf.getData() });
+        sequenceParameterSets.push({ length: length, data: buf.getView() });
       }
 
       var _Reader$readNumber9 = Reader.readNumber(buffer, base, 1);
@@ -259,7 +259,7 @@ var AVCConfigurationBox = (function (_Box) {
       base += readBytesNum;
 
       for (i = 0; i < numOfParameterSets; i++) {
-        var _Reader$readNumber10 = Reader.readNumber(buffer, base, 1);
+        var _Reader$readNumber10 = Reader.readNumber(buffer, base, 2);
 
         var _Reader$readNumber102 = _slicedToArray(_Reader$readNumber10, 2);
 
@@ -271,9 +271,9 @@ var AVCConfigurationBox = (function (_Box) {
         buf = new Buffer(length);
         data = buf.getView();
         for (j = 0; j < length; j++) {
-          data[i] = buffer[base++];
+          data[j] = buffer[base++];
         }
-        pictureParameterSets.push({ length: length, data: buf.getData() });
+        pictureParameterSets.push({ length: length, data: buf.getView() });
       }
 
       props.configurationVersion = configurationVersion;

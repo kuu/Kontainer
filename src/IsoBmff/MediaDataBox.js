@@ -28,7 +28,7 @@ class MediaDataBox extends Box {
     return this.size;
   }
 
-  static parse(buffer, offset=0) {
+  static parse(buffer, offset=-1) {
     var base = offset, readBytesNum, props,
         toBeRead, data, buf;
 
@@ -42,7 +42,7 @@ class MediaDataBox extends Box {
     for (var i = 0; i < toBeRead; i++) {
       data[i] = buffer[base++];
     }
-    props.data = buf.getData();
+    props.data = buf.getView();
 
     return [base - offset, props];
   }

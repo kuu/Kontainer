@@ -1,5 +1,12 @@
-/*global describe, it, expect */
 'use strict';
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _helperMatcher = require('../../helper/matcher');
+
+/*global describe, it, expect */
+
+var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
 
 describe('AVCConfigurationBox', function () {
   var Kontainer = require('../../../src/');
@@ -15,15 +22,21 @@ describe('AVCConfigurationBox', function () {
   8, 4, 2, 1];
 
   it('can wrrap raw bytes', function () {
-    var sps = new Buffer(8);
+    var sps, pps;
+    if (global && global.Buffer) {
+      sps = new Buffer(8);
+      pps = new Buffer(8);
+    } else {
+      sps = new Uint8Array(8);
+      pps = new Uint8Array(8);
+    }
     for (var _i = 0; _i < 8; _i++) {
       sps[_i] = 1 << _i;
     }
-    var pps = new Buffer(8);
     for (var _i2 = 0, j = 7; _i2 < 8; _i2++, j--) {
       pps[_i2] = 1 << j;
     }
-    var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('avcC', {
+    var element = IsoBmff.createElement('avcC', {
       avcProfileIndication: 'baseline',
       profileCompatibility: {
         constraintSet0Flag: false,
@@ -34,7 +47,8 @@ describe('AVCConfigurationBox', function () {
       lengthSize: 4,
       sequenceParameterSets: [{ length: 8, data: sps }],
       pictureParameterSets: [{ length: 8, data: pps }]
-    }));
+    });
+    var buffer = Kontainer.renderToBuffer(element);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -45,6 +59,9 @@ describe('AVCConfigurationBox', function () {
     expect(array.length).toBe(avcCValue.length);
     for (var i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(avcCValue[i]);
+      //console.log('a[' + i + ']=' + array[i] + ', b[' + i + ']=' + avcCValue[i]);
     }
+    var element2 = IsoBmff.createElementFromBuffer(buffer);
+    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(element, element2)).toBe(true);
   });
 });

@@ -150,30 +150,30 @@ class AVCConfigurationBox extends Box {
     numOfParameterSets &= 0x1F;
 
     for (i = 0; i < numOfParameterSets; i++) {
-      [readBytesNum, length] = Reader.readNumber(buffer, base, 1);
+      [readBytesNum, length] = Reader.readNumber(buffer, base, 2);
       base += readBytesNum;
 
       buf = new Buffer(length);
       data = buf.getView();
       for (j = 0; j < length; j++) {
-        data[i] = buffer[base++];
+        data[j] = buffer[base++];
       }
-      sequenceParameterSets.push({length: length, data: buf.getData()});
+      sequenceParameterSets.push({length: length, data: buf.getView()});
     }
 
     [readBytesNum, numOfParameterSets] = Reader.readNumber(buffer, base, 1);
     base += readBytesNum;
 
     for (i = 0; i < numOfParameterSets; i++) {
-      [readBytesNum, length] = Reader.readNumber(buffer, base, 1);
+      [readBytesNum, length] = Reader.readNumber(buffer, base, 2);
       base += readBytesNum;
 
       buf = new Buffer(length);
       data = buf.getView();
       for (j = 0; j < length; j++) {
-        data[i] = buffer[base++];
+        data[j] = buffer[base++];
       }
-      pictureParameterSets.push({length: length, data: buf.getData()});
+      pictureParameterSets.push({length: length, data: buf.getView()});
     }
 
     props.configurationVersion = configurationVersion;

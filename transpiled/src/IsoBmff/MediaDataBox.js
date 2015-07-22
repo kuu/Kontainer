@@ -50,7 +50,7 @@ var MediaDataBox = (function (_Box) {
   }], [{
     key: 'parse',
     value: function parse(buffer) {
-      var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+      var offset = arguments.length <= 1 || arguments[1] === undefined ? -1 : arguments[1];
 
       var base = offset,
           readBytesNum,
@@ -75,7 +75,7 @@ var MediaDataBox = (function (_Box) {
       for (var i = 0; i < toBeRead; i++) {
         data[i] = buffer[base++];
       }
-      props.data = buf.getData();
+      props.data = buf.getView();
 
       return [base - offset, props];
     }

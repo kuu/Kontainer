@@ -1,12 +1,10 @@
 'use strict';
 
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { desc = parent = getter = undefined; _again = false; var object = _x3,
-    property = _x4,
-    receiver = _x5; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -19,18 +17,18 @@ var Box = require('./Box'),
     Buffer = require('../core/Buffer');
 
 var AVCConfigurationBox = (function (_Box) {
+  _inherits(AVCConfigurationBox, _Box);
+
   function AVCConfigurationBox(props) {
     _classCallCheck(this, AVCConfigurationBox);
 
     _get(Object.getPrototypeOf(AVCConfigurationBox.prototype), 'constructor', this).call(this, AVCConfigurationBox.COMPACT_NAME, props);
   }
 
-  _inherits(AVCConfigurationBox, _Box);
-
   _createClass(AVCConfigurationBox, [{
     key: 'serialize',
     value: function serialize(buffer) {
-      var offset = arguments[1] === undefined ? 0 : arguments[1];
+      var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- AVCConfigurationBox.serialize enter.');
       var props = this.props,
@@ -51,14 +49,18 @@ var AVCConfigurationBox = (function (_Box) {
       base += Writer.writeNumber(AVCConfigurationBox.encodeProfile(avcProfileIndication), buffer, base, 1);
       base += Writer.writeNumber(AVCConfigurationBox.encodeCompatibility(profileCompatibility), buffer, base, 1);
       base += Writer.writeNumber(avcLevelIndication * 10 | 0, buffer, base, 1);
-      base += Writer.writeNumber(252 | lengthSizeMinusOne, buffer, base, 1);
-      base += Writer.writeNumber(224 | sequenceParameterSets.length, buffer, base, 1);
+      base += Writer.writeNumber(0xFC | lengthSizeMinusOne, buffer, base, 1);
+      base += Writer.writeNumber(0xE0 | sequenceParameterSets.length, buffer, base, 1);
       sequenceParameterSets.forEach(function (sps) {
         length = sps.length;
         data = sps.data;
         base += Writer.writeNumber(length, buffer, base, 2);
-        for (i = 0; i < length; i++) {
-          buffer[base++] = data[i];
+        if (buffer) {
+          for (i = 0; i < length; i++) {
+            buffer[base++] = data[i];
+          }
+        } else {
+          base += length;
         }
       });
       base += Writer.writeNumber(pictureParameterSets.length, buffer, base, 1);
@@ -66,8 +68,12 @@ var AVCConfigurationBox = (function (_Box) {
         length = pps.length;
         data = pps.data;
         base += Writer.writeNumber(length, buffer, base, 2);
-        for (i = 0; i < length; i++) {
-          buffer[base++] = data[i];
+        if (buffer) {
+          for (i = 0; i < length; i++) {
+            buffer[base++] = data[i];
+          }
+        } else {
+          base += length;
         }
       });
 
@@ -109,13 +115,13 @@ var AVCConfigurationBox = (function (_Box) {
     value: function encodeCompatibility(compat) {
       var c = 0;
       if (compat.constraintSet0Flag) {
-        c |= 1;
+        c |= 0x01;
       }
       if (compat.constraintSet1Flag) {
-        c |= 2;
+        c |= 0x02;
       }
       if (compat.constraintSet2Flag) {
-        c |= 4;
+        c |= 0x04;
       }
       return c;
     }
@@ -127,13 +133,13 @@ var AVCConfigurationBox = (function (_Box) {
         constraintSet1Flag: false,
         constraintSet2Flag: false
       };
-      if (c & 1) {
+      if (c & 0x01) {
         compat.constraintSet0Flag = true;
       }
-      if (c & 2) {
+      if (c & 0x02) {
         compat.constraintSet1Flag = true;
       }
-      if (c & 4) {
+      if (c & 0x04) {
         compat.constraintSet2Flag = true;
       }
       return compat;
@@ -141,7 +147,7 @@ var AVCConfigurationBox = (function (_Box) {
   }, {
     key: 'parse',
     value: function parse(buffer) {
-      var offset = arguments[1] === undefined ? 0 : arguments[1];
+      var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
           readBytesNum,
@@ -223,7 +229,7 @@ var AVCConfigurationBox = (function (_Box) {
 
       base += readBytesNum;
 
-      numOfParameterSets &= 31;
+      numOfParameterSets &= 0x1F;
 
       for (i = 0; i < numOfParameterSets; i++) {
         var _Reader$readNumber8 = Reader.readNumber(buffer, base, 1);
@@ -274,7 +280,7 @@ var AVCConfigurationBox = (function (_Box) {
       props.avcProfileIndication = AVCConfigurationBox.decodeProfile(avcProfileIndication);
       props.profileCompatibility = AVCConfigurationBox.decodeCompatibility(profileCompatibility);
       props.avcLevelIndication = avcLevelIndication / 10;
-      props.lengthSize = (lengthSizeMinusOne & 3) + 1;
+      props.lengthSize = (lengthSizeMinusOne & 0x03) + 1;
       props.sequenceParameterSets = sequenceParameterSets;
       props.pictureParameterSets = pictureParameterSets;
 

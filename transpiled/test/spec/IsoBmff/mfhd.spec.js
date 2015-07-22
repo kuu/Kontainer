@@ -4,9 +4,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var _helperMatcher = require('../../helper/matcher');
 
+/*global describe, it, expect */
+
 var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
 
-/*global describe, it, expect */
 describe('MovieFragmentHeaderBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -42,7 +43,7 @@ describe('MovieFragmentHeaderBox', function () {
   });
 
   it('supports the largest sequence number.', function () {
-    var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 4294967295 });
+    var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 0xFFFFFFFF });
     var buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
     var array;

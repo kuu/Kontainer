@@ -6,10 +6,10 @@ var IsoBmff = require('./IsoBmff/'),
     Writer = require('./core/Writer'),
     Buffer = require('./core/Buffer');
 
-require('babel-core/polyfill');
+require("babel-core/polyfill");
 
 function traverse(context, element, buffer) {
-  var offset = arguments[3] === undefined ? 0 : arguments[3];
+  var offset = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
 
   var type,
       props,

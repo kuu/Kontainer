@@ -4,9 +4,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var _helperMatcher = require('../../helper/matcher');
 
+/*global describe, it, expect */
+
 var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
 
-/*global describe, it, expect */
 describe('TrackRunBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -76,8 +77,8 @@ describe('TrackRunBox', function () {
         },
         compositionTimeOffset: 0
       }, {
-        duration: 4294967295,
-        size: 4294967295,
+        duration: 0xFFFFFFFF,
+        size: 0xFFFFFFFF,
         flags: {
           sampleDependsOn: 'I-picture',
           sampleIsDependedOn: 'disposable',
@@ -86,7 +87,7 @@ describe('TrackRunBox', function () {
           sampleIsDifferenceSample: true,
           sampleDegradationPriority: 65535
         },
-        compositionTimeOffset: 4294967295
+        compositionTimeOffset: 0xFFFFFFFF
       }]
     });
     var buffer = Kontainer.renderToBuffer(trunElement);

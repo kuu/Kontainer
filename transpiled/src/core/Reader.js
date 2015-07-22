@@ -1,14 +1,12 @@
 'use strict';
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
-function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _UtilJs = require('./Util.js');
 
 var _UtilJs2 = _interopRequireDefault(_UtilJs);
-
-'use strict';
 
 var isNegative = _UtilJs2['default'].isNegative,
     convertToNegative = _UtilJs2['default'].convertToNegative;
@@ -24,27 +22,27 @@ function readCharacter(buffer, offset) {
 
     for (var i = 0; i < trailingBytes; i++) {
       multiByteChar <<= 6;
-      multiByteChar |= buffer[base++] & 63;
+      multiByteChar |= buffer[base++] & 0x3F;
     }
     return multiByteChar;
   };
 
-  if (!(firstByte & 128)) {
+  if (!(firstByte & 0x80)) {
     // 1 byte
     charCode = firstByte;
-  } else if (firstByte >>> 5 === 6) {
+  } else if (firstByte >>> 5 === 0x06) {
     // 2 byte
     charCode = decodeMultiBytes(2);
-  } else if (firstByte >>> 4 === 14) {
+  } else if (firstByte >>> 4 === 0x0E) {
     // 3 byte
     charCode = decodeMultiBytes(3);
-  } else if (firstByte >>> 3 === 30) {
+  } else if (firstByte >>> 3 === 0x1E) {
     // 4 byte
     charCode = decodeMultiBytes(4);
-  } else if (firstByte >>> 2 === 62) {
+  } else if (firstByte >>> 2 === 0x3E) {
     // 5 byte
     charCode = decodeMultiBytes(5);
-  } else if (firstByte >>> 1 === 126) {
+  } else if (firstByte >>> 1 === 0x7E) {
     // 6 byte
     charCode = decodeMultiBytes(6);
   } else {
@@ -83,8 +81,8 @@ function readString(buffer, offset, length) {
 }
 
 function readNumber(buffer, offset) {
-  var length = arguments[2] === undefined ? 4 : arguments[2];
-  var signed = arguments[3] === undefined ? false : arguments[3];
+  var length = arguments.length <= 2 || arguments[2] === undefined ? 4 : arguments[2];
+  var signed = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
   var base = offset,
       left = 0,
@@ -162,8 +160,8 @@ function readBits(buffer, byteOffset, bitOffset, bitsToRead) {
 }
 
 function readFixedNumber(buffer, offset) {
-  var length = arguments[2] === undefined ? 4 : arguments[2];
-  var signed = arguments[3] === undefined ? false : arguments[3];
+  var length = arguments.length <= 2 || arguments[2] === undefined ? 4 : arguments[2];
+  var signed = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
   var base = offset,
       readBytesNum,
@@ -249,7 +247,7 @@ function readIso639Lang(buffer, offset) {
   base += readBytesNum;
 
   for (var i = 3 - 1; i >= 0; i--) {
-    language += String.fromCharCode((num >>> 5 * i & 31) + 96);
+    language += String.fromCharCode((num >>> 5 * i & 0x1F) + 0x60);
   }
   return [base - offset, language];
 }

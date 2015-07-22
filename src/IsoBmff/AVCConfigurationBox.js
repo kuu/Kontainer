@@ -90,8 +90,12 @@ class AVCConfigurationBox extends Box {
       length = sps.length;
       data = sps.data;
       base += Writer.writeNumber(length, buffer, base, 2);
-      for (i = 0; i < length; i++) {
-        buffer[base++] = data[i];
+      if (buffer) {
+        for (i = 0; i < length; i++) {
+          buffer[base++] = data[i];
+        }
+      } else {
+        base += length;
       }
     });
     base += Writer.writeNumber(pictureParameterSets.length, buffer, base, 1);
@@ -99,8 +103,12 @@ class AVCConfigurationBox extends Box {
       length = pps.length;
       data = pps.data;
       base += Writer.writeNumber(length, buffer, base, 2);
-      for (i = 0; i < length; i++) {
-        buffer[base++] = data[i];
+      if (buffer) {
+        for (i = 0; i < length; i++) {
+          buffer[base++] = data[i];
+        }
+      } else {
+        base += length;
       }
     });
 

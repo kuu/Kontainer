@@ -4,9 +4,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var _helperMatcher = require('../../helper/matcher');
 
+/*global describe, it, expect */
+
 var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
 
-/*global describe, it, expect */
 describe('TrackExtendsBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -34,7 +35,7 @@ describe('TrackExtendsBox', function () {
     var trexElement = IsoBmff.createElement('trex', {
       trackId: 1,
       defaultSampleDescriptionIndex: 2,
-      defaultSampleDuration: 4294967295,
+      defaultSampleDuration: 0xFFFFFFFF,
       defaultSampleSize: 65536,
       defaultSampleFlags: {
         sampleDependsOn: 'unknown',

@@ -1,7 +1,5 @@
 'use strict';
 
-function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }
-
 /*
 import util from './Util.js';
 
@@ -9,8 +7,10 @@ var isNegative = util.isNegative,
     convertToNegative = util.convertToNegative;
 */
 
-function writeByte(byte, buffer, offset, _x, or) {
-  var mask = arguments[3] === undefined ? 255 : arguments[3];
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
+function writeByte(byte, buffer, offset, mask, or) {
+  if (mask === undefined) mask = 0xFF;
 
   if (buffer) {
     if (or) {
@@ -24,39 +24,39 @@ function writeByte(byte, buffer, offset, _x, or) {
 function writeCharacter(charCode, buffer, offset) {
   var base = offset;
 
-  if (charCode < 128) {
+  if (charCode < 0x80) {
     // 1 byte
     writeByte(charCode, buffer, base++);
-  } else if (charCode >= 128 && charCode < 2048) {
+  } else if (charCode >= 0x80 && charCode < 0x800) {
     // 2 bytes
-    writeByte(192 | charCode >> 6 & 31, buffer, base++);
-    writeByte(128 | charCode >> 0 & 63, buffer, base++);
-  } else if (charCode >= 2048 && charCode < 65536) {
+    writeByte(0xC0 | charCode >> 6 & 0x1F, buffer, base++);
+    writeByte(0x80 | charCode >> 0 & 0x3F, buffer, base++);
+  } else if (charCode >= 0x800 && charCode < 0x10000) {
     // 3 bytes
-    writeByte(224 | charCode >> 12 & 15, buffer, base++);
-    writeByte(128 | charCode >> 6 & 63, buffer, base++);
-    writeByte(128 | charCode >> 0 & 63, buffer, base++);
-  } else if (charCode >= 65536 && charCode < 2097152) {
+    writeByte(0xE0 | charCode >> 12 & 0x0F, buffer, base++);
+    writeByte(0x80 | charCode >> 6 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 0 & 0x3F, buffer, base++);
+  } else if (charCode >= 0x10000 && charCode < 0x200000) {
     // 4 bytes
-    writeByte(240 | charCode >> 18 & 7, buffer, base++);
-    writeByte(128 | charCode >> 12 & 63, buffer, base++);
-    writeByte(128 | charCode >> 6 & 63, buffer, base++);
-    writeByte(128 | charCode >> 0 & 63, buffer, base++);
-  } else if (charCode >= 2097152 && charCode < 67108864) {
+    writeByte(0xF0 | charCode >> 18 & 0x07, buffer, base++);
+    writeByte(0x80 | charCode >> 12 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 6 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 0 & 0x3F, buffer, base++);
+  } else if (charCode >= 0x200000 && charCode < 0x4000000) {
     // 5 bytes
-    writeByte(248 | charCode >> 24 & 3, buffer, base++);
-    writeByte(128 | charCode >> 18 & 63, buffer, base++);
-    writeByte(128 | charCode >> 12 & 63, buffer, base++);
-    writeByte(128 | charCode >> 6 & 63, buffer, base++);
-    writeByte(128 | charCode >> 0 & 63, buffer, base++);
-  } else if (charCode >= 67108864 && charCode < 2147483648) {
+    writeByte(0xF8 | charCode >> 24 & 0x03, buffer, base++);
+    writeByte(0x80 | charCode >> 18 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 12 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 6 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 0 & 0x3F, buffer, base++);
+  } else if (charCode >= 0x4000000 && charCode < 0x80000000) {
     // 6 bytes
-    writeByte(252 | charCode >> 30 & 1, buffer, base++);
-    writeByte(128 | charCode >> 24 & 63, buffer, base++);
-    writeByte(128 | charCode >> 18 & 63, buffer, base++);
-    writeByte(128 | charCode >> 12 & 63, buffer, base++);
-    writeByte(128 | charCode >> 6 & 63, buffer, base++);
-    writeByte(128 | charCode >> 0 & 63, buffer, base++);
+    writeByte(0xFC | charCode >> 30 & 0x01, buffer, base++);
+    writeByte(0x80 | charCode >> 24 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 18 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 12 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 6 & 0x3F, buffer, base++);
+    writeByte(0x80 | charCode >> 0 & 0x3F, buffer, base++);
   } else {
     console.error('Writer.writeCharacter: Invalid char code - ' + charCode);
   }
@@ -89,7 +89,7 @@ function writeString(str, buffer, offset, length) {
 }
 
 function writeNumber(num, buffer, offset) {
-  var length = arguments[3] === undefined ? 4 : arguments[3];
+  var length = arguments.length <= 3 || arguments[3] === undefined ? 4 : arguments[3];
 
   var base = offset,
       byte,
@@ -99,14 +99,14 @@ function writeNumber(num, buffer, offset) {
 
   if (num >= 0 && length > 4) {
     for (i = length - 4 - 1; i >= 0; i--) {
-      byte = left >> 8 * i & 255;
+      byte = left >> 8 * i & 0xFF;
       writeByte(byte, buffer, base++);
     }
     length = 4;
   }
 
   for (i = length - 1; i >= 0; i--) {
-    byte = right >> 8 * i & 255;
+    byte = right >> 8 * i & 0xFF;
     writeByte(byte, buffer, base++);
   }
 
@@ -134,10 +134,10 @@ function writeBits(num, buffer, byteOffset, bitOffset, totalBitsToWrite) {
 
   while (remainingBits > 0) {
     len = Math.min(remainingBits, 8 - start);
-    byte = num >>> Math.max(remainingBits - 8, 0) & 255;
+    byte = num >>> Math.max(remainingBits - 8, 0) & 0xFF;
     mask = makeBitMask(start, len);
     //console.log(`\t\twriteByte(byte=${(byte << start) & 0xFF} base=${base} mask=${mask} or=${!!start}`);
-    writeByte(byte << start & 255, buffer, base, mask, !!start);
+    writeByte(byte << start & 0xFF, buffer, base, mask, !!start);
     remainingBits -= len;
     oddBitsNum = Math.max(8 - start - len, 0);
     if (oddBitsNum) {
@@ -152,11 +152,11 @@ function writeBits(num, buffer, byteOffset, bitOffset, totalBitsToWrite) {
 }
 
 function writeFixedNumber(num, buffer, offset) {
-  var length = arguments[3] === undefined ? 4 : arguments[3];
+  var length = arguments.length <= 3 || arguments[3] === undefined ? 4 : arguments[3];
 
   var base = offset,
       left = num > 0 ? Math.floor(num) : Math.ceil(num),
-      right = parseFloat('0.' + String(num).split('.')[1]),
+      right = parseFloat('0.' + String(num).split(".")[1]),
       halfBitsNum = Math.min(length, 8) * 8 / 2,
       writtenBytesNum = 0,
       unreadBitsNum = 0;
@@ -174,10 +174,10 @@ function writeFixedNumber(num, buffer, offset) {
 
   if (halfBitsNum === 28 && right >= 0.9999999) {
     // ugly
-    right = 4294967295;
+    right = 0xFFFFFFFF;
   } else if (halfBitsNum === 32 && right >= 0.999999) {
     // ugly
-    right = 4294967295;
+    right = 0xFFFFFFFF;
   } else {
     right = Math.round(right * Math.pow(2, halfBitsNum));
   }
@@ -206,8 +206,8 @@ function writeIso639Lang(language, buffer, offset) {
   }
 
   for (var i = 0; i < 3; i++) {
-    charCode = language.charCodeAt(i) - 96;
-    if (charCode > 31) {
+    charCode = language.charCodeAt(i) - 0x60;
+    if (charCode > 0x1F) {
       console.error('Writer.writeIso639Lang: Invalid character - ' + language[i]);
       return 0;
     }

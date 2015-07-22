@@ -4,9 +4,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 var _helperMatcher = require('../../helper/matcher');
 
+/*global describe, it, expect */
+
 var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
 
-/*global describe, it, expect */
 describe('MP4AudioSampleEntry', function () {
   var Kontainer = require('../../../src/');
 

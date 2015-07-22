@@ -12,6 +12,8 @@ var Component = (function () {
     this.props = props;
   }
 
+  // To be overridden
+
   _createClass(Component, [{
     key: "serialize",
 
@@ -19,37 +21,35 @@ var Component = (function () {
     value: function serialize(buffer, offset) {
       void offset;
     }
+
+    // To be overridden
   }, {
     key: "getSize",
+    value: function getSize() {}
 
     // To be overridden
-    value: function getSize() {}
   }, {
     key: "setSize",
-
-    // To be overridden
     value: function setSize(size, buffer, offset) {
       void offset;
     }
-  }, {
-    key: "toString",
 
     // To be overridden
+  }, {
+    key: "toString",
     value: function toString(context) {
       void context;
     }
-  }], [{
-    key: "validate",
 
     // To be overridden
+  }], [{
+    key: "validate",
     value: function validate(context, props) {
       void props;
       return null;
     }
   }, {
     key: "parse",
-
-    // To be overridden
     value: function parse(buffer, offset) {
       void offset;
     }

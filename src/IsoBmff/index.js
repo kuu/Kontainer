@@ -43,7 +43,8 @@ var clazz = {
   'mfhd': require('./MovieFragmentHeaderBox'),
   'traf': require('./TrackFragmentBox'),
   'tfhd': require('./TrackFragmentHeaderBox'),
-  'trun': require('./TrackRunBox')
+  'trun': require('./TrackRunBox'),
+  'tfdt': require('./TrackFragmentBaseMediaDecodeTimeBox')
 };
 
 function validateChild(context, child) {

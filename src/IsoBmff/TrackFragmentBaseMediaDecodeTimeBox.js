@@ -1,0 +1,67 @@
+var Box = require('./Box'),
+    FullBox = require('./FullBox'),
+    PropTypes = require('../core/PropTypes'),
+    Writer = require('../core/Writer'),
+    Reader = require('../core/Reader');
+
+class TrackFragmentBaseMediaDecodeTimeBox extends FullBox {
+  constructor(props) {
+    super(TrackFragmentBaseMediaDecodeTimeBox.COMPACT_NAME, props, props.version, 0);
+  }
+
+  serialize(buffer, offset=0) {
+    //console.log('--- TrackFragmentBaseMediaDecodeTimeBox.serialize enter.');
+    var props = this.props,
+        baseMediaDecodeTime = props.baseMediaDecodeTime,
+        base = offset;
+
+    base += super.serialize(buffer, base);
+    if (this.version === 1) {
+      base += Writer.writeNumber(baseMediaDecodeTime, buffer, base, 8);
+    } else {
+      base += Writer.writeNumber(baseMediaDecodeTime, buffer, base, 4);
+    }
+
+    super.setSize(base - offset, buffer, offset);
+
+    //console.log(`--- TrackFragmentBaseMediaDecodeTimeBox.serialize exit. size=${this.size}`);
+    return this.size;
+  }
+
+  static parse(buffer, offset=0) {
+    var base = offset, readBytesNum, props,
+        baseMediaDecodeTime;
+
+    [readBytesNum, props] = FullBox.parse(buffer, base);
+    base += readBytesNum;
+
+    if (this.version === 1) {
+      [readBytesNum, baseMediaDecodeTime] = Reader.readNumber(buffer, base, 8);
+    } else {
+      [readBytesNum, baseMediaDecodeTime] = Reader.readNumber(buffer, base, 4);
+    }
+    base += readBytesNum;
+
+    props.baseMediaDecodeTime = baseMediaDecodeTime;
+    return [base - offset, props];
+  }
+}
+
+TrackFragmentBaseMediaDecodeTimeBox.COMPACT_NAME = 'tfdt';
+
+TrackFragmentBaseMediaDecodeTimeBox.propTypes = {
+  version: PropTypes.number,
+  baseMediaDecodeTime: PropTypes.number.isRequired
+};
+
+TrackFragmentBaseMediaDecodeTimeBox.defaultProps = {
+  version: 0
+};
+
+TrackFragmentBaseMediaDecodeTimeBox.spec = {
+  container: 'traf',
+  quantity: Box.QUANTITY_EXACTLY_ONE,
+  mandatoryBoxList: []
+};
+
+module.exports = TrackFragmentBaseMediaDecodeTimeBox;

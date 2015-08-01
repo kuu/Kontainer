@@ -35,7 +35,7 @@ class TrackFragmentBaseMediaDecodeTimeBox extends FullBox {
     [readBytesNum, props] = FullBox.parse(buffer, base);
     base += readBytesNum;
 
-    if (this.version === 1) {
+    if (props.version === 1) {
       [readBytesNum, baseMediaDecodeTime] = Reader.readNumber(buffer, base, 8);
     } else {
       [readBytesNum, baseMediaDecodeTime] = Reader.readNumber(buffer, base, 4);

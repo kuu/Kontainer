@@ -66,7 +66,7 @@ var TrackFragmentBaseMediaDecodeTimeBox = (function (_FullBox) {
 
       base += readBytesNum;
 
-      if (this.version === 1) {
+      if (props.version === 1) {
         var _Reader$readNumber = Reader.readNumber(buffer, base, 8);
 
         var _Reader$readNumber2 = _slicedToArray(_Reader$readNumber, 2);

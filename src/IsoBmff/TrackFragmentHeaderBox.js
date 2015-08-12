@@ -27,7 +27,7 @@ class TrackFragmentHeaderBox extends FullBox {
     if (props.defaultSampleFlags !== void 0) {
       f |= (1 << 5);
     }
-    if (props.durationIsEmpty !== void 0) {
+    if (props.durationIsEmpty) {
       f |= (1 << 16);
     }
     return f;

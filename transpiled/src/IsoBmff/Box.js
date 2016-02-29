@@ -111,9 +111,16 @@ var Box = function (_Component) {
         // box extends to end of file
         void 0;
       } else if (size === 1) {
+        var _Reader$readNumber3 = Reader.readNumber(buffer, base, 8);
         // 64bit largesize
-        console.error('IsoBmff.Box.parse(' + type + '): largesize(>4GB) is not supported.');
-        return null;
+
+
+        var _Reader$readNumber4 = _slicedToArray(_Reader$readNumber3, 2);
+
+        readNum = _Reader$readNumber4[0];
+        size = _Reader$readNumber4[1];
+
+        base += readNum;
       }
 
       if (type === 'uuid') {

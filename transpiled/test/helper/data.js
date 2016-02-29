@@ -12,7 +12,7 @@ var DEC4 = 15 / 16,
     DEC28 = 268435455 / 268435456,
     DEC32 = 4294967295 / 4294967296;
 
-exports["default"] = {
+exports.default = {
   int8Zero: {
     buf: [0],
     val: { signedInt: 0, unsignedInt: 0, decimal: 0, unsignedDecimal: 0 }
@@ -78,4 +78,3 @@ exports["default"] = {
     val: { signedInt: -1, unsignedInt: Number.MAX_SAFE_INTEGER, decimal: -1 - DEC32, unsignedDecimal: 4294967295 + DEC32 }
   }
 };
-module.exports = exports["default"];

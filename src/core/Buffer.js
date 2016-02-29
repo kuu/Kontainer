@@ -13,10 +13,10 @@ class Buffer {
 
   getData() {
     var buf = this.buffer;
-    if (buf instanceof Uint8Array) {
-      return buf.buffer;
-    } else {
+    if (global && global.Buffer && buf instanceof global.Buffer) {
       return buf;
+    } else {
+      return buf.buffer;
     }
   }
 }

@@ -1,6 +1,6 @@
-/*global describe, it, expect */
 'use strict';
 
+/*global describe, it, expect */
 describe('MediaDataBox', function () {
   var Kontainer = require('../../../src/');
 

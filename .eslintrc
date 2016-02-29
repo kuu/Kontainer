@@ -6,7 +6,7 @@
   "parser": "babel-eslint",
   "rules": {
     "strict": 0,
-    "quotes": "single",
-    "new-cap": false
+    "quotes": [2, "single"],
+    "new-cap": 0
   }
 }

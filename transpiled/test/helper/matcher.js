@@ -1,9 +1,12 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports['default'] = {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+exports.default = {
   toHaveTheSamePropsAs: function toHaveTheSamePropsAs(expected, actual) {
     var isEqual = function isEqual(a, b) {
       //console.log('-----');
@@ -11,7 +14,7 @@ exports['default'] = {
       //console.log(b);
       if (a instanceof Date && b instanceof Date) {
         return a.getTime() === b.getTime();
-      } else if (typeof a === 'object' && typeof b === 'object') {
+      } else if ((typeof a === 'undefined' ? 'undefined' : _typeof(a)) === 'object' && (typeof b === 'undefined' ? 'undefined' : _typeof(b)) === 'object') {
         return Object.keys(a).every(function (key) {
           return isEqual(a[key], b[key]);
         });
@@ -54,4 +57,3 @@ exports['default'] = {
     return checkProps(actual.props, expected.props);
   }
 };
-module.exports = exports['default'];

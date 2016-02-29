@@ -1,14 +1,16 @@
 'use strict';
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Box = require('./Box'),
     PropTypes = require('../core/PropTypes'),
@@ -16,13 +18,13 @@ var Box = require('./Box'),
     Reader = require('../core/Reader'),
     Buffer = require('../core/Buffer');
 
-var AVCConfigurationBox = (function (_Box) {
+var AVCConfigurationBox = function (_Box) {
   _inherits(AVCConfigurationBox, _Box);
 
   function AVCConfigurationBox(props) {
     _classCallCheck(this, AVCConfigurationBox);
 
-    _get(Object.getPrototypeOf(AVCConfigurationBox.prototype), 'constructor', this).call(this, AVCConfigurationBox.COMPACT_NAME, props);
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(AVCConfigurationBox).call(this, AVCConfigurationBox.COMPACT_NAME, props));
   }
 
   _createClass(AVCConfigurationBox, [{
@@ -186,58 +188,58 @@ var AVCConfigurationBox = (function (_Box) {
 
       var _Reader$readNumber3 = Reader.readNumber(buffer, base, 1);
 
-      var _Reader$readNumber32 = _slicedToArray(_Reader$readNumber3, 2);
+      var _Reader$readNumber4 = _slicedToArray(_Reader$readNumber3, 2);
 
-      readBytesNum = _Reader$readNumber32[0];
-      avcProfileIndication = _Reader$readNumber32[1];
-
-      base += readBytesNum;
-
-      var _Reader$readNumber4 = Reader.readNumber(buffer, base, 1);
-
-      var _Reader$readNumber42 = _slicedToArray(_Reader$readNumber4, 2);
-
-      readBytesNum = _Reader$readNumber42[0];
-      profileCompatibility = _Reader$readNumber42[1];
+      readBytesNum = _Reader$readNumber4[0];
+      avcProfileIndication = _Reader$readNumber4[1];
 
       base += readBytesNum;
 
       var _Reader$readNumber5 = Reader.readNumber(buffer, base, 1);
 
-      var _Reader$readNumber52 = _slicedToArray(_Reader$readNumber5, 2);
+      var _Reader$readNumber6 = _slicedToArray(_Reader$readNumber5, 2);
 
-      readBytesNum = _Reader$readNumber52[0];
-      avcLevelIndication = _Reader$readNumber52[1];
-
-      base += readBytesNum;
-
-      var _Reader$readNumber6 = Reader.readNumber(buffer, base, 1);
-
-      var _Reader$readNumber62 = _slicedToArray(_Reader$readNumber6, 2);
-
-      readBytesNum = _Reader$readNumber62[0];
-      lengthSizeMinusOne = _Reader$readNumber62[1];
+      readBytesNum = _Reader$readNumber6[0];
+      profileCompatibility = _Reader$readNumber6[1];
 
       base += readBytesNum;
 
       var _Reader$readNumber7 = Reader.readNumber(buffer, base, 1);
 
-      var _Reader$readNumber72 = _slicedToArray(_Reader$readNumber7, 2);
+      var _Reader$readNumber8 = _slicedToArray(_Reader$readNumber7, 2);
 
-      readBytesNum = _Reader$readNumber72[0];
-      numOfParameterSets = _Reader$readNumber72[1];
+      readBytesNum = _Reader$readNumber8[0];
+      avcLevelIndication = _Reader$readNumber8[1];
+
+      base += readBytesNum;
+
+      var _Reader$readNumber9 = Reader.readNumber(buffer, base, 1);
+
+      var _Reader$readNumber10 = _slicedToArray(_Reader$readNumber9, 2);
+
+      readBytesNum = _Reader$readNumber10[0];
+      lengthSizeMinusOne = _Reader$readNumber10[1];
+
+      base += readBytesNum;
+
+      var _Reader$readNumber11 = Reader.readNumber(buffer, base, 1);
+
+      var _Reader$readNumber12 = _slicedToArray(_Reader$readNumber11, 2);
+
+      readBytesNum = _Reader$readNumber12[0];
+      numOfParameterSets = _Reader$readNumber12[1];
 
       base += readBytesNum;
 
       numOfParameterSets &= 0x1F;
 
       for (i = 0; i < numOfParameterSets; i++) {
-        var _Reader$readNumber8 = Reader.readNumber(buffer, base, 2);
+        var _Reader$readNumber13 = Reader.readNumber(buffer, base, 2);
 
-        var _Reader$readNumber82 = _slicedToArray(_Reader$readNumber8, 2);
+        var _Reader$readNumber14 = _slicedToArray(_Reader$readNumber13, 2);
 
-        readBytesNum = _Reader$readNumber82[0];
-        length = _Reader$readNumber82[1];
+        readBytesNum = _Reader$readNumber14[0];
+        length = _Reader$readNumber14[1];
 
         base += readBytesNum;
 
@@ -249,22 +251,22 @@ var AVCConfigurationBox = (function (_Box) {
         sequenceParameterSets.push({ length: length, data: buf.getView() });
       }
 
-      var _Reader$readNumber9 = Reader.readNumber(buffer, base, 1);
+      var _Reader$readNumber15 = Reader.readNumber(buffer, base, 1);
 
-      var _Reader$readNumber92 = _slicedToArray(_Reader$readNumber9, 2);
+      var _Reader$readNumber16 = _slicedToArray(_Reader$readNumber15, 2);
 
-      readBytesNum = _Reader$readNumber92[0];
-      numOfParameterSets = _Reader$readNumber92[1];
+      readBytesNum = _Reader$readNumber16[0];
+      numOfParameterSets = _Reader$readNumber16[1];
 
       base += readBytesNum;
 
       for (i = 0; i < numOfParameterSets; i++) {
-        var _Reader$readNumber10 = Reader.readNumber(buffer, base, 2);
+        var _Reader$readNumber17 = Reader.readNumber(buffer, base, 2);
 
-        var _Reader$readNumber102 = _slicedToArray(_Reader$readNumber10, 2);
+        var _Reader$readNumber18 = _slicedToArray(_Reader$readNumber17, 2);
 
-        readBytesNum = _Reader$readNumber102[0];
-        length = _Reader$readNumber102[1];
+        readBytesNum = _Reader$readNumber18[0];
+        length = _Reader$readNumber18[1];
 
         base += readBytesNum;
 
@@ -289,7 +291,7 @@ var AVCConfigurationBox = (function (_Box) {
   }]);
 
   return AVCConfigurationBox;
-})(Box);
+}(Box);
 
 AVCConfigurationBox.COMPACT_NAME = 'avcC';
 

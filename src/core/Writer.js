@@ -143,7 +143,7 @@ function writeBits(num, buffer, byteOffset, bitOffset, totalBitsToWrite) {
 function writeFixedNumber(num, buffer, offset, length=4) {
   var base = offset,
       left = num > 0 ? Math.floor(num) : Math.ceil(num),
-      right = parseFloat('0.' + String(num).split(".")[1]),
+      right = parseFloat('0.' + String(num).split('.')[1]),
       halfBitsNum = Math.min(length, 8) * 8 / 2,
       writtenBytesNum = 0, unreadBitsNum = 0;
 

@@ -33,11 +33,13 @@
 
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var ANONYMOUS = '<<anonymous>>';
 
 // Equivalent of `typeof` but with special handling for array and regexp.
 function getPropType(propValue) {
-  var propType = typeof propValue;
+  var propType = typeof propValue === 'undefined' ? 'undefined' : _typeof(propValue);
   if (Array.isArray(propValue)) {
     return 'array';
   }

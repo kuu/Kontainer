@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = {
+exports.default = {
   isNegative: function isNegative(value, bitLength) {
     return !!(value & 1 << bitLength - 1);
   },
@@ -13,4 +13,3 @@ exports["default"] = {
     return -((~value & mask) + 1);
   }
 };
-module.exports = exports["default"];

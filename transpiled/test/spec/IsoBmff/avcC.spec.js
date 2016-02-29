@@ -1,13 +1,12 @@
 'use strict';
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _matcher = require('../../helper/matcher');
 
-var _helperMatcher = require('../../helper/matcher');
+var _matcher2 = _interopRequireDefault(_matcher);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*global describe, it, expect */
-
-var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
-
 describe('AVCConfigurationBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -48,8 +47,10 @@ describe('AVCConfigurationBox', function () {
       sequenceParameterSets: [{ length: 8, data: sps }],
       pictureParameterSets: [{ length: 8, data: pps }]
     });
+
     var buffer = Kontainer.renderToBuffer(element);
     expect(buffer).not.toBe(null);
+
     var array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
@@ -61,7 +62,9 @@ describe('AVCConfigurationBox', function () {
       expect(array[i]).toBe(avcCValue[i]);
       //console.log('a[' + i + ']=' + array[i] + ', b[' + i + ']=' + avcCValue[i]);
     }
+    console.log('~~~~~~~~');
     var element2 = IsoBmff.createElementFromBuffer(buffer);
-    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(element, element2)).toBe(true);
+    console.log('&&&&&&&&');
+    expect(_matcher2.default.toHaveTheSamePropsAs(element, element2)).toBe(true);
   });
 });

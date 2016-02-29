@@ -1,13 +1,12 @@
 'use strict';
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _matcher = require('../../helper/matcher');
 
-var _helperMatcher = require('../../helper/matcher');
+var _matcher2 = _interopRequireDefault(_matcher);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*global describe, it, expect */
-
-var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
-
 describe('MP4AudioSampleEntry', function () {
   var Kontainer = require('../../../src/');
 
@@ -47,7 +46,7 @@ describe('MP4AudioSampleEntry', function () {
     }
     var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(mp4aElement, element)).toBe(true);
+    expect(_matcher2.default.toHaveTheSamePropsAs(mp4aElement, element)).toBe(true);
   });
 
   it('supports stereo/24bit/48kHz', function () {
@@ -66,6 +65,6 @@ describe('MP4AudioSampleEntry', function () {
     }
     var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(mp4aElement, element)).toBe(true);
+    expect(_matcher2.default.toHaveTheSamePropsAs(mp4aElement, element)).toBe(true);
   });
 });

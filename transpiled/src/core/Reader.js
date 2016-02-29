@@ -1,15 +1,15 @@
 'use strict';
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _Util = require('./Util.js');
 
-var _UtilJs = require('./Util.js');
+var _Util2 = _interopRequireDefault(_Util);
 
-var _UtilJs2 = _interopRequireDefault(_UtilJs);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var isNegative = _UtilJs2['default'].isNegative,
-    convertToNegative = _UtilJs2['default'].convertToNegative;
+var isNegative = _Util2.default.isNegative,
+    convertToNegative = _Util2.default.convertToNegative;
 
 function readCharacter(buffer, offset) {
   var base = offset,
@@ -191,11 +191,11 @@ function readFixedNumber(buffer, offset) {
 
   var _readBits3 = readBits(buffer, base, (8 - unreadBitsNum) % 8, halfBitsNum);
 
-  var _readBits32 = _slicedToArray(_readBits3, 3);
+  var _readBits4 = _slicedToArray(_readBits3, 3);
 
-  readBytesNum = _readBits32[0];
-  right = _readBits32[1];
-  unreadBitsNum = _readBits32[2];
+  readBytesNum = _readBits4[0];
+  right = _readBits4[1];
+  unreadBitsNum = _readBits4[2];
 
   base += readBytesNum;
 

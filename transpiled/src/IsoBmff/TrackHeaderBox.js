@@ -1,14 +1,16 @@
 'use strict';
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Box = require('./Box'),
     FullBox = require('./FullBox'),
@@ -16,13 +18,13 @@ var Box = require('./Box'),
     Writer = require('../core/Writer'),
     Reader = require('../core/Reader');
 
-var TrackHeaderBox = (function (_FullBox) {
+var TrackHeaderBox = function (_FullBox) {
   _inherits(TrackHeaderBox, _FullBox);
 
   function TrackHeaderBox(props) {
     _classCallCheck(this, TrackHeaderBox);
 
-    _get(Object.getPrototypeOf(TrackHeaderBox.prototype), 'constructor', this).call(this, TrackHeaderBox.COMPACT_NAME, props, props.version, TrackHeaderBox.encodeFlags(props.flags));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(TrackHeaderBox).call(this, TrackHeaderBox.COMPACT_NAME, props, props.version, TrackHeaderBox.encodeFlags(props.flags)));
   }
 
   _createClass(TrackHeaderBox, [{
@@ -144,90 +146,90 @@ var TrackHeaderBox = (function (_FullBox) {
 
       var _Reader$readNumber3 = Reader.readNumber(buffer, base, byteLength);
 
-      var _Reader$readNumber32 = _slicedToArray(_Reader$readNumber3, 2);
+      var _Reader$readNumber4 = _slicedToArray(_Reader$readNumber3, 2);
 
-      readBytesNum = _Reader$readNumber32[0];
-      modificationTime = _Reader$readNumber32[1];
+      readBytesNum = _Reader$readNumber4[0];
+      modificationTime = _Reader$readNumber4[1];
 
       base += readBytesNum;
 
-      var _Reader$readNumber4 = Reader.readNumber(buffer, base, 4);
+      var _Reader$readNumber5 = Reader.readNumber(buffer, base, 4);
 
-      var _Reader$readNumber42 = _slicedToArray(_Reader$readNumber4, 2);
+      var _Reader$readNumber6 = _slicedToArray(_Reader$readNumber5, 2);
 
-      readBytesNum = _Reader$readNumber42[0];
-      trackId = _Reader$readNumber42[1];
+      readBytesNum = _Reader$readNumber6[0];
+      trackId = _Reader$readNumber6[1];
 
       base += readBytesNum;
 
       base += 4; // skip reserved
 
-      var _Reader$readNumber5 = Reader.readNumber(buffer, base, byteLength);
+      var _Reader$readNumber7 = Reader.readNumber(buffer, base, byteLength);
 
-      var _Reader$readNumber52 = _slicedToArray(_Reader$readNumber5, 2);
+      var _Reader$readNumber8 = _slicedToArray(_Reader$readNumber7, 2);
 
-      readBytesNum = _Reader$readNumber52[0];
-      duration = _Reader$readNumber52[1];
+      readBytesNum = _Reader$readNumber8[0];
+      duration = _Reader$readNumber8[1];
 
       base += readBytesNum;
 
       base += 8; // skip reserved
 
-      var _Reader$readNumber6 = Reader.readNumber(buffer, base, 2);
+      var _Reader$readNumber9 = Reader.readNumber(buffer, base, 2);
 
-      var _Reader$readNumber62 = _slicedToArray(_Reader$readNumber6, 2);
+      var _Reader$readNumber10 = _slicedToArray(_Reader$readNumber9, 2);
 
-      readBytesNum = _Reader$readNumber62[0];
-      layer = _Reader$readNumber62[1];
-
-      base += readBytesNum;
-
-      var _Reader$readNumber7 = Reader.readNumber(buffer, base, 2);
-
-      var _Reader$readNumber72 = _slicedToArray(_Reader$readNumber7, 2);
-
-      readBytesNum = _Reader$readNumber72[0];
-      alternateGroup = _Reader$readNumber72[1];
+      readBytesNum = _Reader$readNumber10[0];
+      layer = _Reader$readNumber10[1];
 
       base += readBytesNum;
 
-      var _Reader$readFixedNumber = Reader.readFixedNumber(buffer, base, 2);
+      var _Reader$readNumber11 = Reader.readNumber(buffer, base, 2);
 
-      var _Reader$readFixedNumber2 = _slicedToArray(_Reader$readFixedNumber, 2);
+      var _Reader$readNumber12 = _slicedToArray(_Reader$readNumber11, 2);
 
-      readBytesNum = _Reader$readFixedNumber2[0];
-      volume = _Reader$readFixedNumber2[1];
+      readBytesNum = _Reader$readNumber12[0];
+      alternateGroup = _Reader$readNumber12[1];
+
+      base += readBytesNum;
+
+      var _Reader$readFixedNumb = Reader.readFixedNumber(buffer, base, 2);
+
+      var _Reader$readFixedNumb2 = _slicedToArray(_Reader$readFixedNumb, 2);
+
+      readBytesNum = _Reader$readFixedNumb2[0];
+      volume = _Reader$readFixedNumb2[1];
 
       base += readBytesNum;
 
       base += 2; // skip reserved
 
       for (var i = 0; i < 9; i++) {
-        var _Reader$readFixedNumber3 = Reader.readFixedNumber(buffer, base, 4);
+        var _Reader$readFixedNumb3 = Reader.readFixedNumber(buffer, base, 4);
 
-        var _Reader$readFixedNumber32 = _slicedToArray(_Reader$readFixedNumber3, 2);
+        var _Reader$readFixedNumb4 = _slicedToArray(_Reader$readFixedNumb3, 2);
 
-        readBytesNum = _Reader$readFixedNumber32[0];
-        matrix[i] = _Reader$readFixedNumber32[1];
+        readBytesNum = _Reader$readFixedNumb4[0];
+        matrix[i] = _Reader$readFixedNumb4[1];
 
         base += readBytesNum;
       }
 
-      var _Reader$readFixedNumber4 = Reader.readFixedNumber(buffer, base, 4);
+      var _Reader$readFixedNumb5 = Reader.readFixedNumber(buffer, base, 4);
 
-      var _Reader$readFixedNumber42 = _slicedToArray(_Reader$readFixedNumber4, 2);
+      var _Reader$readFixedNumb6 = _slicedToArray(_Reader$readFixedNumb5, 2);
 
-      readBytesNum = _Reader$readFixedNumber42[0];
-      width = _Reader$readFixedNumber42[1];
+      readBytesNum = _Reader$readFixedNumb6[0];
+      width = _Reader$readFixedNumb6[1];
 
       base += readBytesNum;
 
-      var _Reader$readFixedNumber5 = Reader.readFixedNumber(buffer, base, 4);
+      var _Reader$readFixedNumb7 = Reader.readFixedNumber(buffer, base, 4);
 
-      var _Reader$readFixedNumber52 = _slicedToArray(_Reader$readFixedNumber5, 2);
+      var _Reader$readFixedNumb8 = _slicedToArray(_Reader$readFixedNumb7, 2);
 
-      readBytesNum = _Reader$readFixedNumber52[0];
-      height = _Reader$readFixedNumber52[1];
+      readBytesNum = _Reader$readFixedNumb8[0];
+      height = _Reader$readFixedNumb8[1];
 
       base += readBytesNum;
 
@@ -248,7 +250,7 @@ var TrackHeaderBox = (function (_FullBox) {
   }]);
 
   return TrackHeaderBox;
-})(FullBox);
+}(FullBox);
 
 TrackHeaderBox.COMPACT_NAME = 'tkhd';
 

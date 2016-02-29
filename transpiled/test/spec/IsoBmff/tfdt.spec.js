@@ -1,13 +1,12 @@
 'use strict';
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _matcher = require('../../helper/matcher');
 
-var _helperMatcher = require('../../helper/matcher');
+var _matcher2 = _interopRequireDefault(_matcher);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*global describe, it, expect */
-
-var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
-
 describe('TrackFragmentBaseMediaDecodeTimeBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -34,6 +33,6 @@ describe('TrackFragmentBaseMediaDecodeTimeBox', function () {
       //console.log('a[' + i + ']=' + array[i] + ', b[' + i + ']=' + tfdtValue[i]);
     }
     var element2 = IsoBmff.createElementFromBuffer(buffer);
-    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(element, element2)).toBe(true);
+    expect(_matcher2.default.toHaveTheSamePropsAs(element, element2)).toBe(true);
   });
 });

@@ -1,6 +1,6 @@
-/*global describe, it, expect */
 'use strict';
 
+/*global describe, it, expect */
 var Kontainer = require('../../../src/');
 
 var DEC4 = 15 / 16,

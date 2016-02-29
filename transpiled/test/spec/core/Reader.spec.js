@@ -1,8 +1,8 @@
-/*global describe, it, expect */
 'use strict';
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
+/*global describe, it, expect */
 var Kontainer = require('../../../src/');
 
 var DEC4 = 15 / 16,
@@ -115,10 +115,10 @@ describe('Reader', function () {
 
       var _Reader$readNumber3 = Reader.readNumber(inputValue, 0, len, true);
 
-      var _Reader$readNumber32 = _slicedToArray(_Reader$readNumber3, 2);
+      var _Reader$readNumber4 = _slicedToArray(_Reader$readNumber3, 2);
 
-      readBytesNum = _Reader$readNumber32[0];
-      readValue = _Reader$readNumber32[1];
+      readBytesNum = _Reader$readNumber4[0];
+      readValue = _Reader$readNumber4[1];
 
       expect(readBytesNum).toBe(len);
       expected = expectedValues.signedInt;
@@ -126,12 +126,12 @@ describe('Reader', function () {
 
       //console.log(`\tINT: expected=${expected} actual=${readValue}`);
 
-      var _Reader$readFixedNumber = Reader.readFixedNumber(inputValue, 0, len);
+      var _Reader$readFixedNumb = Reader.readFixedNumber(inputValue, 0, len);
 
-      var _Reader$readFixedNumber2 = _slicedToArray(_Reader$readFixedNumber, 2);
+      var _Reader$readFixedNumb2 = _slicedToArray(_Reader$readFixedNumb, 2);
 
-      readBytesNum = _Reader$readFixedNumber2[0];
-      readValue = _Reader$readFixedNumber2[1];
+      readBytesNum = _Reader$readFixedNumb2[0];
+      readValue = _Reader$readFixedNumb2[1];
 
       expect(readBytesNum).toBe(len);
       expected = expectedValues.unsignedDecimal;
@@ -139,12 +139,12 @@ describe('Reader', function () {
 
       //console.log(`\tUDEC: expected=${expected} actual=${readValue}`);
 
-      var _Reader$readFixedNumber3 = Reader.readFixedNumber(inputValue, 0, len, true);
+      var _Reader$readFixedNumb3 = Reader.readFixedNumber(inputValue, 0, len, true);
 
-      var _Reader$readFixedNumber32 = _slicedToArray(_Reader$readFixedNumber3, 2);
+      var _Reader$readFixedNumb4 = _slicedToArray(_Reader$readFixedNumb3, 2);
 
-      readBytesNum = _Reader$readFixedNumber32[0];
-      readValue = _Reader$readFixedNumber32[1];
+      readBytesNum = _Reader$readFixedNumb4[0];
+      readValue = _Reader$readFixedNumb4[1];
 
       expect(readBytesNum).toBe(len);
       expected = expectedValues.signedDecimal;

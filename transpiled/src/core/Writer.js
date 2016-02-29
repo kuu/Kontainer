@@ -7,10 +7,11 @@ var isNegative = util.isNegative,
     convertToNegative = util.convertToNegative;
 */
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-function writeByte(byte, buffer, offset, mask, or) {
-  if (mask === undefined) mask = 0xFF;
+function writeByte(byte, buffer, offset) {
+  var mask = arguments.length <= 3 || arguments[3] === undefined ? 0xFF : arguments[3];
+  var or = arguments[4];
 
   if (buffer) {
     if (or) {
@@ -156,7 +157,7 @@ function writeFixedNumber(num, buffer, offset) {
 
   var base = offset,
       left = num > 0 ? Math.floor(num) : Math.ceil(num),
-      right = parseFloat('0.' + String(num).split(".")[1]),
+      right = parseFloat('0.' + String(num).split('.')[1]),
       halfBitsNum = Math.min(length, 8) * 8 / 2,
       writtenBytesNum = 0,
       unreadBitsNum = 0;
@@ -184,10 +185,10 @@ function writeFixedNumber(num, buffer, offset) {
 
   var _writeBits3 = writeBits(right, buffer, base, (8 - unreadBitsNum) % 8, halfBitsNum);
 
-  var _writeBits32 = _slicedToArray(_writeBits3, 2);
+  var _writeBits4 = _slicedToArray(_writeBits3, 2);
 
-  writtenBytesNum = _writeBits32[0];
-  unreadBitsNum = _writeBits32[1];
+  writtenBytesNum = _writeBits4[0];
+  unreadBitsNum = _writeBits4[1];
 
   base += writtenBytesNum;
 

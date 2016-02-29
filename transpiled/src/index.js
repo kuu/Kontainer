@@ -1,12 +1,14 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var IsoBmff = require('./IsoBmff/'),
     PropTypes = require('./core/PropTypes'),
     Reader = require('./core/Reader'),
     Writer = require('./core/Writer'),
     Buffer = require('./core/Buffer');
 
-require("babel-core/polyfill");
+require('babel-core/register');
 
 function traverse(context, element, buffer) {
   var offset = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
@@ -154,7 +156,7 @@ var defaultPropsFormatter = {
   },
   value: function value(v) {
     var str;
-    if (typeof v === 'object' && !(v instanceof Date) && !defaultPropsFormatter.isBuffer(v)) {
+    if ((typeof v === 'undefined' ? 'undefined' : _typeof(v)) === 'object' && !(v instanceof Date) && !defaultPropsFormatter.isBuffer(v)) {
       str = '{';
       Object.keys(v).forEach(function (key) {
         str += key + ': ' + defaultPropsFormatter.value(v[key]) + ', ';

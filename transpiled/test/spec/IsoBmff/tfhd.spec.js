@@ -1,13 +1,12 @@
 'use strict';
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _matcher = require('../../helper/matcher');
 
-var _helperMatcher = require('../../helper/matcher');
+var _matcher2 = _interopRequireDefault(_matcher);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*global describe, it, expect */
-
-var _helperMatcher2 = _interopRequireDefault(_helperMatcher);
-
 describe('TrackFragmentHeaderBox', function () {
   var Kontainer = require('../../../src/');
 
@@ -49,7 +48,7 @@ describe('TrackFragmentHeaderBox', function () {
     }
     var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(tfhdElement, element)).toBe(true);
+    expect(_matcher2.default.toHaveTheSamePropsAs(tfhdElement, element)).toBe(true);
   });
 
   it('supports other sets of optional values', function () {
@@ -80,7 +79,7 @@ describe('TrackFragmentHeaderBox', function () {
     }
     var element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(_helperMatcher2['default'].toHaveTheSamePropsAs(tfhdElement, element)).toBe(true);
+    expect(_matcher2.default.toHaveTheSamePropsAs(tfhdElement, element)).toBe(true);
   });
 
   it('supports base-data-offset', function () {

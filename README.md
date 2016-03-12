@@ -13,7 +13,7 @@ $ npm install -g kontainer-js
 
 ## API
 
-A media file like MP4 or WebM is composed of nested objects. In Kontainer, each object, e.g. MP4 Box, is represented as a KontainerElement which is similar to ReactElement. (TODO: Support JSX.)
+A media file like MP4 or WebM is composed of nested objects. In Kontainer, each object, e.g. MP4 Box, is represented as a KontainerElement which is similar to ReactElement.
 
 The actual media data (audio and video chunks) and metadata are represented as a `props` object and need to be passed to `createElement()`.
 
@@ -86,6 +86,67 @@ If you don't specify the `formatter` object, the default one will be used.
       }
     }
 ```
+
+### JSX
+
+You can also use JSX to composite KontainerElements.
+
+#### src/MP4.js
+```
+import {IsoBmff} from 'kontainer-js';
+
+export default class MP4 {
+
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+
+  render() {
+    return (
+    <file>
+      <ftyp majorBrand="isom" />
+      <moov>
+        <mvhd creationTime={new Date(0)} modificationTime={new Date(0)} timeScale={1} nextTrackId={4} />
+        <trak>
+          <tkhd creationTime={new Date(0)} modificationTime={new Date(0)} trackId={1} width={this.width} height={this.height} />
+          <mdia>
+            ...
+          </mdia>
+        </trak>
+      </moov>
+    </file>
+    );
+  }
+}
+```
+
+The above example is witten in ES2015 + JSX.
+Use `babel` to do this.
+
+```
+$ npm install babel-cli
+$ npm install babel-preset-es2015
+$ npm install babel-plugin-transform-kontainer-js
+```
+
+And then put a .babelrc file in your project dir.
+
+```
+{
+  "presets": ["es2015"],
+  "plugins": ["transform-kontainer-js"]
+}
+```
+
+So that you can transpile the above file into ES5.
+
+```
+$ babel src/ -d dist/
+```
+
+See the [plugin code](https://github.com/kuu/babel-plugin-transform-kontainer-js) for the detail.
+
 
 ## CLI
 

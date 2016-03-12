@@ -91,8 +91,7 @@ If you don't specify the `formatter` object, the default one will be used.
 
 You can also use JSX to composite KontainerElements.
 
-#### src/MP4.js
-```
+```js
 import {IsoBmff} from 'kontainer-js';
 
 export default class MP4 {
@@ -122,7 +121,7 @@ export default class MP4 {
 ```
 
 The above example is witten in ES2015 + JSX.
-Use `babel` to do this.
+Use `babel` to compile it.
 
 ```
 $ npm install babel-cli
@@ -130,16 +129,16 @@ $ npm install babel-preset-es2015
 $ npm install babel-plugin-transform-kontainer-js
 ```
 
-And then put a .babelrc file in your project dir.
+Put a .babelrc file in your project dir.
 
-```
+```js
 {
   "presets": ["es2015"],
   "plugins": ["transform-kontainer-js"]
 }
 ```
 
-So that you can transpile the above file into ES5.
+Then you can convert the above code into ES5.
 
 ```
 $ babel src/ -d dist/

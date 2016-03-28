@@ -5,13 +5,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Buffer = function () {
-  function Buffer(length) {
+  function Buffer(param) {
     _classCallCheck(this, Buffer);
 
     if (global && global.Buffer) {
-      this.buffer = new global.Buffer(length);
+      this.buffer = new global.Buffer(param);
     } else {
-      this.buffer = new Uint8Array(length);
+      this.buffer = new Uint8Array(param);
     }
   }
 
@@ -28,6 +28,15 @@ var Buffer = function () {
         return buf;
       } else {
         return buf.buffer;
+      }
+    }
+  }, {
+    key: "getLength",
+    value: function getLength() {
+      if (global && global.Buffer) {
+        return this.buffer.length;
+      } else {
+        return this.buffer.byteLength;
       }
     }
   }]);

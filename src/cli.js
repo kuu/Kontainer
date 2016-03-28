@@ -1,60 +1,47 @@
-'use strict';
+import fs from 'fs';
+import yargs from 'yargs';
+import pkg from '../../package.json';
+import Kontainer from '.';
 
-(function () {
 
-var fs = require('fs'),
-    yargs = require('yargs'),
-    pkg = require('../../package.json'),
-    Kontainer = require('./index.js');
+const argv = yargs.argv;
 
-var filePath, element,
-    argv = yargs.boolean(['mp4']).argv,
-    printHelp = function () {
-      var message = 'Usage:\n';
-      message += '    kontainer filePath [options]\n\n';
-      message += 'Example:\n';
-      message += '    kontainer /path/to/file --mp4\n';
-      message += 'Options:\n';
-      message += '  -h, --help    Print help\n';
-      message += '  -v, --version Print version\n';
-      message += '  --mp4         Indicating this file is ISO Base Media File\n';
-      console.info(message);
-    },
-    printVersion = function () {
-      var message = 'v';
-      message += pkg.version;
-      console.info(message);
-    };
+const HELP = `
+Usage:
+    kontainer filePath [options]
+
+Example:\n';
+    kontainer /path/to/file
+Options:\n';
+  -h, --help    Print help
+  -v, --version Print version
+`;
+
+const VERSION = `v${pkg.version}`;
+const filePath = argv._[0];
 
 if (argv.h || argv.help) {
-  printHelp();
-  return;
-}
+  console.info(HELP);
+} else if (argv.v || argv.version) {
+  console.info(VERSION);
+} else if (!filePath) {
+  console.info(HELP);
+} else {
+  let input;
 
-if (argv.v || argv.version) {
-  printVersion();
-  return;
-}
-
-filePath = argv._[0];
-
-if (!filePath) {
-  printHelp();
-  return;
-}
-
-fs.readFile(filePath, function (err, buffer) {
-  if (err) {
-    console.error('[kontainer] Unable to open - ' + filePath);
-    return;
-  }
-
-  element = Kontainer.IsoBmff.createElementFromBuffer(buffer);
-
-  if (!element) {
-    console.error('[kontainer] Unsupported format.');
+  if (filePath === process.stdin) {
+    input = filePath;
   } else {
-    console.log(Kontainer.renderToString(element));
+    input = fs.createReadStream(filePath);
   }
-});
-}());
+
+
+  const visitor = new Kontainer.IsoBmff.IsoBmffDumpVisitor();
+  const logger = Kontainer.IsoBmff.transform(visitor);
+
+  input.pipe(logger).pipe(process.stdout);
+
+  input.on('error', () => {
+    console.error('[kontainer] Unable to read - ' + filePath);
+  });
+}

@@ -1,61 +1,51 @@
 'use strict';
 
-(function () {
+var _fs = require('fs');
 
-  var fs = require('fs'),
-      yargs = require('yargs'),
-      pkg = require('../../package.json'),
-      Kontainer = require('./index.js');
+var _fs2 = _interopRequireDefault(_fs);
 
-  var filePath,
-      element,
-      argv = yargs.boolean(['mp4']).argv,
-      printHelp = function printHelp() {
-    var message = 'Usage:\n';
-    message += '    kontainer filePath [options]\n\n';
-    message += 'Example:\n';
-    message += '    kontainer /path/to/file --mp4\n';
-    message += 'Options:\n';
-    message += '  -h, --help    Print help\n';
-    message += '  -v, --version Print version\n';
-    message += '  --mp4         Indicating this file is ISO Base Media File\n';
-    console.info(message);
-  },
-      printVersion = function printVersion() {
-    var message = 'v';
-    message += pkg.version;
-    console.info(message);
-  };
+var _yargs = require('yargs');
 
-  if (argv.h || argv.help) {
-    printHelp();
-    return;
+var _yargs2 = _interopRequireDefault(_yargs);
+
+var _package = require('../../package.json');
+
+var _package2 = _interopRequireDefault(_package);
+
+var _ = require('.');
+
+var _2 = _interopRequireDefault(_);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var argv = _yargs2.default.argv;
+
+var HELP = '\nUsage:\n    kontainer filePath [options]\n\nExample:\n\';\n    kontainer /path/to/file\nOptions:\n\';\n  -h, --help    Print help\n  -v, --version Print version\n';
+
+var VERSION = 'v' + _package2.default.version;
+var filePath = argv._[0];
+
+if (argv.h || argv.help) {
+  console.info(HELP);
+} else if (argv.v || argv.version) {
+  console.info(VERSION);
+} else if (!filePath) {
+  console.info(HELP);
+} else {
+  var input = undefined;
+
+  if (filePath === process.stdin) {
+    input = filePath;
+  } else {
+    input = _fs2.default.createReadStream(filePath);
   }
 
-  if (argv.v || argv.version) {
-    printVersion();
-    return;
-  }
+  var visitor = new _2.default.IsoBmff.IsoBmffDumpVisitor();
+  var logger = _2.default.IsoBmff.transform(visitor);
 
-  filePath = argv._[0];
+  input.pipe(logger).pipe(process.stdout);
 
-  if (!filePath) {
-    printHelp();
-    return;
-  }
-
-  fs.readFile(filePath, function (err, buffer) {
-    if (err) {
-      console.error('[kontainer] Unable to open - ' + filePath);
-      return;
-    }
-
-    element = Kontainer.IsoBmff.createElementFromBuffer(buffer);
-
-    if (!element) {
-      console.error('[kontainer] Unsupported format.');
-    } else {
-      console.log(Kontainer.renderToString(element));
-    }
+  input.on('error', function () {
+    console.error('[kontainer] Unable to read - ' + filePath);
   });
-})();
+}

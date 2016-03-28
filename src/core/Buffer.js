@@ -1,9 +1,9 @@
 class Buffer {
-  constructor(length) {
+  constructor(param) {
     if (global && global.Buffer) {
-      this.buffer = new global.Buffer(length);
+      this.buffer = new global.Buffer(param);
     } else {
-      this.buffer = new Uint8Array(length);
+      this.buffer = new Uint8Array(param);
     }
   }
 
@@ -17,6 +17,14 @@ class Buffer {
       return buf;
     } else {
       return buf.buffer;
+    }
+  }
+
+  getLength() {
+    if (global && global.Buffer) {
+      return this.buffer.length;
+    } else {
+      return this.buffer.byteLength;
     }
   }
 }

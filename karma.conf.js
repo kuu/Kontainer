@@ -21,6 +21,8 @@ module.exports = function(config) {
     // list of files to exclude
     exclude: [
       'src/cli.js',
+      'test/spec/core/Stream.spec.js',
+      'test/spec/IsoBmff/index.spec.js'
     ],
 
 

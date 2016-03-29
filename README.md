@@ -87,6 +87,25 @@ If you don't specify the `formatter` object, the default one will be used.
     }
 ```
 
+Also, you can parse a byte stream and process it via a transform stream.
+
+```js
+import {IsoBmff} from 'kontainer-js';
+
+class MyBoxVisitor extends IsoBmff.BoxVisitor {
+  enter(type, props) {
+    // Implement this
+  }
+  exit(type, props) {
+    // Implement this
+  }
+}
+const visitor = new MyBoxVisitor();
+const transform = IsoBmff.transform(visitor);
+
+input.pipe(transform).pipe(process.stdout);
+```
+
 ### JSX
 
 You can also use JSX to composite KontainerElements.
@@ -156,11 +175,12 @@ Usage:
     kontainer filePath [options]
 
 Example:
-    kontainer /path/to/mediafile --mp4
+';
+    kontainer /path/to/file
 Options:
+';
   -h, --help    Print help
   -v, --version Print version
-  --mp4         Indicating this file is ISO Base Media File
 ```
 
 ## Development

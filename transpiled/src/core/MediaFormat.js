@@ -1,12 +1,43 @@
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var Component = require('./Component');
 
-function Element(type, props) {
-  this.type = type;
-  this.props = props;
-  this.instance = null; // Instantiation is deferred until the rendering time.
-}
+var Element = function () {
+  function Element(type, props) {
+    _classCallCheck(this, Element);
+
+    this.type = type;
+    this.props = props;
+    this.instance = null; // Instantiation is deferred until the rendering time.
+  }
+
+  _createClass(Element, [{
+    key: 'querySelector',
+    value: function querySelector(type) {
+      var queue = [this];
+      var element = undefined;
+
+      while (element = queue.shift()) {
+        if (type === element.type.COMPACT_NAME) {
+          return element;
+        }
+        var children = element.props.children;
+        if (children) {
+          children.forEach(function (child) {
+            queue.push(child);
+          });
+        }
+      }
+      return null;
+    }
+  }]);
+
+  return Element;
+}();
 
 function extractChild(child, childArray) {
   if (child instanceof Element) {

@@ -1,9 +1,29 @@
 var Component = require('./Component');
 
-function Element(type, props) {
-  this.type = type;
-  this.props = props;
-  this.instance = null; // Instantiation is deferred until the rendering time.
+class Element {
+  constructor(type, props) {
+    this.type = type;
+    this.props = props;
+    this.instance = null; // Instantiation is deferred until the rendering time.
+  }
+
+  querySelector(type) {
+    let queue = [this];
+    let element;
+
+    while (element = queue.shift()) {
+      if (type === element.type.COMPACT_NAME) {
+        return element;
+      }
+      const children = element.props.children;
+      if (children) {
+        children.forEach((child) => {
+          queue.push(child);
+        });
+      }
+    }
+    return null;
+  }
 }
 
 function extractChild(child, childArray) {

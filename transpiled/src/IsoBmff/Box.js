@@ -80,11 +80,13 @@ var Box = function (_Component) {
     value: function parse(buffer) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-      var size,
-          type,
-          extendedType,
-          base = offset,
-          readNum;
+      var LENGTH = buffer.length;
+
+      var size = undefined;
+      var type = undefined;
+      var extendedType = undefined;
+      var base = offset;
+      var readNum = undefined;
 
       // Read size.
 

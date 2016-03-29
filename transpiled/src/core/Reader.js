@@ -1,15 +1,19 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.readIso639Lang = exports.readFixedNumber = exports.readNumber = exports.readString = undefined;
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _Util = require('./Util.js');
 
-var _Util2 = _interopRequireDefault(_Util);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var isNegative = _Util2.default.isNegative,
-    convertToNegative = _Util2.default.convertToNegative;
+function ASSERT(buffer, offset, bytesToRead) {
+  if (buffer.length - offset < bytesToRead) {
+    throw new Error('Interrupted by insufficient buffer.');
+  }
+}
 
 function readCharacter(buffer, offset) {
   var base = offset,
@@ -55,6 +59,8 @@ function readCharacter(buffer, offset) {
 var MAX_URL_LENGTH = 2048;
 
 function readString(buffer, offset, length) {
+  ASSERT(buffer, offset, length);
+
   var base = offset,
       limit = offset + (length || MAX_URL_LENGTH),
       readBytesNum,
@@ -84,6 +90,8 @@ function readNumber(buffer, offset) {
   var length = arguments.length <= 2 || arguments[2] === undefined ? 4 : arguments[2];
   var signed = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
+  ASSERT(buffer, offset, length);
+
   var base = offset,
       left = 0,
       right = 0,
@@ -98,7 +106,7 @@ function readNumber(buffer, offset) {
       left |= buffer[base++] << 8 * i;
     }
     left >>>= 0;
-    negative = isNegative(left, (length - 4) * 8);
+    negative = (0, _Util.isNegative)(left, (length - 4) * 8);
     left *= 4294967296;
     length = 4;
   }
@@ -112,11 +120,11 @@ function readNumber(buffer, offset) {
 
   if (signed) {
     if (negative === void 0) {
-      negative = isNegative(result, length * 8);
+      negative = (0, _Util.isNegative)(result, length * 8);
     }
 
     if (negative) {
-      result = convertToNegative(result, length * 8);
+      result = (0, _Util.convertToNegative)(result, length * 8);
     }
   }
 
@@ -163,6 +171,8 @@ function readFixedNumber(buffer, offset) {
   var length = arguments.length <= 2 || arguments[2] === undefined ? 4 : arguments[2];
   var signed = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
+  ASSERT(buffer, offset, length);
+
   var base = offset,
       readBytesNum,
       left,
@@ -184,8 +194,8 @@ function readFixedNumber(buffer, offset) {
   base += readBytesNum;
 
   if (signed) {
-    if (isNegative(left, halfBitsNum)) {
-      left = convertToNegative(left, halfBitsNum);
+    if ((0, _Util.isNegative)(left, halfBitsNum)) {
+      left = (0, _Util.convertToNegative)(left, halfBitsNum);
     }
   }
 
@@ -252,9 +262,7 @@ function readIso639Lang(buffer, offset) {
   return [base - offset, language];
 }
 
-module.exports = {
-  readString: readString,
-  readNumber: readNumber,
-  readFixedNumber: readFixedNumber,
-  readIso639Lang: readIso639Lang
-};
+exports.readString = readString;
+exports.readNumber = readNumber;
+exports.readFixedNumber = readFixedNumber;
+exports.readIso639Lang = readIso639Lang;

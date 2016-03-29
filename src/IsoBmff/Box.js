@@ -49,8 +49,13 @@ class Box extends Component {
 
   // Parses buffer and returns props.
   static parse(buffer, offset=0) {
-    var size, type, extendedType,
-        base = offset, readNum;
+    const LENGTH = buffer.length;
+
+    let size;
+    let type;
+    let extendedType;
+    let base = offset;
+    let readNum;
 
     // Read size.
     [readNum, size] = Reader.readNumber(buffer, base, 4);

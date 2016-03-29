@@ -1,9 +1,10 @@
-'use strict';
+import {isNegative, convertToNegative} from './Util.js';
 
-import util from './Util.js';
-
-var isNegative = util.isNegative,
-    convertToNegative = util.convertToNegative;
+function ASSERT(buffer, offset, bytesToRead) {
+  if ((buffer.length - offset) < bytesToRead) {
+    throw new Error('Interrupted by insufficient buffer.');
+  }
+}
 
 function readCharacter(buffer, offset) {
   var base = offset,
@@ -49,6 +50,8 @@ function readCharacter(buffer, offset) {
 const MAX_URL_LENGTH = 2048;
 
 function readString(buffer, offset, length) {
+  ASSERT(buffer, offset, length);
+
   var base = offset,
       limit = offset + (length || MAX_URL_LENGTH),
       readBytesNum, ch, str = '';
@@ -67,6 +70,8 @@ function readString(buffer, offset, length) {
 }
 
 function readNumber(buffer, offset, length=4, signed=false) {
+  ASSERT(buffer, offset, length);
+
   var base = offset, left = 0, right = 0, i, negative, result;
 
   length = Math.min(length, 8);
@@ -135,6 +140,8 @@ function readBits(buffer, byteOffset, bitOffset, bitsToRead) {
 }
 
 function readFixedNumber(buffer, offset, length=4, signed=false) {
+  ASSERT(buffer, offset, length);
+
   var base = offset, readBytesNum, left, right,
       halfBitsNum = Math.min(length, 8) * 8 / 2,
       unreadBitsNum = 0, result;
@@ -197,9 +204,9 @@ function readIso639Lang(buffer, offset) {
   return [base - offset, language];
 }
 
-module.exports = {
-  readString: readString,
-  readNumber: readNumber,
-  readFixedNumber: readFixedNumber,
-  readIso639Lang: readIso639Lang
+export {
+  readString,
+  readNumber,
+  readFixedNumber,
+  readIso639Lang
 };

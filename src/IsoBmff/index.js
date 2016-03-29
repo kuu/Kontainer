@@ -1,9 +1,9 @@
-'use strict';
+import MediaFormat from '../core/MediaFormat';
+import Box from './Box';
+import {TransformStream} from '../core/Stream';
+import {BoxVisitor, IsoBmffDumpVisitor} from './BoxVisitor';
 
-var MediaFormat = require('../core/MediaFormat'),
-    Box = require('./Box');
-
-var clazz = {
+const clazz = {
   'file': require('./File'),
   'ftyp': require('./FileTypeBox'),
   'moov': require('./MovieBox'),
@@ -152,80 +152,139 @@ function createElement(type) {
   return element;
 }
 
-function parse(buffer, offset) {
-  var readBytesNum, props, boxSize, boxType, boxClass,
-      base = offset, boxEnd, element, children = [];
+function parse(buffer, offset, visitor) {
+  let readBytesNum;
+  let props;
+  let base = offset;
 
   // Read the Box params as we don't know the type.
   [readBytesNum, props] = Box.parse(buffer, offset);
-  if (!props) {
-    console.error('IsoBmff.createElementFromBuffer: Failed to parse.');
-    return [0, null];
-  }
 
-  boxType = props.type;
-  boxSize = props.size || buffer.length - offset;
-  boxEnd = offset + boxSize;
-
-  //console.log(`parse enter.: type=${boxType} size=${boxSize}`);
+  let boxType = props.type;
+  const boxSize = props.size || buffer.length - offset;
+  const boxEnd = offset + boxSize;
 
   if (boxType === 'uuid') {
     boxType = props.extendedType;
   }
 
-  boxClass = clazz[boxType];
+  //console.log(`parse enter.: type=${boxType} size=${boxSize} offset=${offset}`);
+
+  const boxClass = clazz[boxType];
   if (!boxClass) {
     console.error(`IsoBmff.createElementFromBuffer: Unsupported type - "${boxType}"`);
-    return [boxSize, null];
+    return boxSize;
   }
 
   [readBytesNum, props] = boxClass.parse(buffer, offset);
   base += readBytesNum;
-  if (!props) {
-    console.error('IsoBmff.createElementFromBuffer: Failed to parse.');
-    return [boxSize, null];
-  }
+
+  const stack = visitor.stack;
+  visitor.offset = base;
+  stack.push({type: boxClass, props, children: []});
+  visitor.enter(boxClass, props);
 
   while (base < boxEnd) {
-    [readBytesNum, element] = parse(buffer, base);
-    if (element) {
-      children.push(element);
-      readBytesNum = element.props.size; // Use Box size since it's more reliable.
-    }
+    readBytesNum = parse(buffer, base, visitor);
     base += readBytesNum;
   }
+  const children = stack[stack.length - 1].children;
+  const result = visitor.exit(boxClass, props, children);
+  stack.pop();
+  visitor.offset = base;
+  if (result && stack.length > 0) {
+    stack[stack.length - 1].children.push(result);
+  }
+
   //console.log(`parse exit.: type=${boxType} readBytesNum=${base - offset}`);
-  return [base - offset, MediaFormat.createElement(boxClass, props, children)];
+  return base - offset;
+}
+
+class ElementVisitor extends BoxVisitor {
+  constructor() {
+    super();
+    this.topLevel = [];
+  }
+
+  enter (type, props) {
+    this.setData({element: MediaFormat.createElement(type, props)});
+  }
+
+  exit (type, props, children) {
+    const {element} = this.getData();
+    element.props.children = children;
+    if (this.depth() === 0) {
+      this.topLevel.push(element);
+    }
+    return element;
+  }
 }
 
 function createElementFromBuffer(buffer, offset=0) {
-  var base = offset, endOfBuffer, readBytesNum,
-      element, elementList = [];
+  let base = offset;
 
   if (buffer instanceof ArrayBuffer) {
     buffer = new Uint8Array(buffer);
   }
-  endOfBuffer = base + buffer.length;
+  const endOfBuffer = base + buffer.length;
 
-  while (base < endOfBuffer) {
-    [readBytesNum, element] = parse(buffer, base);
-    if (!element) {
+  const visitor = new ElementVisitor();
+
+  try {
+    while (base < endOfBuffer) {
+      const readBytesNum = parse(buffer, base, visitor);
       base += readBytesNum;
-      break;
     }
-    elementList.push(element);
-    base += readBytesNum;
+  } catch (err) {
+    console.error('IsoBmff.createElementFromBuffer: an error occurred in parsing the buffer');
+    return null;
   }
   //console.log(`IsoBmff.createElementFromBuffer: Done. ${base - offset} bytes read.`);
-  if (elementList.length === 0) {
+  if (visitor.topLevel.length === 0) {
     return null;
-  } else if (elementList.length === 1) {
-    return elementList[0];
+  } else if (visitor.topLevel.length === 1) {
+    return visitor.topLevel[0];
   }
-  return MediaFormat.createElement(clazz.file, null, elementList);
+  return MediaFormat.createElement(clazz.file, null, visitor.topLevel);
 }
 
-module.exports = {
-  createElement: createElement,
-  createElementFromBuffer: createElementFromBuffer
+function transform(visitor) {
+  return new TransformStream((buffer, offset, done) => {
+    let base = visitor.offset;
+    let buf = buffer.getData();
+
+    if (buf instanceof ArrayBuffer) {
+      buf = new Uint8Array(buf);
+    }
+    const endOfBuffer = buf.length;
+    const stack = visitor.stack;
+    try {
+      while (base < endOfBuffer) {
+        const readBytesNum = parse(buf, base, visitor);
+        base += readBytesNum;
+      }
+    } catch (err) {
+      //console.error(`IsoBmff.transform: An error occurred in parsing the buffer: ${err}`);
+      done(null, null);
+      return;
+    }
+
+    while (stack.length) {
+      const {type, props, children} = stack[stack.length - 1];
+      const result = visitor.exit(type, props, children);
+      stack.pop();
+      if (result && stack.length > 0) {
+        stack[stack.length - 1].children.push(result);
+      }
+    }
+    done(null, null);
+  });
+}
+
+export {
+  createElement,
+  createElementFromBuffer,
+  transform,
+  BoxVisitor,
+  IsoBmffDumpVisitor
 };

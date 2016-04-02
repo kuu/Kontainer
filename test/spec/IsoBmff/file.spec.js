@@ -2,12 +2,12 @@ import customMatchers from '../../helper/matcher';
 import sample from '../../helper/IsoBmff';
 import Kontainer from '../../../src/';
 
-describe('File', function () {
+describe('File', () => {
   var IsoBmff = Kontainer.IsoBmff,
       topLevelElement = sample.element,
       value = sample.buffer;
 
-  it('generates a binary data from KontainerElements', function () {
+  it('generates a binary data from KontainerElements', () => {
     var buffer, elem, array;
 
     buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null,
@@ -33,7 +33,7 @@ describe('File', function () {
     expect(customMatchers.toHaveTheSamePropsAs(topLevelElement, elem)).toBe(true);
   });
 
-  it('parses a binary data into KontainerElements', function () {
+  it('parses a binary data into KontainerElements', () => {
     var b, elem, buf, array;
 
     if (global.Buffer) {

@@ -81,11 +81,11 @@ var DEC4 = 15 / 16,
       }
     };
 
-describe('Writer', function () {
+describe('Writer', () => {
   var Writer = Kontainer.Writer;
 
-  it('reads numbers', function () {
-    Object.keys(testData).forEach(key => {
+  it('reads numbers', () => {
+    Object.keys(testData).forEach((key) => {
       var entry = testData[key],
           inputValues = entry.val,
           expectedValue = entry.buf,

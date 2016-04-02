@@ -1,6 +1,6 @@
 import Kontainer from '../../../src/';
 
-describe('MediaDataBox', function () {
+describe('MediaDataBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       mdatValue = [
         0, 0, 0, 16, // size=16
@@ -9,7 +9,7 @@ describe('MediaDataBox', function () {
         16, 32, 64, 128
       ];
 
-  it('can wrrap raw bytes', function () {
+  it('can wrrap raw bytes', () => {
     var data = new Buffer(8);
     for (let i = 0; i < 8; i++) {
       data[i] = (1 << i);

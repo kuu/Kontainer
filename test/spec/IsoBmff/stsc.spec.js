@@ -1,7 +1,7 @@
 import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
-describe('SampleToChunkBox', function () {
+describe('SampleToChunkBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 16, // size=16
@@ -25,7 +25,7 @@ describe('SampleToChunkBox', function () {
         0, 0, 0, 3 // sample_description_index=3
       ];
 
-  it('supports zero entry', function () {
+  it('supports zero entry', () => {
     var stscElement = IsoBmff.createElement('stsc');
     var buffer = Kontainer.renderToBuffer(stscElement);
     expect(buffer).not.toBe(null);
@@ -44,7 +44,7 @@ describe('SampleToChunkBox', function () {
     expect(customMatchers.toHaveTheSamePropsAs(stscElement, element)).toBe(true);
   });
 
-  it('supports variable size', function () {
+  it('supports variable size', () => {
     var stscElement = IsoBmff.createElement(
       'stsc',
       {

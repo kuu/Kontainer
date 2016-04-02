@@ -1,6 +1,6 @@
 import Kontainer from '../../../src/';
 
-describe('FileTypeBox', function () {
+describe('FileTypeBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       defaultValue = [
         0, 0, 0, 16, // size=16
@@ -17,12 +17,12 @@ describe('FileTypeBox', function () {
         105, 115, 111, 50 // compatible_brands[1]='iso2'
       ];
 
-  it('requires major_brand', function () {
+  it('requires major_brand', () => {
     var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp'));
     expect(buffer).toBe(null);
   });
 
-  it('can be initialized with the default values', function () {
+  it('can be initialized with the default values', () => {
     var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'isom'}));
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -36,7 +36,7 @@ describe('FileTypeBox', function () {
     }
   });
 
-  it('can be initialized with the specified values', function () {
+  it('can be initialized with the specified values', () => {
     var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}));
     var array;
     if (buffer instanceof ArrayBuffer) {

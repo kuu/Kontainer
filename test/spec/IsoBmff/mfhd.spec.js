@@ -1,7 +1,7 @@
 import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
-describe('MovieFragmentHeaderBox', function () {
+describe('MovieFragmentHeaderBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 16, // size=16
@@ -16,7 +16,7 @@ describe('MovieFragmentHeaderBox', function () {
         255, 255, 255, 255 // sequence_number=0xFFFFFFFF
       ];
 
-  it('supports the smallest sequence number.', function () {
+  it('supports the smallest sequence number.', () => {
     var mfhdElement = IsoBmff.createElement('mfhd', {sequenceNumber: 0});
     var buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
@@ -35,7 +35,7 @@ describe('MovieFragmentHeaderBox', function () {
     expect(customMatchers.toHaveTheSamePropsAs(mfhdElement, element)).toBe(true);
   });
 
-  it('supports the largest sequence number.', function () {
+  it('supports the largest sequence number.', () => {
     var mfhdElement = IsoBmff.createElement('mfhd', {sequenceNumber: 0xFFFFFFFF});
     var buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);

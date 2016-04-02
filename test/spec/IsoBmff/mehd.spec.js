@@ -1,7 +1,7 @@
 import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
-describe('MovieExtendsHeaderBox', function () {
+describe('MovieExtendsHeaderBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 16, // size=16
@@ -17,7 +17,7 @@ describe('MovieExtendsHeaderBox', function () {
         0, 0, 0, 0
       ];
 
-  it('supports 32 bit duration', function () {
+  it('supports 32 bit duration', () => {
     var mehdElement = IsoBmff.createElement('mehd', {fragmentDuration: 16777216});
     var buffer = Kontainer.renderToBuffer(mehdElement);
     expect(buffer).not.toBe(null);
@@ -36,7 +36,7 @@ describe('MovieExtendsHeaderBox', function () {
     expect(customMatchers.toHaveTheSamePropsAs(mehdElement, element)).toBe(true);
   });
 
-  it('supports 64 bit duration', function () {
+  it('supports 64 bit duration', () => {
     var mehdElement = IsoBmff.createElement('mehd', {version: 1, fragmentDuration: 4294967296});
     var buffer = Kontainer.renderToBuffer(mehdElement);
     expect(buffer).not.toBe(null);

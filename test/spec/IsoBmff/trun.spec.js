@@ -1,7 +1,7 @@
 import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
-describe('TrackRunBox', function () {
+describe('TrackRunBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 24, // size=24
@@ -26,7 +26,7 @@ describe('TrackRunBox', function () {
         255, 255, 255, 255 // sample-composition-time-offset=0xFFFFFFFF
       ];
 
-  it('supports some sets of optional values', function () {
+  it('supports some sets of optional values', () => {
     var trunElement = IsoBmff.createElement('trun', {
       dataOffset: 1,
       firstSampleFlags: {
@@ -55,7 +55,7 @@ describe('TrackRunBox', function () {
     expect(customMatchers.toHaveTheSamePropsAs(trunElement, element)).toBe(true);
   });
 
-  it('supports other sets of optional values', function () {
+  it('supports other sets of optional values', () => {
     var trunElement = IsoBmff.createElement('trun', {
       samples: [
         {

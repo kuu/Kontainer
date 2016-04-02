@@ -1,7 +1,7 @@
 import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
-describe('AVCConfigurationBox', function () {
+describe('AVCConfigurationBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       avcCValue = [
         0, 0, 0, 35, // size=35
@@ -15,7 +15,7 @@ describe('AVCConfigurationBox', function () {
         8, 4, 2, 1
       ];
 
-  it('can wrrap raw bytes', function () {
+  it('can wrrap raw bytes', () => {
     var sps, pps;
     if (global && global.Buffer) {
       sps = new Buffer(8);

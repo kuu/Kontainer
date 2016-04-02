@@ -1,7 +1,7 @@
 import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
-describe('TrackExtendsBox', function () {
+describe('TrackExtendsBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 32, // size=32
@@ -24,7 +24,7 @@ describe('TrackExtendsBox', function () {
         255, 255, 250, 128 // default_sample_flags={I-pic,disposable,no-redundant,7,true,65535}
       ];
 
-  it('supports falthy values', function () {
+  it('supports falthy values', () => {
     var trexElement = IsoBmff.createElement('trex', {
       trackId: 1,
       defaultSampleDescriptionIndex: 2,
@@ -56,7 +56,7 @@ describe('TrackExtendsBox', function () {
     expect(customMatchers.toHaveTheSamePropsAs(trexElement, element)).toBe(true);
   });
 
-  it('supports truethy values', function () {
+  it('supports truethy values', () => {
     var trexElement = IsoBmff.createElement('trex', {
       trackId: 3,
       defaultSampleDescriptionIndex: 4,

@@ -1,7 +1,7 @@
 import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
-describe('CompactSampleSizeBox', function () {
+describe('CompactSampleSizeBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 20, // size=20
@@ -21,7 +21,7 @@ describe('CompactSampleSizeBox', function () {
         0, 0, 0, 3
       ];
 
-  it('supports constant size', function () {
+  it('supports constant size', () => {
     var stszElement = IsoBmff.createElement('stsz', {sampleSize: 5});
     var buffer = Kontainer.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);
@@ -40,7 +40,7 @@ describe('CompactSampleSizeBox', function () {
     expect(customMatchers.toHaveTheSamePropsAs(stszElement, element)).toBe(true);
   });
 
-  it('supports variable size', function () {
+  it('supports variable size', () => {
     var stszElement = IsoBmff.createElement('stsz', {sampleSizeEntries: [1, 2, 3]});
     var buffer = Kontainer.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);

@@ -105,7 +105,7 @@ function createPrimitiveTypeChecker(expectedType) {
 }
 
 function createAnyTypeChecker() {
-  return createChainableTypeChecker(function () { return null; });
+  return createChainableTypeChecker(() => null);
 }
 
 function createArrayOfTypeChecker(typeChecker) {

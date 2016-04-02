@@ -1,7 +1,7 @@
 import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
-describe('SyncSampleBox', function () {
+describe('SyncSampleBox', () => {
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 16, // size=16
@@ -19,7 +19,7 @@ describe('SyncSampleBox', function () {
         0, 0, 0, 3 // sample_number=1
       ];
 
-  it('supports zero entry', function () {
+  it('supports zero entry', () => {
     var stssElement = IsoBmff.createElement('stss', {entries: []});
     var buffer = Kontainer.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);
@@ -38,7 +38,7 @@ describe('SyncSampleBox', function () {
     expect(customMatchers.toHaveTheSamePropsAs(stssElement, element)).toBe(true);
   });
 
-  it('supports multiple entries', function () {
+  it('supports multiple entries', () => {
     var stssElement = IsoBmff.createElement('stss', {entries: [1, 2, 3]});
     var buffer = Kontainer.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);

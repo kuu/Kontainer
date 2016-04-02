@@ -10,11 +10,11 @@ var _Buffer = require('../../../src/core/Buffer');
 
 var _Buffer2 = _interopRequireDefault(_Buffer);
 
-var _IsoBmff = require('../../../src/IsoBmff');
+var _BoxVisitor2 = require('../../../src/IsoBmff/BoxVisitor');
 
-var _IsoBmff2 = require('../../helper/IsoBmff');
+var _IsoBmff = require('../../helper/IsoBmff');
 
-var _IsoBmff3 = _interopRequireDefault(_IsoBmff2);
+var _IsoBmff2 = _interopRequireDefault(_IsoBmff);
 
 var _matcher = require('../../helper/matcher');
 
@@ -29,8 +29,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var IsoBmff = _src2.default.IsoBmff;
-var ELEMENT = _IsoBmff3.default.element;
-var BUFFER = _IsoBmff3.default.buffer;
+var ELEMENT = _IsoBmff2.default.element;
+var BUFFER = _IsoBmff2.default.buffer;
 var ELEMENT_NUM = 22;
 
 describe('IsoBmff', function () {
@@ -144,7 +144,7 @@ describe('IsoBmff', function () {
         }]);
 
         return TestVisitor;
-      }(_IsoBmff.BoxVisitor);
+      }(_BoxVisitor2.BoxVisitor);
 
       it('can parse full buffer', function (cb) {
         var visitor = new TestVisitor();

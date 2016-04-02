@@ -1,8 +1,8 @@
-var SampleEntry = require('./SampleEntry'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import SampleEntry from './SampleEntry';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class AudioSampleEntry extends SampleEntry {
+export default class AudioSampleEntry extends SampleEntry {
   constructor(type, props) {
     super(type, props, props.dataReferenceIndex);
   }
@@ -56,5 +56,3 @@ class AudioSampleEntry extends SampleEntry {
     return [base - offset, props];
   }
 }
-
-module.exports = AudioSampleEntry;

@@ -1,10 +1,10 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class TrackExtendsBox extends FullBox {
+export default class TrackExtendsBox extends FullBox {
   constructor(props) {
     super(TrackExtendsBox.COMPACT_NAME, props, 0, 0);
   }
@@ -176,5 +176,3 @@ TrackExtendsBox.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER, // Actually exactly one for each track.
   mandatoryBoxList: []
 };
-
-module.exports = TrackExtendsBox;

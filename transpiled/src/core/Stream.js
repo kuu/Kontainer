@@ -19,7 +19,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var TransformStream = undefined;
+var TransformStream = exports.TransformStream = undefined;
 
 if (global && global.Buffer) {
   var Transform = require('stream').Transform;
@@ -63,9 +63,7 @@ if (global && global.Buffer) {
     return NodeTransform;
   }(Transform);
 
-  exports.
+  exports.TransformStream = TransformStream = NodeTransform;
+} else {
   // TODO (WhatWG's streams)
-  TransformStream = TransformStream = NodeTransform;
-} else {}
-
-exports.TransformStream = TransformStream;
+}

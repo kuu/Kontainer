@@ -1,8 +1,9 @@
-import {isNegative, convertToNegative} from './Util.js';
+import {isNegative, convertToNegative} from './Util';
+import {BufferReadError} from './Error';
 
 function ASSERT(buffer, offset, bytesToRead) {
   if ((buffer.length - offset) < bytesToRead) {
-    throw new Error('Interrupted by insufficient buffer.');
+    throw new BufferReadError();
   }
 }
 
@@ -204,7 +205,7 @@ function readIso639Lang(buffer, offset) {
   return [base - offset, language];
 }
 
-export {
+export default {
   readString,
   readNumber,
   readFixedNumber,

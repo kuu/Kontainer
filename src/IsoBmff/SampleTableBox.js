@@ -1,6 +1,6 @@
-var Box = require('./Box');
+import Box from './Box';
 
-class SampleTableBox extends Box {
+export default class SampleTableBox extends Box {
   constructor(props) {
     super(SampleTableBox.COMPACT_NAME, props);
   }
@@ -13,5 +13,3 @@ SampleTableBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: ['stsd', 'stts', 'stsc', ['stsz', 'stz2'], ['stco', 'co64']]
 };
-
-module.exports = SampleTableBox;

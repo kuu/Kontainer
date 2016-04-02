@@ -1,7 +1,6 @@
-/*global describe, it, expect */
-describe('MediaDataBox', function () {
-  var Kontainer = require('../../../src/');
+import Kontainer from '../../../src/';
 
+describe('MediaDataBox', function () {
   var IsoBmff = Kontainer.IsoBmff,
       mdatValue = [
         0, 0, 0, 16, // size=16

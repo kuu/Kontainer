@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('CompactSampleSizeBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       value1 = [0, 0, 0, 20, // size=20
   115, 116, 115, 122, // type='stsz'
   0, 0, 0, 0, // version=0, flags=0
@@ -27,7 +28,7 @@ describe('CompactSampleSizeBox', function () {
 
   it('supports constant size', function () {
     var stszElement = IsoBmff.createElement('stsz', { sampleSize: 5 });
-    var buffer = Kontainer.renderToBuffer(stszElement);
+    var buffer = _src2.default.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -46,7 +47,7 @@ describe('CompactSampleSizeBox', function () {
 
   it('supports variable size', function () {
     var stszElement = IsoBmff.createElement('stsz', { sampleSizeEntries: [1, 2, 3] });
-    var buffer = Kontainer.renderToBuffer(stszElement);
+    var buffer = _src2.default.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

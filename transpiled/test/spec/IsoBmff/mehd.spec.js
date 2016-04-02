@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('MovieExtendsHeaderBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       value1 = [0, 0, 0, 16, // size=16
   109, 101, 104, 100, // type='mehd'
   0, 0, 0, 0, // version=0, flags=0
@@ -24,7 +25,7 @@ describe('MovieExtendsHeaderBox', function () {
 
   it('supports 32 bit duration', function () {
     var mehdElement = IsoBmff.createElement('mehd', { fragmentDuration: 16777216 });
-    var buffer = Kontainer.renderToBuffer(mehdElement);
+    var buffer = _src2.default.renderToBuffer(mehdElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -43,7 +44,7 @@ describe('MovieExtendsHeaderBox', function () {
 
   it('supports 64 bit duration', function () {
     var mehdElement = IsoBmff.createElement('mehd', { version: 1, fragmentDuration: 4294967296 });
-    var buffer = Kontainer.renderToBuffer(mehdElement);
+    var buffer = _src2.default.renderToBuffer(mehdElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

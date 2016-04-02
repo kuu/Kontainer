@@ -31,9 +31,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-'use strict';
-
-var ANONYMOUS = '<<anonymous>>';
+const ANONYMOUS = '<<anonymous>>';
 
 // Equivalent of `typeof` but with special handling for array and regexp.
 function getPropType(propValue) {
@@ -228,7 +226,7 @@ function createShapeTypeChecker(shapeTypes) {
   return createChainableTypeChecker(validate);
 }
 
-module.exports = {
+export default {
   array: createPrimitiveTypeChecker('array'),
   bool: createPrimitiveTypeChecker('boolean'),
   func: createPrimitiveTypeChecker('function'),

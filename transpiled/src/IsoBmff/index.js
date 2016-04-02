@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.IsoBmffDumpVisitor = exports.BoxVisitor = exports.transform = exports.createElementFromBuffer = exports.createElement = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -21,6 +20,8 @@ var _Stream = require('../core/Stream');
 
 var _BoxVisitor2 = require('./BoxVisitor');
 
+var _Error = require('../core/Error');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -30,47 +31,47 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var clazz = {
-  'file': require('./File'),
-  'ftyp': require('./FileTypeBox'),
-  'moov': require('./MovieBox'),
-  'mvhd': require('./MovieHeaderBox'),
-  'trak': require('./TrackBox'),
-  'tkhd': require('./TrackHeaderBox'),
-  'mdia': require('./MediaBox'),
-  'mdhd': require('./MediaHeaderBox'),
-  'hdlr': require('./HandlerReferenceBox'),
-  'minf': require('./MediaInformationBox'),
-  'vmhd': require('./VideoMediaHeaderBox'),
-  'smhd': require('./SoundMediaHeaderBox'),
-  'hmhd': require('./HintMediaHeaderBox'),
-  'nmhd': require('./NullMediaHeaderBox'),
-  'dinf': require('./DataInformationBox'),
-  'dref': require('./DataReferenceBox'),
-  'url ': require('./DataEntryUrlBox'),
-  'urn ': require('./DataEntryUrnBox'),
-  'stbl': require('./SampleTableBox'),
-  'stsd': require('./SampleDescriptionBox'),
-  'avc1': require('./AVCSampleEntry'),
-  'avcC': require('./AVCConfigurationBox'),
-  'stts': require('./TimeToSampleBox'),
-  'stsz': require('./SampleSizeBox'),
-  'stz2': require('./CompactSampleSizeBox'),
-  'stsc': require('./SampleToChunkBox'),
-  'stco': require('./ChunkOffsetBox'),
-  'mp4a': require('./MP4AudioSampleEntry'),
-  'esds': require('./ESDBox'),
-  'mdat': require('./MediaDataBox'),
-  'btrt': require('./MPEG4BitRateBox'),
-  'stss': require('./SyncSampleBox'),
-  'mvex': require('./MovieExtendsBox'),
-  'mehd': require('./MovieExtendsHeaderBox'),
-  'trex': require('./TrackExtendsBox'),
-  'moof': require('./MovieFragmentBox'),
-  'mfhd': require('./MovieFragmentHeaderBox'),
-  'traf': require('./TrackFragmentBox'),
-  'tfhd': require('./TrackFragmentHeaderBox'),
-  'trun': require('./TrackRunBox'),
-  'tfdt': require('./TrackFragmentBaseMediaDecodeTimeBox')
+  'file': require('./File').default,
+  'ftyp': require('./FileTypeBox').default,
+  'moov': require('./MovieBox').default,
+  'mvhd': require('./MovieHeaderBox').default,
+  'trak': require('./TrackBox').default,
+  'tkhd': require('./TrackHeaderBox').default,
+  'mdia': require('./MediaBox').default,
+  'mdhd': require('./MediaHeaderBox').default,
+  'hdlr': require('./HandlerReferenceBox').default,
+  'minf': require('./MediaInformationBox').default,
+  'vmhd': require('./VideoMediaHeaderBox').default,
+  'smhd': require('./SoundMediaHeaderBox').default,
+  'hmhd': require('./HintMediaHeaderBox').default,
+  'nmhd': require('./NullMediaHeaderBox').default,
+  'dinf': require('./DataInformationBox').default,
+  'dref': require('./DataReferenceBox').default,
+  'url ': require('./DataEntryUrlBox').default,
+  'urn ': require('./DataEntryUrnBox').default,
+  'stbl': require('./SampleTableBox').default,
+  'stsd': require('./SampleDescriptionBox').default,
+  'avc1': require('./AVCSampleEntry').default,
+  'avcC': require('./AVCConfigurationBox').default,
+  'stts': require('./TimeToSampleBox').default,
+  'stsz': require('./SampleSizeBox').default,
+  'stz2': require('./CompactSampleSizeBox').default,
+  'stsc': require('./SampleToChunkBox').default,
+  'stco': require('./ChunkOffsetBox').default,
+  'mp4a': require('./MP4AudioSampleEntry').default,
+  'esds': require('./ESDBox').default,
+  'mdat': require('./MediaDataBox').default,
+  'btrt': require('./MPEG4BitRateBox').default,
+  'stss': require('./SyncSampleBox').default,
+  'mvex': require('./MovieExtendsBox').default,
+  'mehd': require('./MovieExtendsHeaderBox').default,
+  'trex': require('./TrackExtendsBox').default,
+  'moof': require('./MovieFragmentBox').default,
+  'mfhd': require('./MovieFragmentHeaderBox').default,
+  'traf': require('./TrackFragmentBox').default,
+  'tfhd': require('./TrackFragmentHeaderBox').default,
+  'trun': require('./TrackRunBox').default,
+  'tfdt': require('./TrackFragmentBaseMediaDecodeTimeBox').default
 };
 
 function validateChild(context, child) {
@@ -333,7 +334,9 @@ function transform(visitor) {
         base += readBytesNum;
       }
     } catch (err) {
-      //console.error(`IsoBmff.transform: An error occurred in parsing the buffer: ${err}`);
+      if (err.message !== _Error.BufferReadError.ERROR_MESSAGE) {
+        console.error('IsoBmff.transform: An error occurred in parsing the buffer: ' + err.stack);
+      }
       done(null, null);
       return;
     }
@@ -354,8 +357,10 @@ function transform(visitor) {
   });
 }
 
-exports.createElement = createElement;
-exports.createElementFromBuffer = createElementFromBuffer;
-exports.transform = transform;
-exports.BoxVisitor = _BoxVisitor2.BoxVisitor;
-exports.IsoBmffDumpVisitor = _BoxVisitor2.IsoBmffDumpVisitor;
+exports.default = {
+  createElement: createElement,
+  createElementFromBuffer: createElementFromBuffer,
+  transform: transform,
+  BoxVisitor: _BoxVisitor2.BoxVisitor,
+  IsoBmffDumpVisitor: _BoxVisitor2.IsoBmffDumpVisitor
+};

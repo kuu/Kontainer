@@ -1,10 +1,10 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class MovieExtendsHeaderBox extends FullBox {
+export default class MovieExtendsHeaderBox extends FullBox {
   constructor(props) {
     super(MovieExtendsHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
@@ -60,5 +60,3 @@ MovieExtendsHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE, // Actually zero or one.
   mandatoryBoxList: []
 };
-
-module.exports = MovieExtendsHeaderBox;

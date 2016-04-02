@@ -1,10 +1,10 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class TimeToSampleBox extends FullBox {
+export default class TimeToSampleBox extends FullBox {
   constructor(props) {
     super(TimeToSampleBox.COMPACT_NAME, props, props.version, 0);
   }
@@ -82,5 +82,3 @@ TimeToSampleBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = TimeToSampleBox;

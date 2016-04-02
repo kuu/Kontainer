@@ -1,8 +1,8 @@
-var Box = require('./Box'),
-    VisualSampleEntry = require('./VisualSampleEntry'),
-    PropTypes = require('../core/PropTypes');
+import Box from './Box';
+import VisualSampleEntry from './VisualSampleEntry';
+import PropTypes from '../core/PropTypes';
 
-class AVCSampleEntry extends VisualSampleEntry {
+export default class AVCSampleEntry extends VisualSampleEntry {
   constructor(props) {
     super(AVCSampleEntry.COMPACT_NAME, props);
   }
@@ -55,5 +55,3 @@ AVCSampleEntry.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: []
 };
-
-module.exports = AVCSampleEntry;

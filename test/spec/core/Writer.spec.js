@@ -1,5 +1,4 @@
-/*global describe, it, expect */
-var Kontainer = require('../../../src/');
+import Kontainer from '../../../src/';
 
 var DEC4 = 15 / 16,
     DEC8 = 255 / 256,

@@ -1,4 +1,4 @@
-var Component = require('./Component');
+import Component from './Component';
 
 class Element {
   constructor(type, props) {
@@ -56,7 +56,7 @@ function createElement(type, props, children) {
 
   // Validate type
   if (!isValidComponentClass(type)) {
-    console.error('MediaFormat.createElement: the class does not implement necessary methods.');
+    console.error(`MediaFormat.createElement: the class (${type.name}) does not implement necessary methods.`);
     return null;
   }
 
@@ -83,6 +83,6 @@ function createElement(type, props, children) {
   return new Element(type, props);
 }
 
-module.exports = {
-  createElement: createElement
+export default {
+  createElement
 };

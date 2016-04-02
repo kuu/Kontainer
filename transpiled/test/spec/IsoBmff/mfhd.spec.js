@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('MovieFragmentHeaderBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       value1 = [0, 0, 0, 16, // size=16
   109, 102, 104, 100, // type='mfhd'
   0, 0, 0, 0, // version=0, flags=0
@@ -24,7 +25,7 @@ describe('MovieFragmentHeaderBox', function () {
 
   it('supports the smallest sequence number.', function () {
     var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 0 });
-    var buffer = Kontainer.renderToBuffer(mfhdElement);
+    var buffer = _src2.default.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -43,7 +44,7 @@ describe('MovieFragmentHeaderBox', function () {
 
   it('supports the largest sequence number.', function () {
     var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 0xFFFFFFFF });
-    var buffer = Kontainer.renderToBuffer(mfhdElement);
+    var buffer = _src2.default.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

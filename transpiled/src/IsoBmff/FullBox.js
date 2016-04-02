@@ -1,20 +1,34 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
+var _Box2 = require('./Box');
+
+var _Box3 = _interopRequireDefault(_Box2);
+
+var _Writer = require('../core/Writer');
+
+var _Writer2 = _interopRequireDefault(_Writer);
+
+var _Reader = require('../core/Reader');
+
+var _Reader2 = _interopRequireDefault(_Reader);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Box = require('./Box'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
 
 var FullBox = function (_Box) {
   _inherits(FullBox, _Box);
@@ -46,14 +60,14 @@ var FullBox = function (_Box) {
         console.warn('IsoBmff.FullBox.serialize: the version does not fit within unsigned int (8).');
       }
 
-      base += Writer.writeNumber(version, buffer, base, 1);
+      base += _Writer2.default.writeNumber(version, buffer, base, 1);
 
       // flags is bit(24)
       if (flags >>> 24) {
         console.warn('IsoBmff.FullBox.serialize: the flags does not fit within bit(24).');
       }
 
-      base += Writer.writeNumber(flags, buffer, base, 3);
+      base += _Writer2.default.writeNumber(flags, buffer, base, 3);
 
       _get(Object.getPrototypeOf(FullBox.prototype), 'setSize', this).call(this, base - offset, buffer, offset);
 
@@ -71,7 +85,7 @@ var FullBox = function (_Box) {
           version,
           flags;
 
-      var _Box$parse = Box.parse(buffer, base);
+      var _Box$parse = _Box3.default.parse(buffer, base);
 
       var _Box$parse2 = _slicedToArray(_Box$parse, 2);
 
@@ -80,7 +94,7 @@ var FullBox = function (_Box) {
 
       base += readBytesNum;
 
-      var _Reader$readNumber = Reader.readNumber(buffer, base, 1);
+      var _Reader$readNumber = _Reader2.default.readNumber(buffer, base, 1);
 
       var _Reader$readNumber2 = _slicedToArray(_Reader$readNumber, 2);
 
@@ -89,7 +103,7 @@ var FullBox = function (_Box) {
 
       base += readBytesNum;
 
-      var _Reader$readNumber3 = Reader.readNumber(buffer, base, 3);
+      var _Reader$readNumber3 = _Reader2.default.readNumber(buffer, base, 3);
 
       var _Reader$readNumber4 = _slicedToArray(_Reader$readNumber3, 2);
 
@@ -118,6 +132,6 @@ var FullBox = function (_Box) {
   }]);
 
   return FullBox;
-}(Box);
+}(_Box3.default);
 
-module.exports = FullBox;
+exports.default = FullBox;

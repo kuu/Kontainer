@@ -1,8 +1,8 @@
-var SampleEntry = require('./SampleEntry'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import SampleEntry from './SampleEntry';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class VisualSampleEntry extends SampleEntry {
+export default class VisualSampleEntry extends SampleEntry {
   constructor(type, props) {
     super(type, props, props.dataReferenceIndex);
   }
@@ -91,5 +91,3 @@ class VisualSampleEntry extends SampleEntry {
     return [base - offset, props];
   }
 }
-
-module.exports = VisualSampleEntry;

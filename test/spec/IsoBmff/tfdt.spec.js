@@ -1,9 +1,7 @@
 import customMatchers from '../../helper/matcher';
+import Kontainer from '../../../src/';
 
-/*global describe, it, expect */
 describe('TrackFragmentBaseMediaDecodeTimeBox', function () {
-  var Kontainer = require('../../../src/');
-
   var IsoBmff = Kontainer.IsoBmff,
       tfdtValue = [
         0, 0, 0, 16, // size=16

@@ -2,49 +2,50 @@ import MediaFormat from '../core/MediaFormat';
 import Box from './Box';
 import {TransformStream} from '../core/Stream';
 import {BoxVisitor, IsoBmffDumpVisitor} from './BoxVisitor';
+import {BufferReadError} from '../core/Error';
 
 const clazz = {
-  'file': require('./File'),
-  'ftyp': require('./FileTypeBox'),
-  'moov': require('./MovieBox'),
-  'mvhd': require('./MovieHeaderBox'),
-  'trak': require('./TrackBox'),
-  'tkhd': require('./TrackHeaderBox'),
-  'mdia': require('./MediaBox'),
-  'mdhd': require('./MediaHeaderBox'),
-  'hdlr': require('./HandlerReferenceBox'),
-  'minf': require('./MediaInformationBox'),
-  'vmhd': require('./VideoMediaHeaderBox'),
-  'smhd': require('./SoundMediaHeaderBox'),
-  'hmhd': require('./HintMediaHeaderBox'),
-  'nmhd': require('./NullMediaHeaderBox'),
-  'dinf': require('./DataInformationBox'),
-  'dref': require('./DataReferenceBox'),
-  'url ': require('./DataEntryUrlBox'),
-  'urn ': require('./DataEntryUrnBox'),
-  'stbl': require('./SampleTableBox'),
-  'stsd': require('./SampleDescriptionBox'),
-  'avc1': require('./AVCSampleEntry'),
-  'avcC': require('./AVCConfigurationBox'),
-  'stts': require('./TimeToSampleBox'),
-  'stsz': require('./SampleSizeBox'),
-  'stz2': require('./CompactSampleSizeBox'),
-  'stsc': require('./SampleToChunkBox'),
-  'stco': require('./ChunkOffsetBox'),
-  'mp4a': require('./MP4AudioSampleEntry'),
-  'esds': require('./ESDBox'),
-  'mdat': require('./MediaDataBox'),
-  'btrt': require('./MPEG4BitRateBox'),
-  'stss': require('./SyncSampleBox'),
-  'mvex': require('./MovieExtendsBox'),
-  'mehd': require('./MovieExtendsHeaderBox'),
-  'trex': require('./TrackExtendsBox'),
-  'moof': require('./MovieFragmentBox'),
-  'mfhd': require('./MovieFragmentHeaderBox'),
-  'traf': require('./TrackFragmentBox'),
-  'tfhd': require('./TrackFragmentHeaderBox'),
-  'trun': require('./TrackRunBox'),
-  'tfdt': require('./TrackFragmentBaseMediaDecodeTimeBox')
+  'file': require('./File').default,
+  'ftyp': require('./FileTypeBox').default,
+  'moov': require('./MovieBox').default,
+  'mvhd': require('./MovieHeaderBox').default,
+  'trak': require('./TrackBox').default,
+  'tkhd': require('./TrackHeaderBox').default,
+  'mdia': require('./MediaBox').default,
+  'mdhd': require('./MediaHeaderBox').default,
+  'hdlr': require('./HandlerReferenceBox').default,
+  'minf': require('./MediaInformationBox').default,
+  'vmhd': require('./VideoMediaHeaderBox').default,
+  'smhd': require('./SoundMediaHeaderBox').default,
+  'hmhd': require('./HintMediaHeaderBox').default,
+  'nmhd': require('./NullMediaHeaderBox').default,
+  'dinf': require('./DataInformationBox').default,
+  'dref': require('./DataReferenceBox').default,
+  'url ': require('./DataEntryUrlBox').default,
+  'urn ': require('./DataEntryUrnBox').default,
+  'stbl': require('./SampleTableBox').default,
+  'stsd': require('./SampleDescriptionBox').default,
+  'avc1': require('./AVCSampleEntry').default,
+  'avcC': require('./AVCConfigurationBox').default,
+  'stts': require('./TimeToSampleBox').default,
+  'stsz': require('./SampleSizeBox').default,
+  'stz2': require('./CompactSampleSizeBox').default,
+  'stsc': require('./SampleToChunkBox').default,
+  'stco': require('./ChunkOffsetBox').default,
+  'mp4a': require('./MP4AudioSampleEntry').default,
+  'esds': require('./ESDBox').default,
+  'mdat': require('./MediaDataBox').default,
+  'btrt': require('./MPEG4BitRateBox').default,
+  'stss': require('./SyncSampleBox').default,
+  'mvex': require('./MovieExtendsBox').default,
+  'mehd': require('./MovieExtendsHeaderBox').default,
+  'trex': require('./TrackExtendsBox').default,
+  'moof': require('./MovieFragmentBox').default,
+  'mfhd': require('./MovieFragmentHeaderBox').default,
+  'traf': require('./TrackFragmentBox').default,
+  'tfhd': require('./TrackFragmentHeaderBox').default,
+  'trun': require('./TrackRunBox').default,
+  'tfdt': require('./TrackFragmentBaseMediaDecodeTimeBox').default,
 };
 
 function validateChild(context, child) {
@@ -264,7 +265,9 @@ function transform(visitor) {
         base += readBytesNum;
       }
     } catch (err) {
-      //console.error(`IsoBmff.transform: An error occurred in parsing the buffer: ${err}`);
+      if (err.message !== BufferReadError.ERROR_MESSAGE) {
+        console.error(`IsoBmff.transform: An error occurred in parsing the buffer: ${err.stack}`);
+      }
       done(null, null);
       return;
     }
@@ -281,7 +284,7 @@ function transform(visitor) {
   });
 }
 
-export {
+export default {
   createElement,
   createElementFromBuffer,
   transform,

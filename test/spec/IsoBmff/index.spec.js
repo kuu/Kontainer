@@ -1,6 +1,6 @@
 import Kontainer from '../../../src/';
 import Buffer from '../../../src/core/Buffer';
-import {BoxVisitor} from '../../../src/IsoBmff';
+import {BoxVisitor} from '../../../src/IsoBmff/BoxVisitor';
 import sample from '../../helper/IsoBmff';
 import customMatchers from '../../helper/matcher';
 

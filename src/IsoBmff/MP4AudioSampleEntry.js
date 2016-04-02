@@ -1,8 +1,8 @@
-var Box = require('./Box'),
-    AudioSampleEntry = require('./AudioSampleEntry'),
-    PropTypes = require('../core/PropTypes');
+import Box from './Box';
+import AudioSampleEntry from './AudioSampleEntry';
+import PropTypes from '../core/PropTypes';
 
-class MP4AudioSampleEntry extends AudioSampleEntry {
+export default class MP4AudioSampleEntry extends AudioSampleEntry {
   constructor(props) {
     super(MP4AudioSampleEntry.COMPACT_NAME, props);
   }
@@ -49,5 +49,3 @@ MP4AudioSampleEntry.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: []
 };
-
-module.exports = MP4AudioSampleEntry;

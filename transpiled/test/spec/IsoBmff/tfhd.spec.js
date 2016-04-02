@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('TrackFragmentHeaderBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       value1 = [0, 0, 0, 24, // size=24
   116, 102, 104, 100, // type='tfhd'
   0, 1, 0, 18, // version=0, flags=sample-description-index-present|default-sample-size-present|duration-is-empty
@@ -34,7 +35,7 @@ describe('TrackFragmentHeaderBox', function () {
       defaultSampleSize: 65536,
       durationIsEmpty: true
     });
-    var buffer = Kontainer.renderToBuffer(tfhdElement);
+    var buffer = _src2.default.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -65,7 +66,7 @@ describe('TrackFragmentHeaderBox', function () {
         sampleDegradationPriority: 65535
       }
     });
-    var buffer = Kontainer.renderToBuffer(tfhdElement);
+    var buffer = _src2.default.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -84,7 +85,7 @@ describe('TrackFragmentHeaderBox', function () {
 
   it('supports base-data-offset', function () {
     var elem1 = IsoBmff.createElement('tfhd', { trackId: 1, baseDataOffset: 623 });
-    var buffer = Kontainer.renderToBuffer(elem1);
+    var buffer = _src2.default.renderToBuffer(elem1);
     var elem2 = IsoBmff.createElementFromBuffer(buffer);
     expect(elem2.props.baseDataOffset).toBe(623);
   });

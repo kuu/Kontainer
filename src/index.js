@@ -1,10 +1,8 @@
-var IsoBmff = require('./IsoBmff/'),
-    PropTypes = require('./core/PropTypes'),
-    Reader = require('./core/Reader'),
-    Writer = require('./core/Writer'),
-    Buffer = require('./core/Buffer');
-
-require('babel-core/register');
+import IsoBmff from './IsoBmff';
+import PropTypes from './core/PropTypes';
+import Reader from './core/Reader';
+import Writer from './core/Writer';
+import Buffer from './core/Buffer';
 
 function traverse(context, element, buffer, offset=0) {
   var type, props, children, instance,
@@ -198,11 +196,11 @@ function renderToString(element, propsFormatter) {
   return context.string;
 }
 
-module.exports = {
-  renderToBuffer: renderToBuffer,
-  renderToString: renderToString,
-  IsoBmff: IsoBmff,
-  PropTypes: PropTypes,
-  Reader: Reader,
-  Writer: Writer
+export default {
+  renderToBuffer,
+  renderToString,
+  IsoBmff,
+  PropTypes,
+  Reader,
+  Writer
 };

@@ -1,22 +1,42 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
+var _Box2 = require('./Box');
+
+var _Box3 = _interopRequireDefault(_Box2);
+
+var _PropTypes = require('../core/PropTypes');
+
+var _PropTypes2 = _interopRequireDefault(_PropTypes);
+
+var _Writer = require('../core/Writer');
+
+var _Writer2 = _interopRequireDefault(_Writer);
+
+var _Reader = require('../core/Reader');
+
+var _Reader2 = _interopRequireDefault(_Reader);
+
+var _Buffer = require('../core/Buffer');
+
+var _Buffer2 = _interopRequireDefault(_Buffer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Box = require('./Box'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader'),
-    Buffer = require('../core/Buffer');
 
 var AVCConfigurationBox = function (_Box) {
   _inherits(AVCConfigurationBox, _Box);
@@ -47,16 +67,16 @@ var AVCConfigurationBox = function (_Box) {
           base = offset;
 
       base += _get(Object.getPrototypeOf(AVCConfigurationBox.prototype), 'serialize', this).call(this, buffer, base);
-      base += Writer.writeNumber(configurationVersion, buffer, base, 1);
-      base += Writer.writeNumber(AVCConfigurationBox.encodeProfile(avcProfileIndication), buffer, base, 1);
-      base += Writer.writeNumber(AVCConfigurationBox.encodeCompatibility(profileCompatibility), buffer, base, 1);
-      base += Writer.writeNumber(avcLevelIndication * 10 | 0, buffer, base, 1);
-      base += Writer.writeNumber(0xFC | lengthSizeMinusOne, buffer, base, 1);
-      base += Writer.writeNumber(0xE0 | sequenceParameterSets.length, buffer, base, 1);
+      base += _Writer2.default.writeNumber(configurationVersion, buffer, base, 1);
+      base += _Writer2.default.writeNumber(AVCConfigurationBox.encodeProfile(avcProfileIndication), buffer, base, 1);
+      base += _Writer2.default.writeNumber(AVCConfigurationBox.encodeCompatibility(profileCompatibility), buffer, base, 1);
+      base += _Writer2.default.writeNumber(avcLevelIndication * 10 | 0, buffer, base, 1);
+      base += _Writer2.default.writeNumber(0xFC | lengthSizeMinusOne, buffer, base, 1);
+      base += _Writer2.default.writeNumber(0xE0 | sequenceParameterSets.length, buffer, base, 1);
       sequenceParameterSets.forEach(function (sps) {
         length = sps.length;
         data = sps.data;
-        base += Writer.writeNumber(length, buffer, base, 2);
+        base += _Writer2.default.writeNumber(length, buffer, base, 2);
         if (buffer) {
           for (i = 0; i < length; i++) {
             buffer[base++] = data[i];
@@ -65,11 +85,11 @@ var AVCConfigurationBox = function (_Box) {
           base += length;
         }
       });
-      base += Writer.writeNumber(pictureParameterSets.length, buffer, base, 1);
+      base += _Writer2.default.writeNumber(pictureParameterSets.length, buffer, base, 1);
       pictureParameterSets.forEach(function (pps) {
         length = pps.length;
         data = pps.data;
-        base += Writer.writeNumber(length, buffer, base, 2);
+        base += _Writer2.default.writeNumber(length, buffer, base, 2);
         if (buffer) {
           for (i = 0; i < length; i++) {
             buffer[base++] = data[i];
@@ -168,7 +188,7 @@ var AVCConfigurationBox = function (_Box) {
           sequenceParameterSets = [],
           pictureParameterSets = [];
 
-      var _Box$parse = Box.parse(buffer, base);
+      var _Box$parse = _Box3.default.parse(buffer, base);
 
       var _Box$parse2 = _slicedToArray(_Box$parse, 2);
 
@@ -177,7 +197,7 @@ var AVCConfigurationBox = function (_Box) {
 
       base += readBytesNum;
 
-      var _Reader$readNumber = Reader.readNumber(buffer, base, 1);
+      var _Reader$readNumber = _Reader2.default.readNumber(buffer, base, 1);
 
       var _Reader$readNumber2 = _slicedToArray(_Reader$readNumber, 2);
 
@@ -186,7 +206,7 @@ var AVCConfigurationBox = function (_Box) {
 
       base += readBytesNum;
 
-      var _Reader$readNumber3 = Reader.readNumber(buffer, base, 1);
+      var _Reader$readNumber3 = _Reader2.default.readNumber(buffer, base, 1);
 
       var _Reader$readNumber4 = _slicedToArray(_Reader$readNumber3, 2);
 
@@ -195,7 +215,7 @@ var AVCConfigurationBox = function (_Box) {
 
       base += readBytesNum;
 
-      var _Reader$readNumber5 = Reader.readNumber(buffer, base, 1);
+      var _Reader$readNumber5 = _Reader2.default.readNumber(buffer, base, 1);
 
       var _Reader$readNumber6 = _slicedToArray(_Reader$readNumber5, 2);
 
@@ -204,7 +224,7 @@ var AVCConfigurationBox = function (_Box) {
 
       base += readBytesNum;
 
-      var _Reader$readNumber7 = Reader.readNumber(buffer, base, 1);
+      var _Reader$readNumber7 = _Reader2.default.readNumber(buffer, base, 1);
 
       var _Reader$readNumber8 = _slicedToArray(_Reader$readNumber7, 2);
 
@@ -213,7 +233,7 @@ var AVCConfigurationBox = function (_Box) {
 
       base += readBytesNum;
 
-      var _Reader$readNumber9 = Reader.readNumber(buffer, base, 1);
+      var _Reader$readNumber9 = _Reader2.default.readNumber(buffer, base, 1);
 
       var _Reader$readNumber10 = _slicedToArray(_Reader$readNumber9, 2);
 
@@ -222,7 +242,7 @@ var AVCConfigurationBox = function (_Box) {
 
       base += readBytesNum;
 
-      var _Reader$readNumber11 = Reader.readNumber(buffer, base, 1);
+      var _Reader$readNumber11 = _Reader2.default.readNumber(buffer, base, 1);
 
       var _Reader$readNumber12 = _slicedToArray(_Reader$readNumber11, 2);
 
@@ -234,7 +254,7 @@ var AVCConfigurationBox = function (_Box) {
       numOfParameterSets &= 0x1F;
 
       for (i = 0; i < numOfParameterSets; i++) {
-        var _Reader$readNumber13 = Reader.readNumber(buffer, base, 2);
+        var _Reader$readNumber13 = _Reader2.default.readNumber(buffer, base, 2);
 
         var _Reader$readNumber14 = _slicedToArray(_Reader$readNumber13, 2);
 
@@ -243,7 +263,7 @@ var AVCConfigurationBox = function (_Box) {
 
         base += readBytesNum;
 
-        buf = new Buffer(length);
+        buf = new _Buffer2.default(length);
         data = buf.getView();
         for (j = 0; j < length; j++) {
           data[j] = buffer[base++];
@@ -251,7 +271,7 @@ var AVCConfigurationBox = function (_Box) {
         sequenceParameterSets.push({ length: length, data: buf.getView() });
       }
 
-      var _Reader$readNumber15 = Reader.readNumber(buffer, base, 1);
+      var _Reader$readNumber15 = _Reader2.default.readNumber(buffer, base, 1);
 
       var _Reader$readNumber16 = _slicedToArray(_Reader$readNumber15, 2);
 
@@ -261,7 +281,7 @@ var AVCConfigurationBox = function (_Box) {
       base += readBytesNum;
 
       for (i = 0; i < numOfParameterSets; i++) {
-        var _Reader$readNumber17 = Reader.readNumber(buffer, base, 2);
+        var _Reader$readNumber17 = _Reader2.default.readNumber(buffer, base, 2);
 
         var _Reader$readNumber18 = _slicedToArray(_Reader$readNumber17, 2);
 
@@ -270,7 +290,7 @@ var AVCConfigurationBox = function (_Box) {
 
         base += readBytesNum;
 
-        buf = new Buffer(length);
+        buf = new _Buffer2.default(length);
         data = buf.getView();
         for (j = 0; j < length; j++) {
           data[j] = buffer[base++];
@@ -291,27 +311,30 @@ var AVCConfigurationBox = function (_Box) {
   }]);
 
   return AVCConfigurationBox;
-}(Box);
+}(_Box3.default);
+
+exports.default = AVCConfigurationBox;
+
 
 AVCConfigurationBox.COMPACT_NAME = 'avcC';
 
 AVCConfigurationBox.propTypes = {
-  configurationVersion: PropTypes.number,
-  avcProfileIndication: PropTypes.oneOf(['baseline', 'main', 'extended']).isRequired,
-  profileCompatibility: PropTypes.shape({
-    constraintSet0Flag: PropTypes.bool,
-    constraintSet1Flag: PropTypes.bool,
-    constraintSet2Flag: PropTypes.bool
+  configurationVersion: _PropTypes2.default.number,
+  avcProfileIndication: _PropTypes2.default.oneOf(['baseline', 'main', 'extended']).isRequired,
+  profileCompatibility: _PropTypes2.default.shape({
+    constraintSet0Flag: _PropTypes2.default.bool,
+    constraintSet1Flag: _PropTypes2.default.bool,
+    constraintSet2Flag: _PropTypes2.default.bool
   }).isRequired,
-  avcLevelIndication: PropTypes.oneOf([1, 1.1, 1.2, 1.3, 2, 2.1, 2.2, 3, 3.1, 3.2, 4, 4.1, 4.2, 5, 5.1]).isRequired,
-  lengthSize: PropTypes.oneOf([1, 2, 4]).isRequired,
-  sequenceParameterSets: PropTypes.arrayOf(PropTypes.shape({
-    length: PropTypes.number,
-    data: PropTypes.any
+  avcLevelIndication: _PropTypes2.default.oneOf([1, 1.1, 1.2, 1.3, 2, 2.1, 2.2, 3, 3.1, 3.2, 4, 4.1, 4.2, 5, 5.1]).isRequired,
+  lengthSize: _PropTypes2.default.oneOf([1, 2, 4]).isRequired,
+  sequenceParameterSets: _PropTypes2.default.arrayOf(_PropTypes2.default.shape({
+    length: _PropTypes2.default.number,
+    data: _PropTypes2.default.any
   })),
-  pictureParameterSets: PropTypes.arrayOf(PropTypes.shape({
-    length: PropTypes.number,
-    data: PropTypes.any
+  pictureParameterSets: _PropTypes2.default.arrayOf(_PropTypes2.default.shape({
+    length: _PropTypes2.default.number,
+    data: _PropTypes2.default.any
   }))
 };
 
@@ -323,8 +346,6 @@ AVCConfigurationBox.defaultProps = {
 
 AVCConfigurationBox.spec = {
   container: 'avc1',
-  quantity: Box.QUANTITY_EXACTORY_ONE,
+  quantity: _Box3.default.QUANTITY_EXACTORY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = AVCConfigurationBox;

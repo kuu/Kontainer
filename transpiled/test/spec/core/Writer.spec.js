@@ -1,7 +1,10 @@
 'use strict';
 
-/*global describe, it, expect */
-var Kontainer = require('../../../src/');
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var DEC4 = 15 / 16,
     DEC8 = 255 / 256,
@@ -85,7 +88,7 @@ var DEC4 = 15 / 16,
 };
 
 describe('Writer', function () {
-  var Writer = Kontainer.Writer;
+  var Writer = _src2.default.Writer;
 
   it('reads numbers', function () {
     Object.keys(testData).forEach(function (key) {

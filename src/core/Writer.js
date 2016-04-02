@@ -1,12 +1,3 @@
-'use strict';
-
-/*
-import util from './Util.js';
-
-var isNegative = util.isNegative,
-    convertToNegative = util.convertToNegative;
-*/
-
 function writeByte(byte, buffer, offset, mask=0xFF, or) {
   if (buffer) {
     if (or) {
@@ -190,9 +181,9 @@ function writeIso639Lang(language, buffer, offset) {
   return base - offset;
 }
 
-module.exports = {
-  writeString: writeString,
-  writeNumber: writeNumber,
-  writeFixedNumber: writeFixedNumber,
-  writeIso639Lang: writeIso639Lang
+export default {
+  writeString,
+  writeNumber,
+  writeFixedNumber,
+  writeIso639Lang
 };

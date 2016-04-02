@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('CompactSampleSizeBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       value1 = [0, 0, 0, 23, // size=23
   115, 116, 122, 50, // type='stz2'
   0, 0, 0, 0, // version=0, flags=0
@@ -35,7 +36,7 @@ describe('CompactSampleSizeBox', function () {
 
   it('handles 4 bit field size', function () {
     var stz2Element = IsoBmff.createElement('stz2', { fieldSize: 4, sampleSizeEntries: [1, 2, 3, 4, 5] });
-    var buffer = Kontainer.renderToBuffer(stz2Element);
+    var buffer = _src2.default.renderToBuffer(stz2Element);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -54,7 +55,7 @@ describe('CompactSampleSizeBox', function () {
 
   it('handles 8 bit field size', function () {
     var stz2Element = IsoBmff.createElement('stz2', { fieldSize: 8, sampleSizeEntries: [1, 2, 3, 4, 5] });
-    var buffer = Kontainer.renderToBuffer(stz2Element);
+    var buffer = _src2.default.renderToBuffer(stz2Element);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -73,7 +74,7 @@ describe('CompactSampleSizeBox', function () {
 
   it('handles 16 bit field size', function () {
     var stz2Element = IsoBmff.createElement('stz2', { fieldSize: 16, sampleSizeEntries: [1, 2, 3, 4, 5] });
-    var buffer = Kontainer.renderToBuffer(stz2Element);
+    var buffer = _src2.default.renderToBuffer(stz2Element);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

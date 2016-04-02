@@ -1,6 +1,6 @@
-var Box = require('./Box');
+import Box from './Box';
 
-class MovieBox extends Box {
+export default class MovieBox extends Box {
   constructor(props) {
     super(MovieBox.COMPACT_NAME, props);
   }
@@ -13,5 +13,3 @@ MovieBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: ['mvhd', 'trak']
 };
-
-module.exports = MovieBox;

@@ -1,10 +1,10 @@
-var Box = require('./Box'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader'),
-    Buffer = require('../core/Buffer');
+import Box from './Box';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
+import Buffer from '../core/Buffer';
 
-class AVCConfigurationBox extends Box {
+export default class AVCConfigurationBox extends Box {
   constructor(props) {
     super(AVCConfigurationBox.COMPACT_NAME, props);
   }
@@ -231,5 +231,3 @@ AVCConfigurationBox.spec = {
   quantity: Box.QUANTITY_EXACTORY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = AVCConfigurationBox;

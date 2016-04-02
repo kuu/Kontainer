@@ -1,6 +1,6 @@
 import Visitor from '../core/Visitor';
 
-class BoxVisitor extends Visitor {
+export class BoxVisitor extends Visitor {
   enter (type, props) {
     // To be overriddedn
   }
@@ -10,7 +10,7 @@ class BoxVisitor extends Visitor {
   }
 }
 
-class IsoBmffDumpVisitor extends BoxVisitor {
+export class IsoBmffDumpVisitor extends BoxVisitor {
   static formatBuffer(v) {
     if (global && global.Buffer) {
       return `[Buffer length=${v.length}]`;
@@ -86,8 +86,3 @@ class IsoBmffDumpVisitor extends BoxVisitor {
     console.log(`${IsoBmffDumpVisitor.padding(depth)}[${type.COMPACT_NAME}] <<<< end`);
   }
 }
-
-export {
-  BoxVisitor,
-  IsoBmffDumpVisitor
-};

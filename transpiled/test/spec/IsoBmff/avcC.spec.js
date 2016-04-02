@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('AVCConfigurationBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       avcCValue = [0, 0, 0, 35, // size=35
   97, 118, 99, 67, // type='avcC'
   1, 66, 0, 21, // configurationVersion=1, AVCProfileIndication='baseline', profile_compatibility=0:false,1:false,2:false, AVCLevelIndication=2.1
@@ -47,7 +48,7 @@ describe('AVCConfigurationBox', function () {
       sequenceParameterSets: [{ length: 8, data: sps }],
       pictureParameterSets: [{ length: 8, data: pps }]
     });
-    var buffer = Kontainer.renderToBuffer(element);
+    var buffer = _src2.default.renderToBuffer(element);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

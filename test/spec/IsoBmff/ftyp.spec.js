@@ -1,7 +1,6 @@
-/*global describe, it, expect */
-describe('FileTypeBox', function () {
-  var Kontainer = require('../../../src/');
+import Kontainer from '../../../src/';
 
+describe('FileTypeBox', function () {
   var IsoBmff = Kontainer.IsoBmff,
       defaultValue = [
         0, 0, 0, 16, // size=16

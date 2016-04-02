@@ -1,10 +1,18 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _Component = require('./Component');
 
-var Component = require('./Component');
+var _Component2 = _interopRequireDefault(_Component);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Element = function () {
   function Element(type, props) {
@@ -52,7 +60,7 @@ function extractChild(child, childArray) {
 function isValidComponentClass(type) {
   var proto = type.prototype;
 
-  if (proto instanceof Component && typeof proto.serialize === 'function' && typeof proto.getSize === 'function' && typeof proto.setSize === 'function') {
+  if (proto instanceof _Component2.default && typeof proto.serialize === 'function' && typeof proto.getSize === 'function' && typeof proto.setSize === 'function') {
     return true;
   }
   return false;
@@ -67,7 +75,7 @@ function createElement(type, props, children) {
 
   // Validate type
   if (!isValidComponentClass(type)) {
-    console.error('MediaFormat.createElement: the class does not implement necessary methods.');
+    console.error('MediaFormat.createElement: the class (' + type.name + ') does not implement necessary methods.');
     return null;
   }
 
@@ -94,6 +102,6 @@ function createElement(type, props, children) {
   return new Element(type, props);
 }
 
-module.exports = {
+exports.default = {
   createElement: createElement
 };

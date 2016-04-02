@@ -1,8 +1,8 @@
-var Box = require('./Box'),
-    PropTypes = require('../core/PropTypes'),
-    Buffer = require('../core/Buffer');
+import Box from './Box';
+import PropTypes from '../core/PropTypes';
+import Buffer from '../core/Buffer';
 
-class MediaDataBox extends Box {
+export default class MediaDataBox extends Box {
   constructor(props) {
     super(MediaDataBox.COMPACT_NAME, props);
   }
@@ -59,5 +59,3 @@ MediaDataBox.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: []
 };
-
-module.exports = MediaDataBox;

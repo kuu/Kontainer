@@ -1,9 +1,7 @@
 import customMatchers from '../../helper/matcher';
+import Kontainer from '../../../src/';
 
-/*global describe, it, expect */
 describe('CompactSampleSizeBox', function () {
-  var Kontainer = require('../../../src/');
-
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 23, // size=23

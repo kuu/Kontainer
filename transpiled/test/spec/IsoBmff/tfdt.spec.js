@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('TrackFragmentBaseMediaDecodeTimeBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       tfdtValue = [0, 0, 0, 16, // size=16
   116, 102, 100, 116, // type='tfdt'
   0, 0, 0, 0, // version=0, flags=0
@@ -19,7 +20,7 @@ describe('TrackFragmentBaseMediaDecodeTimeBox', function () {
 
   it('provides the decode time of the first sample in the track fragment', function () {
     var element = IsoBmff.createElement('tfdt', { baseMediaDecodeTime: 65536 });
-    var buffer = Kontainer.renderToBuffer(element);
+    var buffer = _src2.default.renderToBuffer(element);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

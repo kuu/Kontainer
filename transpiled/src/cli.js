@@ -20,7 +20,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var argv = _yargs2.default.argv;
 
-var HELP = '\nUsage:\n    kontainer filePath [options]\n\nExample:\n\';\n    kontainer /path/to/file\nOptions:\n\';\n  -h, --help    Print help\n  -v, --version Print version\n';
+var HELP = '\nUsage:\n    kontainer filePath [options]\n\nExample:\n    kontainer /path/to/file\nOptions:\n  -h, --help    Print help\n  -v, --version Print version\n';
 
 var VERSION = 'v' + _package2.default.version;
 var filePath = argv._[0];

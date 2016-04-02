@@ -1,6 +1,6 @@
-var Box = require('./Box');
+import Box from './Box';
 
-class DataInformationBox extends Box {
+export default class DataInformationBox extends Box {
   constructor(props) {
     super(DataInformationBox.COMPACT_NAME, props);
   }
@@ -13,5 +13,3 @@ DataInformationBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: ['dref']
 };
-
-module.exports = DataInformationBox;

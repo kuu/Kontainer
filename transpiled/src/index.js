@@ -1,14 +1,32 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-var IsoBmff = require('./IsoBmff/'),
-    PropTypes = require('./core/PropTypes'),
-    Reader = require('./core/Reader'),
-    Writer = require('./core/Writer'),
-    Buffer = require('./core/Buffer');
+var _IsoBmff = require('./IsoBmff');
 
-require('babel-core/register');
+var _IsoBmff2 = _interopRequireDefault(_IsoBmff);
+
+var _PropTypes = require('./core/PropTypes');
+
+var _PropTypes2 = _interopRequireDefault(_PropTypes);
+
+var _Reader = require('./core/Reader');
+
+var _Reader2 = _interopRequireDefault(_Reader);
+
+var _Writer = require('./core/Writer');
+
+var _Writer2 = _interopRequireDefault(_Writer);
+
+var _Buffer = require('./core/Buffer');
+
+var _Buffer2 = _interopRequireDefault(_Buffer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function traverse(context, element, buffer) {
   var offset = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
@@ -128,7 +146,7 @@ function renderToBuffer(element) {
   }
 
   // Write to the array buffer.
-  buffer = new Buffer(size);
+  buffer = new _Buffer2.default(size);
   traverse(context, element, buffer.getView());
 
   return buffer.getData();
@@ -213,11 +231,11 @@ function renderToString(element, propsFormatter) {
   return context.string;
 }
 
-module.exports = {
+exports.default = {
   renderToBuffer: renderToBuffer,
   renderToString: renderToString,
-  IsoBmff: IsoBmff,
-  PropTypes: PropTypes,
-  Reader: Reader,
-  Writer: Writer
+  IsoBmff: _IsoBmff2.default,
+  PropTypes: _PropTypes2.default,
+  Reader: _Reader2.default,
+  Writer: _Writer2.default
 };

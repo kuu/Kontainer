@@ -1,11 +1,11 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    DataReferenceBox = require('./DataReferenceBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import DataReferenceBox from './DataReferenceBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class DataEntryUrlBox extends FullBox {
+export default class DataEntryUrlBox extends FullBox {
   constructor(props) {
     super(DataEntryUrlBox.COMPACT_NAME, props, props.version, DataReferenceBox.encodeFlags(props.flags));
   }
@@ -61,5 +61,3 @@ DataEntryUrlBox.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: []
 };
-
-module.exports = DataEntryUrlBox;

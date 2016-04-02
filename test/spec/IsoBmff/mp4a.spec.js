@@ -1,9 +1,7 @@
 import customMatchers from '../../helper/matcher';
+import Kontainer from '../../../src/';
 
-/*global describe, it, expect */
 describe('MP4AudioSampleEntry', function () {
-  var Kontainer = require('../../../src/');
-
   var IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 36, // size=36

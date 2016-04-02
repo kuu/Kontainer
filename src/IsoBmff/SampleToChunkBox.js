@@ -1,10 +1,10 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class SampleToChunkBox extends FullBox {
+export default class SampleToChunkBox extends FullBox {
   constructor(props) {
     super(SampleToChunkBox.COMPACT_NAME, props, props.version, 0);
   }
@@ -87,5 +87,3 @@ SampleToChunkBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = SampleToChunkBox;

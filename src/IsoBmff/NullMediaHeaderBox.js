@@ -1,8 +1,8 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
 
-class NullMediaHeaderBox extends FullBox {
+export default class NullMediaHeaderBox extends FullBox {
   constructor(props) {
     super(NullMediaHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
@@ -37,5 +37,3 @@ NullMediaHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = NullMediaHeaderBox;

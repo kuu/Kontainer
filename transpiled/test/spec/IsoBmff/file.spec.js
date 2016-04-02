@@ -8,22 +8,24 @@ var _IsoBmff = require('../../helper/IsoBmff');
 
 var _IsoBmff2 = _interopRequireDefault(_IsoBmff);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('File', function () {
-  var Kontainer = require('../../../src/');
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       topLevelElement = _IsoBmff2.default.element,
       value = _IsoBmff2.default.buffer;
 
   it('generates a binary data from KontainerElements', function () {
     var buffer, elem, array;
 
-    buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null, IsoBmff.createElement('moov', null, IsoBmff.createElement('mvhd'))));
+    buffer = _src2.default.renderToBuffer(IsoBmff.createElement('file', null, IsoBmff.createElement('moov', null, IsoBmff.createElement('mvhd'))));
     expect(buffer).toBe(null);
 
-    buffer = Kontainer.renderToBuffer(topLevelElement);
+    buffer = _src2.default.renderToBuffer(topLevelElement);
     expect(buffer).not.toBe(null);
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
@@ -50,7 +52,7 @@ describe('File', function () {
     }
     elem = IsoBmff.createElementFromBuffer(b);
     expect(elem).not.toBe(null);
-    buf = Kontainer.renderToBuffer(elem);
+    buf = _src2.default.renderToBuffer(elem);
     expect(buf).not.toBe(null);
     if (buf instanceof ArrayBuffer) {
       array = new Uint8Array(buf);

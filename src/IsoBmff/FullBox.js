@@ -1,8 +1,8 @@
-var Box = require('./Box'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class FullBox extends Box {
+export default class FullBox extends Box {
   constructor(type, props, version, flags) {
     super(type, props);
     this.version = version;
@@ -67,5 +67,3 @@ class FullBox extends Box {
     return new Date(Math.max(0, sec - SECONDS_BTW_1904_1970) * 1000);
   }
 }
-
-module.exports = FullBox;

@@ -1,10 +1,13 @@
 'use strict';
 
-/*global describe, it, expect */
-describe('MediaDataBox', function () {
-  var Kontainer = require('../../../src/');
+var _src = require('../../../src/');
 
-  var IsoBmff = Kontainer.IsoBmff,
+var _src2 = _interopRequireDefault(_src);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+describe('MediaDataBox', function () {
+  var IsoBmff = _src2.default.IsoBmff,
       mdatValue = [0, 0, 0, 16, // size=16
   109, 100, 97, 116, // type='mdat'
   1, 2, 4, 8, 16, 32, 64, 128];
@@ -14,7 +17,7 @@ describe('MediaDataBox', function () {
     for (var _i = 0; _i < 8; _i++) {
       data[_i] = 1 << _i;
     }
-    var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('mdat', { data: data }));
+    var buffer = _src2.default.renderToBuffer(IsoBmff.createElement('mdat', { data: data }));
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

@@ -1,9 +1,8 @@
 import customMatchers from '../../helper/matcher';
 import sample from '../../helper/IsoBmff';
+import Kontainer from '../../../src/';
 
-/*global describe, it, expect */
 describe('File', function () {
-  var Kontainer = require('../../../src/');
   var IsoBmff = Kontainer.IsoBmff,
       topLevelElement = sample.element,
       value = sample.buffer;

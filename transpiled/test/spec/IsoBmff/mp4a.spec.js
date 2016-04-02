@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('MP4AudioSampleEntry', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       value1 = [0, 0, 0, 36, // size=36
   109, 112, 52, 97, // type='mp4a'
   0, 0, 0, 0, // reserved (8)[6]
@@ -32,7 +33,7 @@ describe('MP4AudioSampleEntry', function () {
 
   it('supports mono/16bit/48kHz', function () {
     var mp4aElement = IsoBmff.createElement('mp4a', { dataReferenceIndex: 1 });
-    var buffer = Kontainer.renderToBuffer(mp4aElement);
+    var buffer = _src2.default.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -51,7 +52,7 @@ describe('MP4AudioSampleEntry', function () {
 
   it('supports stereo/24bit/48kHz', function () {
     var mp4aElement = IsoBmff.createElement('mp4a', { dataReferenceIndex: 2, channelCount: 2, sampleSize: 24, sampleRate: 48000 });
-    var buffer = Kontainer.renderToBuffer(mp4aElement);
+    var buffer = _src2.default.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

@@ -1,9 +1,9 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Buffer = require('../core/Buffer');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Buffer from '../core/Buffer';
 
-class ESDBox extends FullBox {
+export default class ESDBox extends FullBox {
   constructor(props) {
     super(ESDBox.COMPACT_NAME, props, props.version, 0);
   }
@@ -59,5 +59,3 @@ ESDBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = ESDBox;

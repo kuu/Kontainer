@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('TrackRunBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       value1 = [0, 0, 0, 24, // size=24
   116, 114, 117, 110, // type='trun'
   0, 0, 0, 5, // version=0, flags=data-offset-present|first-sample-flags-present
@@ -44,7 +45,7 @@ describe('TrackRunBox', function () {
         sampleDegradationPriority: 65535
       }
     });
-    var buffer = Kontainer.renderToBuffer(trunElement);
+    var buffer = _src2.default.renderToBuffer(trunElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -89,7 +90,7 @@ describe('TrackRunBox', function () {
         compositionTimeOffset: 0xFFFFFFFF
       }]
     });
-    var buffer = Kontainer.renderToBuffer(trunElement);
+    var buffer = _src2.default.renderToBuffer(trunElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

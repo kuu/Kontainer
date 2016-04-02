@@ -1,10 +1,10 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class SampleSizeBox extends FullBox {
+export default class SampleSizeBox extends FullBox {
   constructor(props) {
     super(SampleSizeBox.COMPACT_NAME, props, 0, 0);
   }
@@ -78,5 +78,3 @@ SampleSizeBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = SampleSizeBox;

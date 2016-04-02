@@ -1,9 +1,9 @@
-var Box = require('./Box'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class MPEG4BitRateBox extends Box {
+export default class MPEG4BitRateBox extends Box {
   constructor(props) {
     super(MPEG4BitRateBox.COMPACT_NAME, props);
   }
@@ -65,5 +65,3 @@ MPEG4BitRateBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = MPEG4BitRateBox;

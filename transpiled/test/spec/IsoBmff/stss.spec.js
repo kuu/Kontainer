@@ -4,13 +4,14 @@ var _matcher = require('../../helper/matcher');
 
 var _matcher2 = _interopRequireDefault(_matcher);
 
+var _src = require('../../../src/');
+
+var _src2 = _interopRequireDefault(_src);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global describe, it, expect */
 describe('SyncSampleBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+  var IsoBmff = _src2.default.IsoBmff,
       value1 = [0, 0, 0, 16, // size=16
   115, 116, 115, 115, // type='stss'
   0, 0, 0, 0, // version=0, flags=0
@@ -27,7 +28,7 @@ describe('SyncSampleBox', function () {
 
   it('supports zero entry', function () {
     var stssElement = IsoBmff.createElement('stss', { entries: [] });
-    var buffer = Kontainer.renderToBuffer(stssElement);
+    var buffer = _src2.default.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {
@@ -46,7 +47,7 @@ describe('SyncSampleBox', function () {
 
   it('supports multiple entries', function () {
     var stssElement = IsoBmff.createElement('stss', { entries: [1, 2, 3] });
-    var buffer = Kontainer.renderToBuffer(stssElement);
+    var buffer = _src2.default.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);
     var array;
     if (buffer instanceof ArrayBuffer) {

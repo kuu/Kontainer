@@ -1,4 +1,4 @@
-class Buffer {
+export default class Buffer {
   constructor(param) {
     if (global && global.Buffer) {
       this.buffer = new global.Buffer(param);
@@ -28,5 +28,3 @@ class Buffer {
     }
   }
 }
-
-module.exports = Buffer;

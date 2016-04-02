@@ -1,6 +1,6 @@
-var Box = require('./Box');
+import Box from './Box';
 
-class File extends Box {
+export default class File extends Box {
   constructor(props) {
     super(File.COMPACT_NAME, props);
   }
@@ -27,5 +27,3 @@ File.COMPACT_NAME = 'file';
 File.spec = {
   mandatoryBoxList: []
 };
-
-module.exports = File;

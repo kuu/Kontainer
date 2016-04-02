@@ -22,7 +22,8 @@ describe('AVCConfigurationBox', function () {
   8, 4, 2, 1];
 
   it('can wrrap raw bytes', function () {
-    var sps, pps;
+    var sps = undefined,
+        pps = undefined;
     if (global && global.Buffer) {
       sps = new Buffer(8);
       pps = new Buffer(8);
@@ -30,11 +31,11 @@ describe('AVCConfigurationBox', function () {
       sps = new Uint8Array(8);
       pps = new Uint8Array(8);
     }
-    for (var _i = 0; _i < 8; _i++) {
-      sps[_i] = 1 << _i;
+    for (var i = 0; i < 8; i++) {
+      sps[i] = 1 << i;
     }
-    for (var _i2 = 0, j = 7; _i2 < 8; _i2++, j--) {
-      pps[_i2] = 1 << j;
+    for (var i = 0, j = 7; i < 8; i++, j--) {
+      pps[i] = 1 << j;
     }
     var element = IsoBmff.createElement('avcC', {
       avcProfileIndication: 'baseline',
@@ -50,7 +51,7 @@ describe('AVCConfigurationBox', function () {
     });
     var buffer = _src2.default.renderToBuffer(element);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

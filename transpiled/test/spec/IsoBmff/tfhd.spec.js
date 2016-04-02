@@ -37,7 +37,7 @@ describe('TrackFragmentHeaderBox', function () {
     });
     var buffer = _src2.default.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -68,7 +68,7 @@ describe('TrackFragmentHeaderBox', function () {
     });
     var buffer = _src2.default.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

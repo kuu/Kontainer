@@ -49,11 +49,12 @@ var MPEG4BitRateBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- MPEG4BitRateBox.serialize enter.');
-      var props = this.props,
-          bufferSizeDB = props.bufferSizeDB,
-          maxBitrate = props.maxBitrate,
-          avgBitrate = props.avgBitrate,
-          base = offset;
+      var props = this.props;
+      var bufferSizeDB = props.bufferSizeDB;
+      var maxBitrate = props.maxBitrate;
+      var avgBitrate = props.avgBitrate;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(MPEG4BitRateBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(bufferSizeDB, buffer, base, 4);
@@ -71,11 +72,11 @@ var MPEG4BitRateBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          bufferSizeDB,
-          maxBitrate,
-          avgBitrate;
+          readBytesNum = undefined,
+          props = undefined,
+          bufferSizeDB = undefined,
+          maxBitrate = undefined,
+          avgBitrate = undefined;
 
       var _Box$parse = _Box3.default.parse(buffer, base);
 

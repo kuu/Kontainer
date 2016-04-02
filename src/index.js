@@ -5,7 +5,7 @@ import Writer from './core/Writer';
 import Buffer from './core/Buffer';
 
 function traverse(context, element, buffer, offset=0) {
-  var type, props, children, instance,
+  let type, props, children, instance,
       propTypes, base = offset, err;
 
   if (!element) {
@@ -60,9 +60,10 @@ function traverse(context, element, buffer, offset=0) {
 }
 
 function printProps(context, element) {
-  var type, props, children,
-      indent = context.indent,
-      formatter = context.formatter;
+  const indent = context.indent;
+  const formatter = context.formatter;
+
+  let type, props, children;
 
   if (!element) {
     console.warn('Kontainer.renderToString: null element.');
@@ -101,7 +102,7 @@ function printProps(context, element) {
 }
 
 function renderToBuffer(element) {
-  var size, buffer, context = {};
+  let size, buffer, context = {};
 
   // Culculate the entire byte size.
   size = traverse(context, element);
@@ -117,7 +118,7 @@ function renderToBuffer(element) {
   return buffer.getData();
 }
 
-var defaultPropsFormatter = {
+const defaultPropsFormatter = {
   buffer: (v) => {
     if (global && global.Buffer) {
       return `[Buffer length=${v.length}]`;
@@ -131,14 +132,14 @@ var defaultPropsFormatter = {
     return (v instanceof ArrayBuffer);
   },
   padding: (num) => {
-    var str = '';
-    for (var i = 0; i < num; i++) {
+    let str = '';
+    for (let i = 0; i < num; i++) {
       str += '\t';
     }
     return str;
   },
   value: (v) => {
-    var str;
+    let str;
     if (typeof v === 'object' && !(v instanceof Date) && !defaultPropsFormatter.isBuffer(v)) {
       str = '{';
       Object.keys(v).forEach(key => {
@@ -155,7 +156,7 @@ var defaultPropsFormatter = {
     return v;
   },
   array: (a) => {
-    var str = '[ ';
+    let str = '[ ';
     if (a.length > 100) {
       return str + `array of length=${a.length}]`;
     }
@@ -176,7 +177,7 @@ var defaultPropsFormatter = {
     return defaultPropsFormatter.padding(indentNum) + '[' + typeName + '] <<<< end' + '\n';
   },
   body: (indentNum, key, value) => {
-    var v;
+    let v;
     if (value instanceof Array) {
       v = defaultPropsFormatter.array(value);
     } else {
@@ -187,7 +188,7 @@ var defaultPropsFormatter = {
 };
 
 function renderToString(element, propsFormatter) {
-  var context = {
+  const context = {
     string: '',
     indent: 0,
     formatter: propsFormatter || defaultPropsFormatter

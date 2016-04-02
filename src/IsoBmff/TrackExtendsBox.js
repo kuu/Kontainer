@@ -10,7 +10,7 @@ export default class TrackExtendsBox extends FullBox {
   }
 
   static encodeDefaultSampleFlags(flags) {
-    var f = 0;
+    let f = 0;
 
     if (!flags) {
       return void 0;
@@ -48,16 +48,16 @@ export default class TrackExtendsBox extends FullBox {
   }
 
   static decodeDefaultSampleFlags(f) {
-    var flags = {
+    const flags = {
       sampleDependsOn: '',
       sampleIsDependedOn: '',
       sampleHasRedundancy: '',
       samplePaddingValue: 0,
       sampleIsDifferenceSample: false,
       sampleDegradationPriority: 0
-    }, v;
+    };
 
-    v = (f >>> 6) & 0x03;
+    let v = (f >>> 6) & 0x03;
     if (v === 0) {
       flags.sampleDependsOn = 'unknown';
     } else if (v === 1) {
@@ -93,13 +93,14 @@ export default class TrackExtendsBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- TrackExtendsBox.serialize enter.');
-    var props = this.props,
-        trackId = props.trackId,
-        defaultSampleDescriptionIndex = props.defaultSampleDescriptionIndex,
-        defaultSampleDuration = props.defaultSampleDuration,
-        defaultSampleSize = props.defaultSampleSize,
-        defaultSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.defaultSampleFlags),
-        base = offset;
+    const props = this.props;
+    const trackId = props.trackId;
+    const defaultSampleDescriptionIndex = props.defaultSampleDescriptionIndex;
+    const defaultSampleDuration = props.defaultSampleDuration;
+    const defaultSampleSize = props.defaultSampleSize;
+    const defaultSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.defaultSampleFlags);
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(trackId, buffer, base, 4);
@@ -115,7 +116,7 @@ export default class TrackExtendsBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         trackId, defaultSampleDescriptionIndex,
         defaultSampleDuration, defaultSampleSize, defaultSampleFlags;
 

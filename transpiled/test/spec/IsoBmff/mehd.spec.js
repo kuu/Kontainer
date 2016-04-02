@@ -27,7 +27,7 @@ describe('MovieExtendsHeaderBox', function () {
     var mehdElement = IsoBmff.createElement('mehd', { fragmentDuration: 16777216 });
     var buffer = _src2.default.renderToBuffer(mehdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -46,7 +46,7 @@ describe('MovieExtendsHeaderBox', function () {
     var mehdElement = IsoBmff.createElement('mehd', { version: 1, fragmentDuration: 4294967296 });
     var buffer = _src2.default.renderToBuffer(mehdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

@@ -9,7 +9,7 @@ function writeByte(byte, buffer, offset, mask=0xFF, or) {
 }
 
 function writeCharacter(charCode, buffer, offset) {
-  var base = offset;
+  let base = offset;
 
   if (charCode < 0x80) {
     // 1 byte
@@ -51,12 +51,13 @@ function writeCharacter(charCode, buffer, offset) {
 }
 
 function writeString(str, buffer, offset, length) {
-  var base = offset,
-      lowerLimit = offset + (length || 0),
-      upperLimit = offset + (length || Infinity),
-      nullTerminationNeeded = (length === void 0);
+  const lowerLimit = offset + (length || 0);
+  const upperLimit = offset + (length || Infinity);
+  const nullTerminationNeeded = (length === void 0);
 
-  for (var i = 0, il = str.length; i < il; i++) {
+  let base = offset;
+
+  for (let i = 0, il = str.length; i < il; i++) {
     base += writeCharacter(str.charCodeAt(i), buffer, base);
     if (base > upperLimit) {
       base = upperLimit;
@@ -76,9 +77,10 @@ function writeString(str, buffer, offset, length) {
 }
 
 function writeNumber(num, buffer, offset, length=4) {
-  var base = offset, byte, i,
-      left = num / 4294967296,
-      right = num % 4294967296;
+  const left = num / 4294967296;
+  const right = num % 4294967296;
+
+  let base = offset, byte, i;
 
   if (num >= 0 && length > 4) {
     for (i = length - 4 - 1; i >= 0; i--) {
@@ -97,18 +99,19 @@ function writeNumber(num, buffer, offset, length=4) {
 }
 
 function makeBitMask(start, len) {
-  var mask = 0;
-  for (var i = start + len - 1; i >= start; i--) {
+  let mask = 0;
+
+  for (let i = start + len - 1; i >= start; i--) {
     mask |= (1 << i);
   }
   return mask;
 }
 
 function writeBits(num, buffer, byteOffset, bitOffset, totalBitsToWrite) {
-  var base = byteOffset,
-      start = bitOffset,
-      remainingBits = totalBitsToWrite,
-      len, mask, byte, oddBitsNum = 0;
+  let base = byteOffset;
+  let start = bitOffset;
+  let remainingBits = totalBitsToWrite;
+  let len, mask, byte, oddBitsNum = 0;
 
   //console.log(`\twriteBits(num=${num} byteOffset=${byteOffset} bitOffset=${bitOffset} totalBitsToWrite=${totalBitsToWrite})`);
 
@@ -132,11 +135,12 @@ function writeBits(num, buffer, byteOffset, bitOffset, totalBitsToWrite) {
 }
 
 function writeFixedNumber(num, buffer, offset, length=4) {
-  var base = offset,
-      left = num > 0 ? Math.floor(num) : Math.ceil(num),
-      right = parseFloat('0.' + String(num).split('.')[1]),
-      halfBitsNum = Math.min(length, 8) * 8 / 2,
-      writtenBytesNum = 0, unreadBitsNum = 0;
+  const left = num > 0 ? Math.floor(num) : Math.ceil(num);
+  const halfBitsNum = Math.min(length, 8) * 8 / 2;
+
+  let base = offset;
+  let right = parseFloat('0.' + String(num).split('.')[1]);
+  let writtenBytesNum = 0, unreadBitsNum = 0;
 
   //console.log(`writeFixedNumber(${num} ${offset} ${length})`);
 
@@ -159,14 +163,14 @@ function writeFixedNumber(num, buffer, offset, length=4) {
 }
 
 function writeIso639Lang(language, buffer, offset) {
-  var base = offset, charCode, num = 0;
+  let base = offset, charCode, num = 0;
 
   if (language.length !== 3) {
     console.error(`Writer.writeIso639Lang: Invalid language code - ${language}`);
     return 0;
   }
 
-  for (var i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     charCode = language.charCodeAt(i) - 0x60;
     if (charCode > 0x1F) {
       console.error(`Writer.writeIso639Lang: Invalid character - ${language[i]}`);

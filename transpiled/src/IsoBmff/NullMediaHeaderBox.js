@@ -55,7 +55,8 @@ var NullMediaHeaderBox = function (_FullBox) {
     value: function parse(buffer) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-      var readBytesNum, props;
+      var readBytesNum = undefined,
+          props = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, offset);
 

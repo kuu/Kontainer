@@ -45,15 +45,16 @@ var VisualSampleEntry = function (_SampleEntry) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- VisualSampleEntry.serialize enter.');
-      var props = this.props,
-          width = props.width,
-          height = props.height,
-          horizResolution = props.horizResolution,
-          vertResolution = props.vertResolution,
-          frameCount = props.frameCount,
-          compressorName = props.compressorName,
-          depth = props.depth,
-          base = offset;
+      var props = this.props;
+      var width = props.width;
+      var height = props.height;
+      var horizResolution = props.horizResolution;
+      var vertResolution = props.vertResolution;
+      var frameCount = props.frameCount;
+      var compressorName = props.compressorName;
+      var depth = props.depth;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(VisualSampleEntry.prototype), 'serialize', this).call(this, buffer, base);
 
@@ -80,16 +81,16 @@ var VisualSampleEntry = function (_SampleEntry) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          width,
-          height,
-          horizResolution,
-          vertResolution,
-          frameCount,
-          compressorName,
-          compressorNameLength,
-          depth;
+          readBytesNum = undefined,
+          props = undefined,
+          width = undefined,
+          height = undefined,
+          horizResolution = undefined,
+          vertResolution = undefined,
+          frameCount = undefined,
+          compressorName = undefined,
+          compressorNameLength = undefined,
+          depth = undefined;
 
       var _SampleEntry$parse = _SampleEntry3.default.parse(buffer, base);
 

@@ -46,9 +46,10 @@ var Box = function (_Component) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- Box.serialize enter.');
-      var base = offset,
-          size = this.size,
-          type = this.type;
+      var size = this.size;
+      var type = this.type;
+
+      var base = offset;
 
       if (size < 4294967296) {
         base += _Writer2.default.writeNumber(size, buffer, base, 4);

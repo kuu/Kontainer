@@ -2,7 +2,7 @@ import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
 describe('TrackRunBox', () => {
-  var IsoBmff = Kontainer.IsoBmff,
+  const IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 24, // size=24
         116, 114, 117, 110, // type='trun'
@@ -27,7 +27,7 @@ describe('TrackRunBox', () => {
       ];
 
   it('supports some sets of optional values', () => {
-    var trunElement = IsoBmff.createElement('trun', {
+    const trunElement = IsoBmff.createElement('trun', {
       dataOffset: 1,
       firstSampleFlags: {
         sampleDependsOn: 'I-picture',
@@ -38,25 +38,25 @@ describe('TrackRunBox', () => {
         sampleDegradationPriority: 65535
       }
     });
-    var buffer = Kontainer.renderToBuffer(trunElement);
+    const buffer = Kontainer.renderToBuffer(trunElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value1.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value1[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(trunElement, element)).toBe(true);
   });
 
   it('supports other sets of optional values', () => {
-    var trunElement = IsoBmff.createElement('trun', {
+    const trunElement = IsoBmff.createElement('trun', {
       samples: [
         {
           duration: 0,
@@ -86,19 +86,19 @@ describe('TrackRunBox', () => {
         }
       ]
     });
-    var buffer = Kontainer.renderToBuffer(trunElement);
+    const buffer = Kontainer.renderToBuffer(trunElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value2.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value2[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(trunElement, element)).toBe(true);
   });

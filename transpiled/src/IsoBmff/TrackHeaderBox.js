@@ -53,20 +53,21 @@ var TrackHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- TrackHeaderBox.serialize enter.');
-      var props = this.props,
-          version = props.version,
-          creationTime = props.creationTime || new Date(),
-          modificationTime = props.modificationTime || new Date(),
-          trackId = props.trackId | 0,
-          duration = props.duration | 0,
-          layer = props.layer,
-          alternateGroup = props.alternateGroup | 0,
-          volume = props.volume,
-          matrix = props.matrix,
-          width = props.width,
-          height = props.height,
-          byteLength = version ? 8 : 4,
-          base = offset;
+      var props = this.props;
+      var version = props.version;
+      var creationTime = props.creationTime || new Date();
+      var modificationTime = props.modificationTime || new Date();
+      var trackId = props.trackId | 0;
+      var duration = props.duration | 0;
+      var layer = props.layer;
+      var alternateGroup = props.alternateGroup | 0;
+      var volume = props.volume;
+      var matrix = props.matrix;
+      var width = props.width;
+      var height = props.height;
+      var byteLength = version ? 8 : 4;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(TrackHeaderBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(_FullBox3.default.date2sec(creationTime), buffer, base, byteLength);
@@ -131,19 +132,19 @@ var TrackHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          byteLength,
-          creationTime,
-          modificationTime,
-          trackId,
-          duration,
-          layer,
-          alternateGroup,
-          volume,
+          readBytesNum = undefined,
+          props = undefined,
+          byteLength = undefined,
+          creationTime = undefined,
+          modificationTime = undefined,
+          trackId = undefined,
+          duration = undefined,
+          layer = undefined,
+          alternateGroup = undefined,
+          volume = undefined,
           matrix = new Array(9),
-          width,
-          height;
+          width = undefined,
+          height = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

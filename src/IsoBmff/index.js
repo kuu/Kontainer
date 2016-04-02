@@ -49,11 +49,12 @@ const clazz = {
 };
 
 function validateChild(context, child) {
-  var childSpec = child.type.spec,
-      childName = child.type.COMPACT_NAME,
-      container, quantity,
-      checkList = context.mandatoryCheckList,
-      quantityTable = context.quantityTable;
+  const childSpec = child.type.spec;
+  const childName = child.type.COMPACT_NAME;
+  const checkList = context.mandatoryCheckList;
+  const quantityTable = context.quantityTable;
+
+  let container, quantity;
 
   // Container check.
   if (childSpec.container) {
@@ -93,7 +94,7 @@ function validateChild(context, child) {
 }
 
 function createElement(type) {
-  var componentClass, element, context = {},
+  let componentClass, element, context = {},
       spec, result, errorMessage, checkList;
 
   // Validate type.
@@ -161,17 +162,13 @@ function parse(buffer, offset, visitor) {
   // Read the Box params as we don't know the type.
   [readBytesNum, props] = Box.parse(buffer, offset);
 
-  let boxType = props.type;
   const boxSize = props.size || buffer.length - offset;
   const boxEnd = offset + boxSize;
-
-  if (boxType === 'uuid') {
-    boxType = props.extendedType;
-  }
+  const boxType = (props.type === 'uuid' ? props.extendedType : props.type);
+  const boxClass = clazz[boxType];
 
   //console.log(`parse enter.: type=${boxType} size=${boxSize} offset=${offset}`);
 
-  const boxClass = clazz[boxType];
   if (!boxClass) {
     console.error(`IsoBmff.createElementFromBuffer: Unsupported type - "${boxType}"`);
     return boxSize;
@@ -237,7 +234,9 @@ function createElementFromBuffer(buffer, offset=0) {
       base += readBytesNum;
     }
   } catch (err) {
-    console.error('IsoBmff.createElementFromBuffer: an error occurred in parsing the buffer');
+    if (err.message !== BufferReadError.ERROR_MESSAGE) {
+      console.error(`IsoBmff.transform: An error occurred in parsing the buffer: ${err.stack}`);
+    }
     return null;
   }
   //console.log(`IsoBmff.createElementFromBuffer: Done. ${base - offset} bytes read.`);

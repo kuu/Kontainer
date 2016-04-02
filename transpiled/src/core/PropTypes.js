@@ -44,6 +44,7 @@ var ANONYMOUS = '<<anonymous>>';
 // Equivalent of `typeof` but with special handling for array and regexp.
 function getPropType(propValue) {
   var propType = typeof propValue === 'undefined' ? 'undefined' : _typeof(propValue);
+
   if (Array.isArray(propValue)) {
     return 'array';
   }
@@ -60,6 +61,7 @@ function getPropType(propValue) {
 // See `createPrimitiveTypeChecker`.
 function getPreciseType(propValue) {
   var propType = getPropType(propValue);
+
   if (propType === 'object') {
     if (propValue instanceof Date) {
       return 'date';
@@ -93,6 +95,7 @@ function createPrimitiveTypeChecker(expectedType) {
   function validate(props, propName, componentName) {
     var propValue = props[propName];
     var propType = getPropType(propValue);
+
     if (propType !== expectedType) {
       // `propValue` being instance of, say, date/regexp, pass the 'object'
       // check, but we can offer a more precise error message here rather than
@@ -115,12 +118,15 @@ function createAnyTypeChecker() {
 function createArrayOfTypeChecker(typeChecker) {
   function validate(props, propName, componentName) {
     var propValue = props[propName];
+
     if (!Array.isArray(propValue)) {
       var propType = getPropType(propValue);
+
       return new Error('Invalid `' + propName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
     }
     for (var i = 0; i < propValue.length; i++) {
       var error = typeChecker(propValue, i, componentName);
+
       if (error instanceof Error) {
         return error;
       }
@@ -134,6 +140,7 @@ function createInstanceTypeChecker(expectedClass) {
   function validate(props, propName, componentName) {
     if (!(props[propName] instanceof expectedClass)) {
       var expectedClassName = expectedClass.name || ANONYMOUS;
+
       return new Error('Invalid `' + propName + '` supplied to ' + ('`' + componentName + '`, expected instance of `' + expectedClassName + '`.'));
     }
     return null;
@@ -144,6 +151,7 @@ function createInstanceTypeChecker(expectedClass) {
 function createEnumTypeChecker(expectedValues) {
   function validate(props, propName, componentName) {
     var propValue = props[propName];
+
     for (var i = 0; i < expectedValues.length; i++) {
       if (propValue === expectedValues[i]) {
         return null;
@@ -160,12 +168,14 @@ function createObjectOfTypeChecker(typeChecker) {
   function validate(props, propName, componentName) {
     var propValue = props[propName];
     var propType = getPropType(propValue);
+
     if (propType !== 'object') {
       return new Error('Invalid `' + propName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
     }
     for (var key in propValue) {
       if (propValue.hasOwnProperty(key)) {
         var error = typeChecker(propValue, key, componentName);
+
         if (error instanceof Error) {
           return error;
         }
@@ -180,6 +190,7 @@ function createUnionTypeChecker(arrayOfTypeCheckers) {
   function validate(props, propName, componentName) {
     for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
       var checker = arrayOfTypeCheckers[i];
+
       if (checker(props, propName, componentName) == null) {
         return null;
       }
@@ -194,15 +205,18 @@ function createShapeTypeChecker(shapeTypes) {
   function validate(props, propName, componentName) {
     var propValue = props[propName];
     var propType = getPropType(propValue);
+
     if (propType !== 'object') {
       return new Error('Invalid `' + propName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
     }
     for (var key in shapeTypes) {
       var checker = shapeTypes[key];
+
       if (!checker) {
         continue;
       }
       var error = checker(propValue, key, componentName);
+
       if (error) {
         return error;
       }

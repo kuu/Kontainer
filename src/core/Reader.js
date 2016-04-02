@@ -8,20 +8,24 @@ function ASSERT(buffer, offset, bytesToRead) {
 }
 
 function readCharacter(buffer, offset) {
-  var base = offset,
-      firstByte = buffer[base++],
-      charCode,
-      decodeMultiBytes = (numBytes) => {
-    var firstByteMask = (1 << (8 - numBytes)) - 1,
-        trailingBytes = numBytes = 1,
-        multiByteChar = firstByte & firstByteMask;
+  let base = offset;
 
-    for (var i = 0; i < trailingBytes; i++) {
+  const firstByte = buffer[base++];
+
+  const decodeMultiBytes = (numBytes) => {
+    const firstByteMask = (1 << (8 - numBytes)) - 1;
+    const trailingBytes = numBytes = 1;
+
+    let multiByteChar = firstByte & firstByteMask;
+
+    for (let i = 0; i < trailingBytes; i++) {
       multiByteChar <<= 6;
       multiByteChar |= (buffer[base++] & 0x3F);
     }
     return multiByteChar;
   };
+
+  let charCode;
 
   if (!(firstByte & 0x80)) {
     // 1 byte
@@ -53,9 +57,10 @@ const MAX_URL_LENGTH = 2048;
 function readString(buffer, offset, length) {
   ASSERT(buffer, offset, length);
 
-  var base = offset,
-      limit = offset + (length || MAX_URL_LENGTH),
-      readBytesNum, ch, str = '';
+  const limit = offset + (length || MAX_URL_LENGTH);
+
+  let base = offset;
+  let readBytesNum, ch, str = '';
 
   while (base < limit) {
     [readBytesNum, ch] = readCharacter(buffer, base);
@@ -73,7 +78,7 @@ function readString(buffer, offset, length) {
 function readNumber(buffer, offset, length=4, signed=false) {
   ASSERT(buffer, offset, length);
 
-  var base = offset, left = 0, right = 0, i, negative, result;
+  let base = offset, left = 0, right = 0, i, negative, result;
 
   length = Math.min(length, 8);
 
@@ -114,11 +119,13 @@ function readNumber(buffer, offset, length=4, signed=false) {
 }
 
 function readBits(buffer, byteOffset, bitOffset, bitsToRead) {
-  var base = byteOffset,
-      endOfBuffer = base + buffer.length,
-      start = bitOffset, num = 0,
-      remainingBits = bitsToRead,
-      len, byte, oddBitsNum = 0;
+  let base = byteOffset;
+
+  const endOfBuffer = base + buffer.length;
+
+  let start = bitOffset, num = 0;
+  let remainingBits = bitsToRead;
+  let len, byte, oddBitsNum = 0;
 
   //console.log(`\treadBits(byteOffset=${byteOffset} bitOffset=${bitOffset} bitsToRead=${bitsToRead})`);
 
@@ -143,9 +150,10 @@ function readBits(buffer, byteOffset, bitOffset, bitsToRead) {
 function readFixedNumber(buffer, offset, length=4, signed=false) {
   ASSERT(buffer, offset, length);
 
-  var base = offset, readBytesNum, left, right,
-      halfBitsNum = Math.min(length, 8) * 8 / 2,
-      unreadBitsNum = 0, result;
+  const halfBitsNum = Math.min(length, 8) * 8 / 2;
+
+  let base = offset, readBytesNum, left, right;
+  let unreadBitsNum = 0, result;
 
   //console.log(`readFixedNumber(offset=${offset} length=${length} signed=${signed})`);
 
@@ -176,30 +184,13 @@ function readFixedNumber(buffer, offset, length=4, signed=false) {
   return [base - offset, result];
 }
 
-/*
-function readFixedNumber(buffer, offset, length=4) {
-  var base = offset, readBytesNum, left, right,
-      half = Math.min(length / 2, 2);
-
-  [readBytesNum, left] = readNumber(buffer, base, half);
-  base += readBytesNum;
-
-  [readBytesNum, right] = readNumber(buffer, base, half);
-  base += readBytesNum;
-
-  right = right / (1 << (half * 8));
-
-  return [base - offset, left + right];
-}
-*/
-
 function readIso639Lang(buffer, offset) {
-  var base = offset, readBytesNum, num, language = '';
+  let base = offset, readBytesNum, num, language = '';
 
   [readBytesNum, num] = readNumber(buffer, base, 2);
   base += readBytesNum;
 
-  for (var i = 3 - 1; i >= 0; i--) {
+  for (let i = 3 - 1; i >= 0; i--) {
     language += String.fromCharCode(((num >>> (5 * i)) & 0x1F) + 0x60);
   }
   return [base - offset, language];

@@ -8,7 +8,7 @@ export default class NullMediaHeaderBox extends FullBox {
   }
 
   serialize(buffer, offset=0) {
-    var base = offset;
+    let base = offset;
 
     base += super.serialize(buffer, base);
     super.setSize(base - offset, buffer, offset);
@@ -16,7 +16,7 @@ export default class NullMediaHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var readBytesNum, props;
+    let readBytesNum, props;
     [readBytesNum, props] = FullBox.parse(buffer, offset);
     return [readBytesNum, props];
   }

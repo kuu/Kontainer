@@ -53,17 +53,18 @@ var AVCConfigurationBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- AVCConfigurationBox.serialize enter.');
-      var props = this.props,
-          configurationVersion = props.configurationVersion,
-          avcProfileIndication = props.avcProfileIndication,
-          profileCompatibility = props.profileCompatibility,
-          avcLevelIndication = props.avcLevelIndication,
-          lengthSizeMinusOne = props.lengthSize - 1,
-          sequenceParameterSets = props.sequenceParameterSets,
-          pictureParameterSets = props.pictureParameterSets,
-          i,
-          length,
-          data,
+      var props = this.props;
+      var configurationVersion = props.configurationVersion;
+      var avcProfileIndication = props.avcProfileIndication;
+      var profileCompatibility = props.profileCompatibility;
+      var avcLevelIndication = props.avcLevelIndication;
+      var lengthSizeMinusOne = props.lengthSize - 1;
+      var sequenceParameterSets = props.sequenceParameterSets;
+      var pictureParameterSets = props.pictureParameterSets;
+
+      var i = undefined,
+          length = undefined,
+          data = undefined,
           base = offset;
 
       base += _get(Object.getPrototypeOf(AVCConfigurationBox.prototype), 'serialize', this).call(this, buffer, base);
@@ -172,19 +173,19 @@ var AVCConfigurationBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          i,
-          j,
-          length,
-          data,
-          buf,
-          configurationVersion,
-          avcProfileIndication,
-          profileCompatibility,
-          avcLevelIndication,
-          lengthSizeMinusOne,
-          numOfParameterSets,
+          readBytesNum = undefined,
+          props = undefined,
+          i = undefined,
+          j = undefined,
+          length = undefined,
+          data = undefined,
+          buf = undefined,
+          configurationVersion = undefined,
+          avcProfileIndication = undefined,
+          profileCompatibility = undefined,
+          avcLevelIndication = undefined,
+          lengthSizeMinusOne = undefined,
+          numOfParameterSets = undefined,
           sequenceParameterSets = [],
           pictureParameterSets = [];
 

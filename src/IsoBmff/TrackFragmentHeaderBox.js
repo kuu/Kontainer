@@ -11,7 +11,7 @@ export default class TrackFragmentHeaderBox extends FullBox {
   }
 
   static encodeFlags(props) {
-    var f = 0;
+    let f = 0;
     if (props.baseDataOffset !== void 0) {
       f |= (1 << 0);
     }
@@ -34,7 +34,7 @@ export default class TrackFragmentHeaderBox extends FullBox {
   }
 
   static decodeFlags(f) {
-    var flags = {
+    const flags = {
       baseDataOffsetPresent: false,
       sampleDescriptionIndexPresent: false,
       defaultSampleDurationPresent: false,
@@ -65,14 +65,15 @@ export default class TrackFragmentHeaderBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- TrackFragmentHeaderBox.serialize enter.');
-    var props = this.props,
-        trackId = props.trackId,
-        baseDataOffset = props.baseDataOffset,
-        sampleDescriptionIndex = props.sampleDescriptionIndex,
-        defaultSampleDuration = props.defaultSampleDuration,
-        defaultSampleSize = props.defaultSampleSize,
-        defaultSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.defaultSampleFlags),
-        base = offset;
+    const props = this.props;
+    const trackId = props.trackId;
+    const baseDataOffset = props.baseDataOffset;
+    const sampleDescriptionIndex = props.sampleDescriptionIndex;
+    const defaultSampleDuration = props.defaultSampleDuration;
+    const defaultSampleSize = props.defaultSampleSize;
+    const defaultSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.defaultSampleFlags);
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -101,7 +102,7 @@ export default class TrackFragmentHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props, flags,
+    let base = offset, readBytesNum, props, flags,
         trackId, baseDataOffset,
         sampleDescriptionIndex, defaultSampleDuration,
         defaultSampleSize, defaultSampleFlags;

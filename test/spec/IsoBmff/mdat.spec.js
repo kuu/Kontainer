@@ -1,7 +1,7 @@
 import Kontainer from '../../../src/';
 
 describe('MediaDataBox', () => {
-  var IsoBmff = Kontainer.IsoBmff,
+  const IsoBmff = Kontainer.IsoBmff,
       mdatValue = [
         0, 0, 0, 16, // size=16
         109, 100, 97, 116, // type='mdat'
@@ -10,20 +10,20 @@ describe('MediaDataBox', () => {
       ];
 
   it('can wrrap raw bytes', () => {
-    var data = new Buffer(8);
+    const data = new Buffer(8);
     for (let i = 0; i < 8; i++) {
       data[i] = (1 << i);
     }
-    var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('mdat', {data}));
+    const buffer = Kontainer.renderToBuffer(IsoBmff.createElement('mdat', {data}));
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(mdatValue.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(mdatValue[i]);
     }
   });

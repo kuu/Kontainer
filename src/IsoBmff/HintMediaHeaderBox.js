@@ -10,7 +10,7 @@ export default class HintMediaHeaderBox extends FullBox {
   }
 
   static validate(context) {
-    var trackType = context.currentTrackType;
+    const trackType = context.currentTrackType;
     if (trackType && trackType !== 'hint') {
       return new Error(`"${HintMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
     }
@@ -18,12 +18,13 @@ export default class HintMediaHeaderBox extends FullBox {
   }
 
   serialize(buffer, offset=0) {
-    var props = this.props,
-        maxPDUSize = props.maxPDUSize,
-        avgPDUSize = props.avgPDUSize,
-        maxBitrate = props.maxBitrate,
-        avgBitrate = props.avgBitrate,
-        base = offset;
+    const props = this.props;
+    const maxPDUSize = props.maxPDUSize;
+    const avgPDUSize = props.avgPDUSize;
+    const maxBitrate = props.maxBitrate;
+    const avgBitrate = props.avgBitrate;
+    
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeFixedNumber(maxPDUSize, buffer, base, 2);
@@ -38,7 +39,7 @@ export default class HintMediaHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         maxPDUSize, avgPDUSize,
         maxBitrate, avgBitrate;

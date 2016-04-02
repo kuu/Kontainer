@@ -75,12 +75,13 @@ var clazz = {
 };
 
 function validateChild(context, child) {
-  var childSpec = child.type.spec,
-      childName = child.type.COMPACT_NAME,
-      container,
-      quantity,
-      checkList = context.mandatoryCheckList,
-      quantityTable = context.quantityTable;
+  var childSpec = child.type.spec;
+  var childName = child.type.COMPACT_NAME;
+  var checkList = context.mandatoryCheckList;
+  var quantityTable = context.quantityTable;
+
+  var container = undefined,
+      quantity = undefined;
 
   // Container check.
   if (childSpec.container) {
@@ -120,13 +121,13 @@ function validateChild(context, child) {
 }
 
 function createElement(type) {
-  var componentClass,
-      element,
+  var componentClass = undefined,
+      element = undefined,
       context = {},
-      spec,
-      result,
-      errorMessage,
-      checkList;
+      spec = undefined,
+      result = undefined,
+      errorMessage = undefined,
+      checkList = undefined;
 
   // Validate type.
   if (typeof type === 'string') {
@@ -207,17 +208,13 @@ function parse(buffer, offset, visitor) {
   props = _Box$parse2[1];
 
 
-  var boxType = props.type;
   var boxSize = props.size || buffer.length - offset;
   var boxEnd = offset + boxSize;
-
-  if (boxType === 'uuid') {
-    boxType = props.extendedType;
-  }
+  var boxType = props.type === 'uuid' ? props.extendedType : props.type;
+  var boxClass = clazz[boxType];
 
   //console.log(`parse enter.: type=${boxType} size=${boxSize} offset=${offset}`);
 
-  var boxClass = clazz[boxType];
   if (!boxClass) {
     console.error('IsoBmff.createElementFromBuffer: Unsupported type - "' + boxType + '"');
     return boxSize;
@@ -306,7 +303,9 @@ function createElementFromBuffer(buffer) {
       base += readBytesNum;
     }
   } catch (err) {
-    console.error('IsoBmff.createElementFromBuffer: an error occurred in parsing the buffer');
+    if (err.message !== _Error.BufferReadError.ERROR_MESSAGE) {
+      console.error('IsoBmff.transform: An error occurred in parsing the buffer: ' + err.stack);
+    }
     return null;
   }
   //console.log(`IsoBmff.createElementFromBuffer: Done. ${base - offset} bytes read.`);

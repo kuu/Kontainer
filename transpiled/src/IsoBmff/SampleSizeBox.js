@@ -53,10 +53,11 @@ var SampleSizeBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- SampleSizeBox.serialize enter.');
-      var props = this.props,
-          sampleSize = props.sampleSize,
-          sampleSizeEntries = props.sampleSizeEntries,
-          base = offset;
+      var props = this.props;
+      var sampleSize = props.sampleSize;
+      var sampleSizeEntries = props.sampleSizeEntries;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(SampleSizeBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(sampleSize, buffer, base, 4);
@@ -77,11 +78,11 @@ var SampleSizeBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          sampleSize,
-          sampleCount,
-          entrySize,
+          readBytesNum = undefined,
+          props = undefined,
+          sampleSize = undefined,
+          sampleCount = undefined,
+          entrySize = undefined,
           sampleSizeEntries = [];
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);

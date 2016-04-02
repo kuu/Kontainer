@@ -12,7 +12,7 @@ export default class Buffer {
   }
 
   getData() {
-    var buf = this.buffer;
+    const buf = this.buffer;
     if (global && global.Buffer && buf instanceof global.Buffer) {
       return buf;
     } else {

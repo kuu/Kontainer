@@ -1,6 +1,6 @@
 import Kontainer from '../../../src/';
 
-var DEC4 = 15 / 16,
+const DEC4 = 15 / 16,
     DEC8 = 255 / 256,
     DEC12 = 4095 / 4096,
     DEC16 = 65535 / 65536,
@@ -81,15 +81,16 @@ var DEC4 = 15 / 16,
 
 describe('Reader', () => {
 
-  var Reader = Kontainer.Reader;
+  const Reader = Kontainer.Reader;
 
   it('reads numbers', () => {
-    Object.keys(testData).forEach((key) => {
-      var entry = testData[key],
-          inputValue = entry.buf,
-          len = inputValue.length,
-          expectedValues = entry.val,
-          readBytesNum, expected, readValue;
+    Object.keys(testData).forEach(key => {
+      const entry = testData[key];
+      const inputValue = entry.buf;
+      const len = inputValue.length;
+      const expectedValues = entry.val;
+
+      let readBytesNum, expected, readValue;
 
       //console.log(`[${key}]----`);
 

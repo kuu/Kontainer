@@ -57,10 +57,11 @@ var DataEntryUrnBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- DataEntryUrnBox.serialize enter.');
-      var props = this.props,
-          name = props.name,
-          location = props.location,
-          base = offset;
+      var props = this.props;
+      var name = props.name;
+      var location = props.location;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(DataEntryUrnBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeString(name, buffer, base);
@@ -77,10 +78,10 @@ var DataEntryUrnBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          name,
-          location;
+          readBytesNum = undefined,
+          props = undefined,
+          name = undefined,
+          location = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

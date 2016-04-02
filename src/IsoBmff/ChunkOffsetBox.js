@@ -11,15 +11,16 @@ export default class ChunkOffsetBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- ChunkOffsetBox.serialize enter.');
-    var props = this.props,
-        entries = props.entries,
-        entryCount = entries.length,
-        base = offset;
+    const props = this.props;
+    const entries = props.entries;
+    const entryCount = entries.length;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(entryCount, buffer, base, 4);
 
-    for (var i = 0; i < entryCount; i++) {
+    for (let i = 0; i < entryCount; i++) {
       base += Writer.writeNumber(entries[i], buffer, base, 4);
     }
 
@@ -30,7 +31,7 @@ export default class ChunkOffsetBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         entryCount, chunkOffset, entries = [];
 
     [readBytesNum, props] = FullBox.parse(buffer, base);
@@ -39,7 +40,7 @@ export default class ChunkOffsetBox extends FullBox {
     [readBytesNum, entryCount] = Reader.readNumber(buffer, base, 4);
     base += readBytesNum;
 
-    for (var i = 0; i < entryCount; i++) {
+    for (let i = 0; i < entryCount; i++) {
       [readBytesNum, chunkOffset] = Reader.readNumber(buffer, base, 4);
       base += readBytesNum;
       entries.push(chunkOffset);

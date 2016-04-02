@@ -53,10 +53,11 @@ var ChunkOffsetBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- ChunkOffsetBox.serialize enter.');
-      var props = this.props,
-          entries = props.entries,
-          entryCount = entries.length,
-          base = offset;
+      var props = this.props;
+      var entries = props.entries;
+      var entryCount = entries.length;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(ChunkOffsetBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(entryCount, buffer, base, 4);
@@ -76,10 +77,10 @@ var ChunkOffsetBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          entryCount,
-          chunkOffset,
+          readBytesNum = undefined,
+          props = undefined,
+          entryCount = undefined,
+          chunkOffset = undefined,
           entries = [];
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);

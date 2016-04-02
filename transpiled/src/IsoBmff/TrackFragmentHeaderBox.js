@@ -57,14 +57,15 @@ var TrackFragmentHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- TrackFragmentHeaderBox.serialize enter.');
-      var props = this.props,
-          trackId = props.trackId,
-          baseDataOffset = props.baseDataOffset,
-          sampleDescriptionIndex = props.sampleDescriptionIndex,
-          defaultSampleDuration = props.defaultSampleDuration,
-          defaultSampleSize = props.defaultSampleSize,
-          defaultSampleFlags = _TrackExtendsBox2.default.encodeDefaultSampleFlags(props.defaultSampleFlags),
-          base = offset;
+      var props = this.props;
+      var trackId = props.trackId;
+      var baseDataOffset = props.baseDataOffset;
+      var sampleDescriptionIndex = props.sampleDescriptionIndex;
+      var defaultSampleDuration = props.defaultSampleDuration;
+      var defaultSampleSize = props.defaultSampleSize;
+      var defaultSampleFlags = _TrackExtendsBox2.default.encodeDefaultSampleFlags(props.defaultSampleFlags);
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(TrackFragmentHeaderBox.prototype), 'serialize', this).call(this, buffer, base);
 
@@ -152,15 +153,15 @@ var TrackFragmentHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          flags,
-          trackId,
-          baseDataOffset,
-          sampleDescriptionIndex,
-          defaultSampleDuration,
-          defaultSampleSize,
-          defaultSampleFlags;
+          readBytesNum = undefined,
+          props = undefined,
+          flags = undefined,
+          trackId = undefined,
+          baseDataOffset = undefined,
+          sampleDescriptionIndex = undefined,
+          defaultSampleDuration = undefined,
+          defaultSampleSize = undefined,
+          defaultSampleFlags = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

@@ -92,12 +92,15 @@ describe('Writer', function () {
 
   it('reads numbers', function () {
     Object.keys(testData).forEach(function (key) {
-      var entry = testData[key],
-          inputValues = entry.val,
-          expectedValue = entry.buf,
-          len = expectedValue.length,
-          buffer,
-          writtenBytesNum;
+      var entry = testData[key];
+      var inputValues = entry.val;
+
+      var expectedValue = entry.buf;
+
+      var len = expectedValue.length;
+
+      var buffer = undefined,
+          writtenBytesNum = undefined;
 
       //console.log(`[${key}]----`);
 

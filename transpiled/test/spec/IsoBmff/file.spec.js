@@ -20,7 +20,9 @@ describe('File', function () {
       value = _IsoBmff2.default.buffer;
 
   it('generates a binary data from KontainerElements', function () {
-    var buffer, elem, array;
+    var buffer = undefined,
+        elem = undefined,
+        array = undefined;
 
     buffer = _src2.default.renderToBuffer(IsoBmff.createElement('file', null, IsoBmff.createElement('moov', null, IsoBmff.createElement('mvhd'))));
     expect(buffer).toBe(null);
@@ -42,7 +44,10 @@ describe('File', function () {
   });
 
   it('parses a binary data into KontainerElements', function () {
-    var b, elem, buf, array;
+    var b = undefined,
+        elem = undefined,
+        buf = undefined,
+        array = undefined;
 
     if (global.Buffer) {
       b = new global.Buffer(value);

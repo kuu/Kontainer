@@ -2,7 +2,7 @@ import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
 describe('SyncSampleBox', () => {
-  var IsoBmff = Kontainer.IsoBmff,
+  const IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 16, // size=16
         115, 116, 115, 115, // type='stss'
@@ -20,39 +20,39 @@ describe('SyncSampleBox', () => {
       ];
 
   it('supports zero entry', () => {
-    var stssElement = IsoBmff.createElement('stss', {entries: []});
-    var buffer = Kontainer.renderToBuffer(stssElement);
+    const stssElement = IsoBmff.createElement('stss', {entries: []});
+    const buffer = Kontainer.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value1.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value1[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(stssElement, element)).toBe(true);
   });
 
   it('supports multiple entries', () => {
-    var stssElement = IsoBmff.createElement('stss', {entries: [1, 2, 3]});
-    var buffer = Kontainer.renderToBuffer(stssElement);
+    const stssElement = IsoBmff.createElement('stss', {entries: [1, 2, 3]});
+    const buffer = Kontainer.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value2.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value2[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(stssElement, element)).toBe(true);
   });

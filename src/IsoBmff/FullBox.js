@@ -11,9 +11,10 @@ export default class FullBox extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- FullBox.serialize enter.');
-    var version = this.version,
-        flags = this.flags,
-        base = offset;
+    const version = this.version;
+    const flags = this.flags;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -38,7 +39,7 @@ export default class FullBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         version, flags;
 

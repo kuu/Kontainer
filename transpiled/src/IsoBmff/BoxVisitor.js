@@ -103,7 +103,7 @@ var IsoBmffDumpVisitor = exports.IsoBmffDumpVisitor = function (_BoxVisitor) {
   }, {
     key: 'formatValue',
     value: function formatValue(v) {
-      var str;
+      var str = undefined;
       if ((typeof v === 'undefined' ? 'undefined' : _typeof(v)) === 'object' && !(v instanceof Date) && !IsoBmffDumpVisitor.isBuffer(v)) {
         str = '{';
         Object.keys(v).forEach(function (key) {

@@ -53,10 +53,11 @@ var MovieExtendsHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- MovieExtendsHeaderBox.serialize enter.');
-      var props = this.props,
-          byteLength = props.version ? 8 : 4,
-          fragmentDuration = props.fragmentDuration,
-          base = offset;
+      var props = this.props;
+      var byteLength = props.version ? 8 : 4;
+      var fragmentDuration = props.fragmentDuration;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(MovieExtendsHeaderBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(fragmentDuration, buffer, base, byteLength);
@@ -72,10 +73,10 @@ var MovieExtendsHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          byteLength,
-          fragmentDuration;
+          readBytesNum = undefined,
+          props = undefined,
+          byteLength = undefined,
+          fragmentDuration = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

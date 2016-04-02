@@ -35,7 +35,8 @@ const ANONYMOUS = '<<anonymous>>';
 
 // Equivalent of `typeof` but with special handling for array and regexp.
 function getPropType(propValue) {
-  var propType = typeof propValue;
+  const propType = typeof propValue;
+
   if (Array.isArray(propValue)) {
     return 'array';
   }
@@ -51,7 +52,8 @@ function getPropType(propValue) {
 // This handles more types than `getPropType`. Only used for error messages.
 // See `createPrimitiveTypeChecker`.
 function getPreciseType(propValue) {
-  var propType = getPropType(propValue);
+  const propType = getPropType(propValue);
+
   if (propType === 'object') {
     if (propValue instanceof Date) {
       return 'date';
@@ -78,7 +80,7 @@ function createChainableTypeChecker(validate) {
     }
   }
 
-  var chainedCheckType = checkType.bind(null, false);
+  const chainedCheckType = checkType.bind(null, false);
   chainedCheckType.isRequired = checkType.bind(null, true);
 
   return chainedCheckType;
@@ -86,13 +88,14 @@ function createChainableTypeChecker(validate) {
 
 function createPrimitiveTypeChecker(expectedType) {
   function validate(props, propName, componentName) {
-    var propValue = props[propName];
-    var propType = getPropType(propValue);
+    const propValue = props[propName];
+    const propType = getPropType(propValue);
+
     if (propType !== expectedType) {
       // `propValue` being instance of, say, date/regexp, pass the 'object'
       // check, but we can offer a more precise error message here rather than
       // 'of type `object`'.
-      var preciseType = getPreciseType(propValue);
+      const preciseType = getPreciseType(propValue);
 
       return new Error(
         `Invalid \`${propName}\` of type \`${preciseType}\` ` +
@@ -110,16 +113,19 @@ function createAnyTypeChecker() {
 
 function createArrayOfTypeChecker(typeChecker) {
   function validate(props, propName, componentName) {
-    var propValue = props[propName];
+    const propValue = props[propName];
+
     if (!Array.isArray(propValue)) {
-      var propType = getPropType(propValue);
+      const propType = getPropType(propValue);
+
       return new Error(
         `Invalid \`${propName}\` of type ` +
         `\`${propType}\` supplied to \`${componentName}\`, expected an array.`
       );
     }
-    for (var i = 0; i < propValue.length; i++) {
-      var error = typeChecker(propValue, i, componentName);
+    for (let i = 0; i < propValue.length; i++) {
+      const error = typeChecker(propValue, i, componentName);
+
       if (error instanceof Error) {
         return error;
       }
@@ -132,7 +138,8 @@ function createArrayOfTypeChecker(typeChecker) {
 function createInstanceTypeChecker(expectedClass) {
   function validate(props, propName, componentName) {
     if (!(props[propName] instanceof expectedClass)) {
-      var expectedClassName = expectedClass.name || ANONYMOUS;
+      let expectedClassName = expectedClass.name || ANONYMOUS;
+      
       return new Error(
         `Invalid \`${propName}\` supplied to ` +
         `\`${componentName}\`, expected instance of \`${expectedClassName}\`.`
@@ -145,14 +152,15 @@ function createInstanceTypeChecker(expectedClass) {
 
 function createEnumTypeChecker(expectedValues) {
   function validate(props, propName, componentName) {
-    var propValue = props[propName];
-    for (var i = 0; i < expectedValues.length; i++) {
+    const propValue = props[propName];
+
+    for (let i = 0; i < expectedValues.length; i++) {
       if (propValue === expectedValues[i]) {
         return null;
       }
     }
 
-    var valuesString = JSON.stringify(expectedValues);
+    const valuesString = JSON.stringify(expectedValues);
     return new Error(
       `Invalid \`${propName}\` of value \`${propValue}\` ` +
       `supplied to \`${componentName}\`, expected one of ${valuesString}.`
@@ -163,17 +171,19 @@ function createEnumTypeChecker(expectedValues) {
 
 function createObjectOfTypeChecker(typeChecker) {
   function validate(props, propName, componentName) {
-    var propValue = props[propName];
-    var propType = getPropType(propValue);
+    const propValue = props[propName];
+    const propType = getPropType(propValue);
+
     if (propType !== 'object') {
       return new Error(
         `Invalid \`${propName}\` of type ` +
         `\`${propType}\` supplied to \`${componentName}\`, expected an object.`
       );
     }
-    for (var key in propValue) {
+    for (let key in propValue) {
       if (propValue.hasOwnProperty(key)) {
-        var error = typeChecker(propValue, key, componentName);
+        const error = typeChecker(propValue, key, componentName);
+
         if (error instanceof Error) {
           return error;
         }
@@ -186,8 +196,9 @@ function createObjectOfTypeChecker(typeChecker) {
 
 function createUnionTypeChecker(arrayOfTypeCheckers) {
   function validate(props, propName, componentName) {
-    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-      var checker = arrayOfTypeCheckers[i];
+    for (let i = 0; i < arrayOfTypeCheckers.length; i++) {
+      const checker = arrayOfTypeCheckers[i];
+
       if (checker(props, propName, componentName) == null) {
         return null;
       }
@@ -203,20 +214,23 @@ function createUnionTypeChecker(arrayOfTypeCheckers) {
 
 function createShapeTypeChecker(shapeTypes) {
   function validate(props, propName, componentName) {
-    var propValue = props[propName];
-    var propType = getPropType(propValue);
+    const propValue = props[propName];
+    const propType = getPropType(propValue);
+
     if (propType !== 'object') {
       return new Error(
         `Invalid \`${propName}\` of type \`${propType}\` ` +
         `supplied to \`${componentName}\`, expected \`object\`.`
       );
     }
-    for (var key in shapeTypes) {
-      var checker = shapeTypes[key];
+    for (let key in shapeTypes) {
+      const checker = shapeTypes[key];
+
       if (!checker) {
         continue;
       }
-      var error = checker(propValue, key, componentName);
+      const error = checker(propValue, key, componentName);
+
       if (error) {
         return error;
       }

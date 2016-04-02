@@ -11,9 +11,10 @@ export default class TrackFragmentBaseMediaDecodeTimeBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- TrackFragmentBaseMediaDecodeTimeBox.serialize enter.');
-    var props = this.props,
-        baseMediaDecodeTime = props.baseMediaDecodeTime,
-        base = offset;
+    const props = this.props;
+    const baseMediaDecodeTime = props.baseMediaDecodeTime;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     if (this.version === 1) {
@@ -29,7 +30,7 @@ export default class TrackFragmentBaseMediaDecodeTimeBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         baseMediaDecodeTime;
 
     [readBytesNum, props] = FullBox.parse(buffer, base);

@@ -59,8 +59,8 @@ var MP4AudioSampleEntry = function (_AudioSampleEntry) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props;
+          readBytesNum = undefined,
+          props = undefined;
 
       var _AudioSampleEntry$par = _AudioSampleEntry3.default.parse(buffer, base);
 

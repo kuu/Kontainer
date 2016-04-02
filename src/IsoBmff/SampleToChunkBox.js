@@ -11,15 +11,16 @@ export default class SampleToChunkBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- SampleToChunkBox.serialize enter.');
-    var props = this.props,
-        entries = props.entries,
-        entryCount = entries.length,
-        base = offset;
+    const props = this.props;
+    const entries = props.entries;
+    const entryCount = entries.length;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(entryCount, buffer, base, 4);
 
-    for (var i = 0; i < entryCount; i++) {
+    for (let i = 0; i < entryCount; i++) {
       base += Writer.writeNumber(entries[i].firstChunk, buffer, base, 4);
       base += Writer.writeNumber(entries[i].samplesPerChunk, buffer, base, 4);
       base += Writer.writeNumber(entries[i].sampleDescriptionIndex, buffer, base, 4);
@@ -32,7 +33,7 @@ export default class SampleToChunkBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         entryCount, firstChunk, samplesPerChunk,
         sampleDescriptionIndex, entries = [];
 
@@ -42,7 +43,7 @@ export default class SampleToChunkBox extends FullBox {
     [readBytesNum, entryCount] = Reader.readNumber(buffer, base, 4);
     base += readBytesNum;
 
-    for (var i = 0; i < entryCount; i++) {
+    for (let i = 0; i < entryCount; i++) {
       [readBytesNum, firstChunk] = Reader.readNumber(buffer, base, 4);
       base += readBytesNum;
 

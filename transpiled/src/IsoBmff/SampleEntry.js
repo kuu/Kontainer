@@ -48,8 +48,9 @@ var SampleEntry = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- SampleEntry.serialize enter.');
-      var dataReferenceIndex = this.dataReferenceIndex,
-          base = offset;
+      var dataReferenceIndex = this.dataReferenceIndex;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(SampleEntry.prototype), 'serialize', this).call(this, buffer, base);
 
@@ -68,9 +69,9 @@ var SampleEntry = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          dataReferenceIndex;
+          readBytesNum = undefined,
+          props = undefined,
+          dataReferenceIndex = undefined;
 
       var _Box$parse = _Box3.default.parse(buffer, base);
 

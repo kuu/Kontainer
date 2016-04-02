@@ -53,13 +53,14 @@ var TrackExtendsBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- TrackExtendsBox.serialize enter.');
-      var props = this.props,
-          trackId = props.trackId,
-          defaultSampleDescriptionIndex = props.defaultSampleDescriptionIndex,
-          defaultSampleDuration = props.defaultSampleDuration,
-          defaultSampleSize = props.defaultSampleSize,
-          defaultSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.defaultSampleFlags),
-          base = offset;
+      var props = this.props;
+      var trackId = props.trackId;
+      var defaultSampleDescriptionIndex = props.defaultSampleDescriptionIndex;
+      var defaultSampleDuration = props.defaultSampleDuration;
+      var defaultSampleSize = props.defaultSampleSize;
+      var defaultSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.defaultSampleFlags);
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(TrackExtendsBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(trackId, buffer, base, 4);
@@ -122,10 +123,9 @@ var TrackExtendsBox = function (_FullBox) {
         samplePaddingValue: 0,
         sampleIsDifferenceSample: false,
         sampleDegradationPriority: 0
-      },
-          v;
+      };
 
-      v = f >>> 6 & 0x03;
+      var v = f >>> 6 & 0x03;
       if (v === 0) {
         flags.sampleDependsOn = 'unknown';
       } else if (v === 1) {
@@ -164,13 +164,13 @@ var TrackExtendsBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          trackId,
-          defaultSampleDescriptionIndex,
-          defaultSampleDuration,
-          defaultSampleSize,
-          defaultSampleFlags;
+          readBytesNum = undefined,
+          props = undefined,
+          trackId = undefined,
+          defaultSampleDescriptionIndex = undefined,
+          defaultSampleDuration = undefined,
+          defaultSampleSize = undefined,
+          defaultSampleFlags = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

@@ -52,9 +52,10 @@ var SoundMediaHeaderBox = function (_FullBox) {
     value: function serialize(buffer) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-      var props = this.props,
-          balance = props.balance,
-          base = offset;
+      var props = this.props;
+      var balance = props.balance;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(SoundMediaHeaderBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeFixedNumber(balance, buffer, base, 2);
@@ -79,9 +80,9 @@ var SoundMediaHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          balance;
+          readBytesNum = undefined,
+          props = undefined,
+          balance = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

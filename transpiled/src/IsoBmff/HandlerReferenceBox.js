@@ -53,10 +53,11 @@ var HandlerReferenceBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- HandlerReferenceBox.serialize enter.');
-      var props = this.props,
-          handlerType = HandlerReferenceBox.encodeHandlerType(props.handlerType),
-          name = props.name,
-          base = offset;
+      var props = this.props;
+      var handlerType = HandlerReferenceBox.encodeHandlerType(props.handlerType);
+      var name = props.name;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(HandlerReferenceBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(0, buffer, base, 4);
@@ -107,10 +108,10 @@ var HandlerReferenceBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          handlerType,
-          name;
+          readBytesNum = undefined,
+          props = undefined,
+          handlerType = undefined,
+          name = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

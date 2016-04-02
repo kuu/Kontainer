@@ -31,13 +31,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function traverse(context, element, buffer) {
   var offset = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
 
-  var type,
-      props,
-      children,
-      instance,
-      propTypes,
+  var type = undefined,
+      props = undefined,
+      children = undefined,
+      instance = undefined,
+      propTypes = undefined,
       base = offset,
-      err;
+      err = undefined;
 
   if (!element) {
     console.warn('Kontainer.renderToBuffer: null element.');
@@ -91,11 +91,12 @@ function traverse(context, element, buffer) {
 }
 
 function printProps(context, element) {
-  var type,
-      props,
-      children,
-      indent = context.indent,
-      formatter = context.formatter;
+  var indent = context.indent;
+  var formatter = context.formatter;
+
+  var type = undefined,
+      props = undefined,
+      children = undefined;
 
   if (!element) {
     console.warn('Kontainer.renderToString: null element.');
@@ -134,8 +135,8 @@ function printProps(context, element) {
 }
 
 function renderToBuffer(element) {
-  var size,
-      buffer,
+  var size = undefined,
+      buffer = undefined,
       context = {};
 
   // Culculate the entire byte size.
@@ -173,7 +174,7 @@ var defaultPropsFormatter = {
     return str;
   },
   value: function value(v) {
-    var str;
+    var str = undefined;
     if ((typeof v === 'undefined' ? 'undefined' : _typeof(v)) === 'object' && !(v instanceof Date) && !defaultPropsFormatter.isBuffer(v)) {
       str = '{';
       Object.keys(v).forEach(function (key) {
@@ -211,7 +212,7 @@ var defaultPropsFormatter = {
     return defaultPropsFormatter.padding(indentNum) + '[' + typeName + '] <<<< end' + '\n';
   },
   body: function body(indentNum, key, value) {
-    var v;
+    var v = undefined;
     if (value instanceof Array) {
       v = defaultPropsFormatter.array(value);
     } else {

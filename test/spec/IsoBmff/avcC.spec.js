@@ -2,7 +2,7 @@ import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
 describe('AVCConfigurationBox', () => {
-  var IsoBmff = Kontainer.IsoBmff,
+  const IsoBmff = Kontainer.IsoBmff,
       avcCValue = [
         0, 0, 0, 35, // size=35
         97, 118, 99, 67, // type='avcC'
@@ -16,7 +16,7 @@ describe('AVCConfigurationBox', () => {
       ];
 
   it('can wrrap raw bytes', () => {
-    var sps, pps;
+    let sps, pps;
     if (global && global.Buffer) {
       sps = new Buffer(8);
       pps = new Buffer(8);
@@ -51,18 +51,18 @@ describe('AVCConfigurationBox', () => {
     );
     let buffer = Kontainer.renderToBuffer(element);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(avcCValue.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(avcCValue[i]);
       //console.log('a[' + i + ']=' + array[i] + ', b[' + i + ']=' + avcCValue[i]);
     }
-    var element2 = IsoBmff.createElementFromBuffer(buffer);
+    const element2 = IsoBmff.createElementFromBuffer(buffer);
     expect(customMatchers.toHaveTheSamePropsAs(element, element2)).toBe(true);
   });
 });

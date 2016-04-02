@@ -49,9 +49,10 @@ var ESDBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- ESDBox.serialize enter.');
-      var props = this.props,
-          esDescriptor = props.esDescriptor,
-          base = offset;
+      var props = this.props;
+      var esDescriptor = props.esDescriptor;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(ESDBox.prototype), 'serialize', this).call(this, buffer, base);
       for (var i = 0, il = esDescriptor.length; i < il; i++) {
@@ -69,11 +70,11 @@ var ESDBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          toBeRead,
-          esDescriptor,
-          buf;
+          readBytesNum = undefined,
+          props = undefined,
+          toBeRead = undefined,
+          esDescriptor = undefined,
+          buf = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

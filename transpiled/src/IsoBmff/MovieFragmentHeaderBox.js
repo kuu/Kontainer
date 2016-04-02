@@ -53,9 +53,10 @@ var MovieFragmentHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- MovieFragmentHeaderBox.serialize enter.');
-      var props = this.props,
-          sequenceNumber = props.sequenceNumber,
-          base = offset;
+      var props = this.props;
+      var sequenceNumber = props.sequenceNumber;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(MovieFragmentHeaderBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(sequenceNumber, buffer, base, 4);
@@ -71,9 +72,9 @@ var MovieFragmentHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          sequenceNumber;
+          readBytesNum = undefined,
+          props = undefined,
+          sequenceNumber = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

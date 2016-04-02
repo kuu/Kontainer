@@ -48,7 +48,7 @@ describe('TrackExtendsBox', function () {
     });
     var buffer = _src2.default.renderToBuffer(trexElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -80,7 +80,7 @@ describe('TrackExtendsBox', function () {
     });
     var buffer = _src2.default.renderToBuffer(trexElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

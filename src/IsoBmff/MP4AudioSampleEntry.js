@@ -9,7 +9,7 @@ export default class MP4AudioSampleEntry extends AudioSampleEntry {
 
   serialize(buffer, offset=0) {
     //console.log('--- MP4AudioSampleEntry.serialize enter.');
-    var base = offset;
+    let base = offset;
 
     base += super.serialize(buffer, base);
     super.setSize(base - offset, buffer, offset);
@@ -19,7 +19,7 @@ export default class MP4AudioSampleEntry extends AudioSampleEntry {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props;
 
     [readBytesNum, props] = AudioSampleEntry.parse(buffer, base);

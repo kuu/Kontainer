@@ -10,8 +10,9 @@ export default class SampleEntry extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- SampleEntry.serialize enter.');
-    var dataReferenceIndex = this.dataReferenceIndex,
-        base = offset;
+    const dataReferenceIndex = this.dataReferenceIndex;
+    
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -26,7 +27,7 @@ export default class SampleEntry extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         dataReferenceIndex;
 

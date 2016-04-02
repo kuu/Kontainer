@@ -17,7 +17,7 @@ class Element {
       }
       const children = element.props.children;
       if (children) {
-        children.forEach((child) => {
+        children.forEach(child => {
           queue.push(child);
         });
       }
@@ -37,7 +37,7 @@ function extractChild(child, childArray) {
 }
 
 function isValidComponentClass(type) {
-  var proto = type.prototype;
+  const proto = type.prototype;
 
   if (proto instanceof Component &&
       typeof proto.serialize === 'function' &&
@@ -49,8 +49,8 @@ function isValidComponentClass(type) {
 }
 
 function createElement(type, props, children) {
-  var childrenArgsLen = arguments.length - 2,
-      childArray = [], defaultProps;
+  const childrenArgsLen = arguments.length - 2;
+  const childArray = [];
 
   props = props || {};
 
@@ -64,14 +64,14 @@ function createElement(type, props, children) {
   if (childrenArgsLen === 1) {
     extractChild(children, childArray);
   } else if (childrenArgsLen > 1) {
-    for (var i = 0; i < childrenArgsLen; i++) {
+    for (let i = 0; i < childrenArgsLen; i++) {
       extractChild(arguments[i + 2], childArray);
     }
   }
   props.children = childArray;
 
   // Resolve default props
-  defaultProps = type.defaultProps;
+  const defaultProps = type.defaultProps;
   if (defaultProps) {
     Object.keys(defaultProps).forEach(key => {
       if (props[key] === void 0) {
@@ -79,7 +79,6 @@ function createElement(type, props, children) {
       }
     });
   }
-
   return new Element(type, props);
 }
 

@@ -53,10 +53,11 @@ var VideoMediaHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- VideoMediaHeaderBox.serialize enter.');
-      var props = this.props,
-          graphicsMode = VideoMediaHeaderBox.encodeGraphicsMode(props.graphicsMode),
-          opColor = props.opColor,
-          base = offset;
+      var props = this.props;
+      var graphicsMode = VideoMediaHeaderBox.encodeGraphicsMode(props.graphicsMode);
+      var opColor = props.opColor;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(VideoMediaHeaderBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(graphicsMode, buffer, base, 2);
@@ -102,12 +103,12 @@ var VideoMediaHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          graphicsMode,
-          r,
-          g,
-          b;
+          readBytesNum = undefined,
+          props = undefined,
+          graphicsMode = undefined,
+          r = undefined,
+          g = undefined,
+          b = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

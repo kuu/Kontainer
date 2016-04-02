@@ -45,8 +45,9 @@ var MediaDataBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- MediaDataBox.serialize enter.');
-      var data = this.props.data,
-          base = offset;
+      var data = this.props.data;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(MediaDataBox.prototype), 'serialize', this).call(this, buffer, base);
 
@@ -69,11 +70,11 @@ var MediaDataBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? -1 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          toBeRead,
-          data,
-          buf;
+          readBytesNum = undefined,
+          props = undefined,
+          toBeRead = undefined,
+          data = undefined,
+          buf = undefined;
 
       var _Box$parse = _Box3.default.parse(buffer, base);
 

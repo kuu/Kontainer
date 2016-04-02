@@ -53,15 +53,16 @@ var MediaHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- MediaHeaderBox.serialize enter.');
-      var props = this.props,
-          version = props.version,
-          creationTime = props.creationTime || new Date(),
-          modificationTime = props.modificationTime || new Date(),
-          timeScale = props.timeScale | 0,
-          duration = props.duration | 0,
-          language = props.language,
-          byteLength = version ? 8 : 4,
-          base = offset;
+      var props = this.props;
+      var version = props.version;
+      var creationTime = props.creationTime || new Date();
+      var modificationTime = props.modificationTime || new Date();
+      var timeScale = props.timeScale | 0;
+      var duration = props.duration | 0;
+      var language = props.language;
+      var byteLength = version ? 8 : 4;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(MediaHeaderBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(_FullBox3.default.date2sec(creationTime), buffer, base, byteLength);
@@ -82,14 +83,14 @@ var MediaHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          byteLength,
-          creationTime,
-          modificationTime,
-          timeScale,
-          duration,
-          language;
+          readBytesNum = undefined,
+          props = undefined,
+          byteLength = undefined,
+          creationTime = undefined,
+          modificationTime = undefined,
+          timeScale = undefined,
+          duration = undefined,
+          language = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

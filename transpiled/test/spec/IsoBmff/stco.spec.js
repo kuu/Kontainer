@@ -30,7 +30,7 @@ describe('ChunkOffsetBox', function () {
     var stcoElement = IsoBmff.createElement('stco');
     var buffer = _src2.default.renderToBuffer(stcoElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -49,7 +49,7 @@ describe('ChunkOffsetBox', function () {
     var stcoElement = IsoBmff.createElement('stco', { entries: [1, 2, 3] });
     var buffer = _src2.default.renderToBuffer(stcoElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

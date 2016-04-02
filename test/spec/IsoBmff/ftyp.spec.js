@@ -1,7 +1,7 @@
 import Kontainer from '../../../src/';
 
 describe('FileTypeBox', () => {
-  var IsoBmff = Kontainer.IsoBmff,
+  const IsoBmff = Kontainer.IsoBmff,
       defaultValue = [
         0, 0, 0, 16, // size=16
         102, 116, 121, 112, // type='ftyp'
@@ -18,34 +18,34 @@ describe('FileTypeBox', () => {
       ];
 
   it('requires major_brand', () => {
-    var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp'));
+    const buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp'));
     expect(buffer).toBe(null);
   });
 
   it('can be initialized with the default values', () => {
-    var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'isom'}));
-    var array;
+    const buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'isom'}));
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(defaultValue.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(defaultValue[i]);
     }
   });
 
   it('can be initialized with the specified values', () => {
-    var buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}));
-    var array;
+    const buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}));
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(avc1Value.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(avc1Value[i]);
     }
   });

@@ -12,10 +12,11 @@ export default class DataEntryUrnBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- DataEntryUrnBox.serialize enter.');
-    var props = this.props,
-        name = props.name,
-        location = props.location,
-        base = offset;
+    const props = this.props;
+    const name = props.name;
+    const location = props.location;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeString(name, buffer, base);
@@ -28,7 +29,7 @@ export default class DataEntryUrnBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         name, location;
 

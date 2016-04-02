@@ -10,7 +10,7 @@ export default class DataReferenceBox extends FullBox {
   }
 
   static encodeFlags(flags) {
-    var f = 0;
+    let f = 0;
     if (flags && flags.inTheSameFile) {
       f |= 0x01;
     }
@@ -18,7 +18,7 @@ export default class DataReferenceBox extends FullBox {
   }
 
   static decodeFlags(f) {
-    var flags = {
+    const flags = {
       inTheSameFile: false
     };
 
@@ -30,9 +30,10 @@ export default class DataReferenceBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- DataReferenceBox.serialize enter.');
-    var props = this.props,
-        entryCount = props.entryCount,
-        base = offset;
+    const props = this.props;
+    const entryCount = props.entryCount;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(entryCount, buffer, base, 4);
@@ -44,7 +45,7 @@ export default class DataReferenceBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         entryCount;
 

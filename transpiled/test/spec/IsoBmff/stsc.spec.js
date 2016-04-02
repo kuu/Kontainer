@@ -36,7 +36,7 @@ describe('SampleToChunkBox', function () {
     var stscElement = IsoBmff.createElement('stsc');
     var buffer = _src2.default.renderToBuffer(stscElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -69,7 +69,7 @@ describe('SampleToChunkBox', function () {
     });
     var buffer = _src2.default.renderToBuffer(stscElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

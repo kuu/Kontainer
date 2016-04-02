@@ -10,12 +10,13 @@ export default class ESDBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- ESDBox.serialize enter.');
-    var props = this.props,
-        esDescriptor = props.esDescriptor,
-        base = offset;
+    const props = this.props;
+    const esDescriptor = props.esDescriptor;
+    
+    let base = offset;
 
     base += super.serialize(buffer, base);
-    for (var i = 0, il = esDescriptor.length; i < il; i++) {
+    for (let i = 0, il = esDescriptor.length; i < il; i++) {
       buffer[base++] = esDescriptor[i];
     }
 
@@ -26,7 +27,7 @@ export default class ESDBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         toBeRead, esDescriptor, buf;
 
     [readBytesNum, props] = FullBox.parse(buffer, base);
@@ -35,7 +36,7 @@ export default class ESDBox extends FullBox {
     buf = new Buffer(toBeRead);
     esDescriptor = buf.getView();
 
-    for (var i = 0; i < toBeRead; i++) {
+    for (let i = 0; i < toBeRead; i++) {
       esDescriptor[i] = buffer[base++];
     }
     props.esDescriptor = buf.getData();

@@ -52,12 +52,13 @@ var HintMediaHeaderBox = function (_FullBox) {
     value: function serialize(buffer) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-      var props = this.props,
-          maxPDUSize = props.maxPDUSize,
-          avgPDUSize = props.avgPDUSize,
-          maxBitrate = props.maxBitrate,
-          avgBitrate = props.avgBitrate,
-          base = offset;
+      var props = this.props;
+      var maxPDUSize = props.maxPDUSize;
+      var avgPDUSize = props.avgPDUSize;
+      var maxBitrate = props.maxBitrate;
+      var avgBitrate = props.avgBitrate;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(HintMediaHeaderBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeFixedNumber(maxPDUSize, buffer, base, 2);
@@ -85,12 +86,12 @@ var HintMediaHeaderBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          maxPDUSize,
-          avgPDUSize,
-          maxBitrate,
-          avgBitrate;
+          readBytesNum = undefined,
+          props = undefined,
+          maxPDUSize = undefined,
+          avgPDUSize = undefined,
+          maxBitrate = undefined,
+          avgBitrate = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

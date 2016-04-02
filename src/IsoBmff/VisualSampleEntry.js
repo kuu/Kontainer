@@ -9,15 +9,16 @@ export default class VisualSampleEntry extends SampleEntry {
 
   serialize(buffer, offset=0) {
     //console.log('--- VisualSampleEntry.serialize enter.');
-    var props = this.props,
-        width = props.width,
-        height = props.height,
-        horizResolution = props.horizResolution,
-        vertResolution = props.vertResolution,
-        frameCount = props.frameCount,
-        compressorName = props.compressorName,
-        depth = props.depth,
-        base = offset;
+    const props = this.props;
+    const width = props.width;
+    const height = props.height;
+    const horizResolution = props.horizResolution;
+    const vertResolution = props.vertResolution;
+    const frameCount = props.frameCount;
+    const compressorName = props.compressorName;
+    const depth = props.depth;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -40,7 +41,7 @@ export default class VisualSampleEntry extends SampleEntry {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         width, height,
         horizResolution, vertResolution,

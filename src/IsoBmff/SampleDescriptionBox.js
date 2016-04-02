@@ -11,9 +11,10 @@ export default class SampleDescriptionBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- SampleDescriptionBox.serialize enter.');
-    var props = this.props,
-        entryCount = props.entryCount,
-        base = offset;
+    const props = this.props;
+    const entryCount = props.entryCount;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(entryCount, buffer, base, 4);
@@ -25,7 +26,7 @@ export default class SampleDescriptionBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         entryCount;
 

@@ -53,11 +53,12 @@ var CompactSampleSizeBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- CompactSampleSizeBox.serialize enter.');
-      var props = this.props,
-          fieldSize = props.fieldSize,
-          sampleSizeEntries = props.sampleSizeEntries,
-          base = offset,
-          num;
+      var props = this.props;
+      var fieldSize = props.fieldSize;
+      var sampleSizeEntries = props.sampleSizeEntries;
+
+      var base = offset,
+          num = undefined;
 
       base += _get(Object.getPrototypeOf(CompactSampleSizeBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(0, buffer, base, 3); // reserved(24)
@@ -91,11 +92,11 @@ var CompactSampleSizeBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          fieldSize,
-          sampleCount,
-          entrySize,
+          readBytesNum = undefined,
+          props = undefined,
+          fieldSize = undefined,
+          sampleCount = undefined,
+          entrySize = undefined,
           sampleSizeEntries = [];
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);

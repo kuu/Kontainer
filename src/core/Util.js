@@ -3,6 +3,6 @@ export function isNegative(value, bitLength) {
 }
 
 export function convertToNegative(value, bitLength) {
-  var mask = (1 << bitLength) - 1;
+  const mask = (1 << bitLength) - 1;
   return -((~value & mask) + 1);
 }

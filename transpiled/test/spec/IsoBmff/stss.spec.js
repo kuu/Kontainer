@@ -30,7 +30,7 @@ describe('SyncSampleBox', function () {
     var stssElement = IsoBmff.createElement('stss', { entries: [] });
     var buffer = _src2.default.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -49,7 +49,7 @@ describe('SyncSampleBox', function () {
     var stssElement = IsoBmff.createElement('stss', { entries: [1, 2, 3] });
     var buffer = _src2.default.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

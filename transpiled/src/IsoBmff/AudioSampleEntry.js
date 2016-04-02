@@ -45,11 +45,12 @@ var AudioSampleEntry = function (_SampleEntry) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- AudioSampleEntry.serialize enter.');
-      var props = this.props,
-          channelCount = props.channelCount,
-          sampleSize = props.sampleSize,
-          sampleRate = props.sampleRate,
-          base = offset;
+      var props = this.props;
+      var channelCount = props.channelCount;
+      var sampleSize = props.sampleSize;
+      var sampleRate = props.sampleRate;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(AudioSampleEntry.prototype), 'serialize', this).call(this, buffer, base);
 
@@ -70,11 +71,11 @@ var AudioSampleEntry = function (_SampleEntry) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          channelCount,
-          sampleSize,
-          sampleRate;
+          readBytesNum = undefined,
+          props = undefined,
+          channelCount = undefined,
+          sampleSize = undefined,
+          sampleRate = undefined;
 
       var _SampleEntry$parse = _SampleEntry3.default.parse(buffer, base);
 

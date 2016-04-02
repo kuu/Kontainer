@@ -14,12 +14,12 @@ describe('MediaDataBox', function () {
 
   it('can wrrap raw bytes', function () {
     var data = new Buffer(8);
-    for (var _i = 0; _i < 8; _i++) {
-      data[_i] = 1 << _i;
+    for (var i = 0; i < 8; i++) {
+      data[i] = 1 << i;
     }
     var buffer = _src2.default.renderToBuffer(IsoBmff.createElement('mdat', { data: data }));
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

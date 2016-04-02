@@ -53,9 +53,10 @@ var SampleDescriptionBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- SampleDescriptionBox.serialize enter.');
-      var props = this.props,
-          entryCount = props.entryCount,
-          base = offset;
+      var props = this.props;
+      var entryCount = props.entryCount;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(SampleDescriptionBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeNumber(entryCount, buffer, base, 4);
@@ -71,9 +72,9 @@ var SampleDescriptionBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          entryCount;
+          readBytesNum = undefined,
+          props = undefined,
+          entryCount = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

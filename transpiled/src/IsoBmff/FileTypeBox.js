@@ -49,10 +49,11 @@ var FileTypeBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- FileTypeBox.serialize enter.');
-      var majorBrand = this.props.majorBrand,
-          minorVersion = this.props.minorVersion,
-          compatibleBrands = this.props.compatibleBrands,
-          base = offset;
+      var majorBrand = this.props.majorBrand;
+      var minorVersion = this.props.minorVersion;
+      var compatibleBrands = this.props.compatibleBrands;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(FileTypeBox.prototype), 'serialize', this).call(this, buffer, base);
       base += _Writer2.default.writeString(majorBrand, buffer, base, 4);
@@ -80,13 +81,13 @@ var FileTypeBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          boxEnd,
-          majorBrand,
-          minorVersion,
-          brand,
-          compatibleBrands;
+          readBytesNum = undefined,
+          props = undefined,
+          boxEnd = undefined,
+          majorBrand = undefined,
+          minorVersion = undefined,
+          brand = undefined,
+          compatibleBrands = undefined;
 
       var _Box$parse = _Box3.default.parse(buffer, base);
 

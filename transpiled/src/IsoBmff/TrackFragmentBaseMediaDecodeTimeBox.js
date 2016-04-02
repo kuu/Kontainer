@@ -53,9 +53,10 @@ var TrackFragmentBaseMediaDecodeTimeBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- TrackFragmentBaseMediaDecodeTimeBox.serialize enter.');
-      var props = this.props,
-          baseMediaDecodeTime = props.baseMediaDecodeTime,
-          base = offset;
+      var props = this.props;
+      var baseMediaDecodeTime = props.baseMediaDecodeTime;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(TrackFragmentBaseMediaDecodeTimeBox.prototype), 'serialize', this).call(this, buffer, base);
       if (this.version === 1) {
@@ -75,9 +76,9 @@ var TrackFragmentBaseMediaDecodeTimeBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          baseMediaDecodeTime;
+          readBytesNum = undefined,
+          props = undefined,
+          baseMediaDecodeTime = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

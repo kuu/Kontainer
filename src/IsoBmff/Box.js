@@ -10,9 +10,10 @@ export default class Box extends Component {
 
   serialize(buffer, offset=0) {
     //console.log('--- Box.serialize enter.');
-    var base = offset,
-        size = this.size,
-        type = this.type;
+    const size = this.size;
+    const type = this.type;
+
+    let base = offset;
 
     if (size < 4294967296) {
       base += Writer.writeNumber(size, buffer, base, 4);
@@ -79,9 +80,9 @@ export default class Box extends Component {
     }
 
     return [base - offset, {
-      size: size,
-      type: type,
-      extendedType: extendedType
+      size,
+      type,
+      extendedType,
     }];
   }
 }

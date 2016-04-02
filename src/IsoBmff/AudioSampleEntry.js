@@ -9,11 +9,12 @@ export default class AudioSampleEntry extends SampleEntry {
 
   serialize(buffer, offset=0) {
     //console.log('--- AudioSampleEntry.serialize enter.');
-    var props = this.props,
-        channelCount = props.channelCount,
-        sampleSize = props.sampleSize,
-        sampleRate = props.sampleRate,
-        base = offset;
+    const props = this.props;
+    const channelCount = props.channelCount;
+    const sampleSize = props.sampleSize;
+    const sampleRate = props.sampleRate;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -30,7 +31,7 @@ export default class AudioSampleEntry extends SampleEntry {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         channelCount, sampleSize, sampleRate;
 
     [readBytesNum, props] = SampleEntry.parse(buffer, base);

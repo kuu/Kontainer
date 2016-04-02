@@ -67,9 +67,8 @@ function isValidComponentClass(type) {
 }
 
 function createElement(type, props, children) {
-  var childrenArgsLen = arguments.length - 2,
-      childArray = [],
-      defaultProps;
+  var childrenArgsLen = arguments.length - 2;
+  var childArray = [];
 
   props = props || {};
 
@@ -90,7 +89,7 @@ function createElement(type, props, children) {
   props.children = childArray;
 
   // Resolve default props
-  defaultProps = type.defaultProps;
+  var defaultProps = type.defaultProps;
   if (defaultProps) {
     Object.keys(defaultProps).forEach(function (key) {
       if (props[key] === void 0) {
@@ -98,7 +97,6 @@ function createElement(type, props, children) {
       }
     });
   }
-
   return new Element(type, props);
 }
 

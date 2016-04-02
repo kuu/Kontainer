@@ -10,11 +10,12 @@ export default class MPEG4BitRateBox extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- MPEG4BitRateBox.serialize enter.');
-    var props = this.props,
-        bufferSizeDB = props.bufferSizeDB,
-        maxBitrate = props.maxBitrate,
-        avgBitrate = props.avgBitrate,
-        base = offset;
+    const props = this.props;
+    const bufferSizeDB = props.bufferSizeDB;
+    const maxBitrate = props.maxBitrate;
+    const avgBitrate = props.avgBitrate;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(bufferSizeDB, buffer, base, 4);
@@ -28,7 +29,7 @@ export default class MPEG4BitRateBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         bufferSizeDB, maxBitrate, avgBitrate;
 

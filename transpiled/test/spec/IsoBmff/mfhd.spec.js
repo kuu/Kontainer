@@ -27,7 +27,7 @@ describe('MovieFragmentHeaderBox', function () {
     var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 0 });
     var buffer = _src2.default.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -46,7 +46,7 @@ describe('MovieFragmentHeaderBox', function () {
     var mfhdElement = IsoBmff.createElement('mfhd', { sequenceNumber: 0xFFFFFFFF });
     var buffer = _src2.default.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

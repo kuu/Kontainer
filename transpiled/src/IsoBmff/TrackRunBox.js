@@ -57,11 +57,12 @@ var TrackRunBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- TrackRunBox.serialize enter.');
-      var props = this.props,
-          samples = props.samples,
-          dataOffset = props.dataOffset,
-          firstSampleFlags = _TrackExtendsBox2.default.encodeDefaultSampleFlags(props.firstSampleFlags),
-          base = offset;
+      var props = this.props;
+      var samples = props.samples;
+      var dataOffset = props.dataOffset;
+      var firstSampleFlags = _TrackExtendsBox2.default.encodeDefaultSampleFlags(props.firstSampleFlags);
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(TrackRunBox.prototype), 'serialize', this).call(this, buffer, base);
 
@@ -161,18 +162,18 @@ var TrackRunBox = function (_FullBox) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          flags,
-          sampleCount,
-          samples,
-          dataOffset,
-          firstSampleFlags,
-          sample,
-          sampleDuration,
-          sampleSize,
-          sampleFlags,
-          sampleCompositionTimeOffset;
+          readBytesNum = undefined,
+          props = undefined,
+          flags = undefined,
+          sampleCount = undefined,
+          samples = undefined,
+          dataOffset = undefined,
+          firstSampleFlags = undefined,
+          sample = undefined,
+          sampleDuration = undefined,
+          sampleSize = undefined,
+          sampleFlags = undefined,
+          sampleCompositionTimeOffset = undefined;
 
       var _FullBox$parse = _FullBox3.default.parse(buffer, base);
 

@@ -93,13 +93,14 @@ describe('Reader', function () {
 
   it('reads numbers', function () {
     Object.keys(testData).forEach(function (key) {
-      var entry = testData[key],
-          inputValue = entry.buf,
-          len = inputValue.length,
-          expectedValues = entry.val,
-          readBytesNum,
-          expected,
-          readValue;
+      var entry = testData[key];
+      var inputValue = entry.buf;
+      var len = inputValue.length;
+      var expectedValues = entry.val;
+
+      var readBytesNum = undefined,
+          expected = undefined,
+          readValue = undefined;
 
       //console.log(`[${key}]----`);
 

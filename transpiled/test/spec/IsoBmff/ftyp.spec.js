@@ -28,7 +28,7 @@ describe('FileTypeBox', function () {
 
   it('can be initialized with the default values', function () {
     var buffer = _src2.default.renderToBuffer(IsoBmff.createElement('ftyp', { majorBrand: 'isom' }));
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -42,7 +42,7 @@ describe('FileTypeBox', function () {
 
   it('can be initialized with the specified values', function () {
     var buffer = _src2.default.renderToBuffer(IsoBmff.createElement('ftyp', { majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2'] }));
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

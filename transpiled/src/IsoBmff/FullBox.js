@@ -49,9 +49,10 @@ var FullBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       //console.log('--- FullBox.serialize enter.');
-      var version = this.version,
-          flags = this.flags,
-          base = offset;
+      var version = this.version;
+      var flags = this.flags;
+
+      var base = offset;
 
       base += _get(Object.getPrototypeOf(FullBox.prototype), 'serialize', this).call(this, buffer, base);
 
@@ -80,10 +81,10 @@ var FullBox = function (_Box) {
       var offset = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
       var base = offset,
-          readBytesNum,
-          props,
-          version,
-          flags;
+          readBytesNum = undefined,
+          props = undefined,
+          version = undefined,
+          flags = undefined;
 
       var _Box$parse = _Box3.default.parse(buffer, base);
 

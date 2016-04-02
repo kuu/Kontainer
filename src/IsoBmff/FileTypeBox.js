@@ -17,10 +17,11 @@ export default class FileTypeBox extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- FileTypeBox.serialize enter.');
-    var majorBrand = this.props.majorBrand,
-        minorVersion = this.props.minorVersion,
-        compatibleBrands = this.props.compatibleBrands,
-        base = offset;
+    const majorBrand = this.props.majorBrand;
+    const minorVersion = this.props.minorVersion;
+    const compatibleBrands = this.props.compatibleBrands;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeString(majorBrand, buffer, base, 4);
@@ -36,7 +37,7 @@ export default class FileTypeBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props, boxEnd,
         majorBrand, minorVersion,
         brand, compatibleBrands;

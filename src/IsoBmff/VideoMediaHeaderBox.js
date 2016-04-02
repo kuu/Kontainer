@@ -10,7 +10,7 @@ export default class VideoMediaHeaderBox extends FullBox {
   }
 
   static validate(context) {
-    var trackType = context.currentTrackType;
+    const trackType = context.currentTrackType;
     if (trackType && trackType !== 'video') {
       return new Error(`"${VideoMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
     }
@@ -18,7 +18,7 @@ export default class VideoMediaHeaderBox extends FullBox {
   }
 
   static encodeGraphicsMode(mode) {
-    var m = 0;
+    let m = 0;
     if (mode === 'copy') {
       m = 0;
     }
@@ -26,7 +26,7 @@ export default class VideoMediaHeaderBox extends FullBox {
   }
 
   static decodeGraphicsMode(m) {
-    var mode = 'copy';
+    let mode = 'copy';
     if (m === 0) {
       mode = 'copy';
     }
@@ -34,10 +34,11 @@ export default class VideoMediaHeaderBox extends FullBox {
   }
   serialize(buffer, offset=0) {
     //console.log('--- VideoMediaHeaderBox.serialize enter.');
-    var props = this.props,
-        graphicsMode = VideoMediaHeaderBox.encodeGraphicsMode(props.graphicsMode),
-        opColor = props.opColor,
-        base = offset;
+    const props = this.props;
+    const graphicsMode = VideoMediaHeaderBox.encodeGraphicsMode(props.graphicsMode);
+    const opColor = props.opColor;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(graphicsMode, buffer, base, 2);
@@ -52,7 +53,7 @@ export default class VideoMediaHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         graphicsMode, r, g, b;
 

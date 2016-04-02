@@ -31,7 +31,8 @@ exports.default = {
     },
         checkProps = function checkProps(actualProps, expectedProps) {
       return Object.keys(expectedProps).every(function (key) {
-        var expectedChildren, actualChildren;
+        var expectedChildren = undefined,
+            actualChildren = undefined;
 
         if (key === 'children') {
           expectedChildren = expectedProps.children;

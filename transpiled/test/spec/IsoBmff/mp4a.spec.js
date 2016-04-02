@@ -35,7 +35,7 @@ describe('MP4AudioSampleEntry', function () {
     var mp4aElement = IsoBmff.createElement('mp4a', { dataReferenceIndex: 1 });
     var buffer = _src2.default.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -54,7 +54,7 @@ describe('MP4AudioSampleEntry', function () {
     var mp4aElement = IsoBmff.createElement('mp4a', { dataReferenceIndex: 2, channelCount: 2, sampleSize: 24, sampleRate: 48000 });
     var buffer = _src2.default.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

@@ -11,9 +11,10 @@ export default class MovieFragmentHeaderBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- MovieFragmentHeaderBox.serialize enter.');
-    var props = this.props,
-        sequenceNumber = props.sequenceNumber,
-        base = offset;
+    const props = this.props;
+    const sequenceNumber = props.sequenceNumber;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(sequenceNumber, buffer, base, 4);
@@ -25,7 +26,7 @@ export default class MovieFragmentHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         sequenceNumber;
 
     [readBytesNum, props] = FullBox.parse(buffer, base);

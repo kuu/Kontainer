@@ -62,10 +62,11 @@ function writeCharacter(charCode, buffer, offset) {
 }
 
 function writeString(str, buffer, offset, length) {
-  var base = offset,
-      lowerLimit = offset + (length || 0),
-      upperLimit = offset + (length || Infinity),
-      nullTerminationNeeded = length === void 0;
+  var lowerLimit = offset + (length || 0);
+  var upperLimit = offset + (length || Infinity);
+  var nullTerminationNeeded = length === void 0;
+
+  var base = offset;
 
   for (var i = 0, il = str.length; i < il; i++) {
     base += writeCharacter(str.charCodeAt(i), buffer, base);
@@ -89,11 +90,12 @@ function writeString(str, buffer, offset, length) {
 function writeNumber(num, buffer, offset) {
   var length = arguments.length <= 3 || arguments[3] === undefined ? 4 : arguments[3];
 
+  var left = num / 4294967296;
+  var right = num % 4294967296;
+
   var base = offset,
-      byte,
-      i,
-      left = num / 4294967296,
-      right = num % 4294967296;
+      byte = undefined,
+      i = undefined;
 
   if (num >= 0 && length > 4) {
     for (i = length - 4 - 1; i >= 0; i--) {
@@ -113,6 +115,7 @@ function writeNumber(num, buffer, offset) {
 
 function makeBitMask(start, len) {
   var mask = 0;
+
   for (var i = start + len - 1; i >= start; i--) {
     mask |= 1 << i;
   }
@@ -120,12 +123,12 @@ function makeBitMask(start, len) {
 }
 
 function writeBits(num, buffer, byteOffset, bitOffset, totalBitsToWrite) {
-  var base = byteOffset,
-      start = bitOffset,
-      remainingBits = totalBitsToWrite,
-      len,
-      mask,
-      byte,
+  var base = byteOffset;
+  var start = bitOffset;
+  var remainingBits = totalBitsToWrite;
+  var len = undefined,
+      mask = undefined,
+      byte = undefined,
       oddBitsNum = 0;
 
   //console.log(`\twriteBits(num=${num} byteOffset=${byteOffset} bitOffset=${bitOffset} totalBitsToWrite=${totalBitsToWrite})`);
@@ -152,11 +155,12 @@ function writeBits(num, buffer, byteOffset, bitOffset, totalBitsToWrite) {
 function writeFixedNumber(num, buffer, offset) {
   var length = arguments.length <= 3 || arguments[3] === undefined ? 4 : arguments[3];
 
-  var base = offset,
-      left = num > 0 ? Math.floor(num) : Math.ceil(num),
-      right = parseFloat('0.' + String(num).split('.')[1]),
-      halfBitsNum = Math.min(length, 8) * 8 / 2,
-      writtenBytesNum = 0,
+  var left = num > 0 ? Math.floor(num) : Math.ceil(num);
+  var halfBitsNum = Math.min(length, 8) * 8 / 2;
+
+  var base = offset;
+  var right = parseFloat('0.' + String(num).split('.')[1]);
+  var writtenBytesNum = 0,
       unreadBitsNum = 0;
 
   //console.log(`writeFixedNumber(${num} ${offset} ${length})`);
@@ -195,7 +199,7 @@ function writeFixedNumber(num, buffer, offset) {
 
 function writeIso639Lang(language, buffer, offset) {
   var base = offset,
-      charCode,
+      charCode = undefined,
       num = 0;
 
   if (language.length !== 3) {

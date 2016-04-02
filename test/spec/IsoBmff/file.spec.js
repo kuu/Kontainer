@@ -3,12 +3,12 @@ import sample from '../../helper/IsoBmff';
 import Kontainer from '../../../src/';
 
 describe('File', () => {
-  var IsoBmff = Kontainer.IsoBmff,
+  const IsoBmff = Kontainer.IsoBmff,
       topLevelElement = sample.element,
       value = sample.buffer;
 
   it('generates a binary data from KontainerElements', () => {
-    var buffer, elem, array;
+    let buffer, elem, array;
 
     buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null,
       IsoBmff.createElement('moov', null,
@@ -25,7 +25,7 @@ describe('File', () => {
       array = buffer;
     }
     expect(array.length).toBe(value.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value[i]);
       //console.log(`array[${i}]=${array[i]}`);
     }
@@ -34,7 +34,7 @@ describe('File', () => {
   });
 
   it('parses a binary data into KontainerElements', () => {
-    var b, elem, buf, array;
+    let b, elem, buf, array;
 
     if (global.Buffer) {
       b = new global.Buffer(value);
@@ -52,7 +52,7 @@ describe('File', () => {
       array = buf;
     }
     expect(array.length).toBe(value.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value[i]);
     }
   });

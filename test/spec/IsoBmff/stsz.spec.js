@@ -2,7 +2,7 @@ import customMatchers from '../../helper/matcher';
 import Kontainer from '../../../src/';
 
 describe('CompactSampleSizeBox', () => {
-  var IsoBmff = Kontainer.IsoBmff,
+  const IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 20, // size=20
         115, 116, 115, 122, // type='stsz'
@@ -22,39 +22,39 @@ describe('CompactSampleSizeBox', () => {
       ];
 
   it('supports constant size', () => {
-    var stszElement = IsoBmff.createElement('stsz', {sampleSize: 5});
-    var buffer = Kontainer.renderToBuffer(stszElement);
+    const stszElement = IsoBmff.createElement('stsz', {sampleSize: 5});
+    const buffer = Kontainer.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value1.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value1[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(stszElement, element)).toBe(true);
   });
 
   it('supports variable size', () => {
-    var stszElement = IsoBmff.createElement('stsz', {sampleSizeEntries: [1, 2, 3]});
-    var buffer = Kontainer.renderToBuffer(stszElement);
+    const stszElement = IsoBmff.createElement('stsz', {sampleSizeEntries: [1, 2, 3]});
+    const buffer = Kontainer.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value2.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value2[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(stszElement, element)).toBe(true);
   });

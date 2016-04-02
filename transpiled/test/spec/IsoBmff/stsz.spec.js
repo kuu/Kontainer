@@ -30,7 +30,7 @@ describe('CompactSampleSizeBox', function () {
     var stszElement = IsoBmff.createElement('stsz', { sampleSize: 5 });
     var buffer = _src2.default.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
@@ -49,7 +49,7 @@ describe('CompactSampleSizeBox', function () {
     var stszElement = IsoBmff.createElement('stsz', { sampleSizeEntries: [1, 2, 3] });
     var buffer = _src2.default.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);
-    var array;
+    var array = undefined;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {

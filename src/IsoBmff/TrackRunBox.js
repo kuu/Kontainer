@@ -11,7 +11,7 @@ export default class TrackRunBox extends FullBox {
   }
 
   static encodeFlags(props) {
-    var f = 0, samples = props.samples;
+    let f = 0, samples = props.samples;
 
     if (props.dataOffset !== void 0) {
       f |= (1 << 0);
@@ -40,7 +40,7 @@ export default class TrackRunBox extends FullBox {
   }
 
   static decodeFlags(f) {
-    var flags = {
+    const flags = {
       dataOffsetPresent: false,
       firstSampleFlagsPresent: false,
       sampleDurationPresent: false,
@@ -71,11 +71,12 @@ export default class TrackRunBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- TrackRunBox.serialize enter.');
-    var props = this.props,
-        samples = props.samples,
-        dataOffset = props.dataOffset,
-        firstSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.firstSampleFlags),
-        base = offset;
+    const props = this.props;
+    const samples = props.samples;
+    const dataOffset = props.dataOffset;
+    const firstSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.firstSampleFlags);
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -109,7 +110,7 @@ export default class TrackRunBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props, flags,
+    let base = offset, readBytesNum, props, flags,
         sampleCount, samples, dataOffset, firstSampleFlags,
         sample, sampleDuration, sampleSize,
         sampleFlags, sampleCompositionTimeOffset;
@@ -136,7 +137,7 @@ export default class TrackRunBox extends FullBox {
       props.firstSampleFlags = TrackExtendsBox.decodeDefaultSampleFlags(firstSampleFlags);
     }
 
-    for (var i = 0; i < sampleCount; i++) {
+    for (let i = 0; i < sampleCount; i++) {
       sample = samples[i] = {};
 
       if (flags.sampleDurationPresent) {

@@ -1,9 +1,9 @@
 # Kontainer
 A media file format generator/parser that exposes a React-like API.
 
-![logo](logo.png)
+![logo](logo.svg)
 
-Kontainer aims to fully support the MP4 (ISO Base Media file format: ISO/IEC 14496-12) and WebM file format.
+Kontainer aims to fully support the MP4 (ISO Base Media file format: ISO/IEC 14496-12) and WebM file format. The library can be used on Node.js and in the browser.
 
 ## Install
 
@@ -13,105 +13,14 @@ $ npm install -g kontainer-js
 
 ## API
 
-A media file like MP4 or WebM is composed of nested objects. In Kontainer, each object, e.g. MP4 Box, is represented as a KontainerElement which is similar to ReactElement.
+A media file like MP4 and WebM is composed of nested objects. In Kontainer, each object, e.g. MP4 Box, is represented as a `KontainerElement` which is similar to the `ReactElement`.
 
-The actual media data (audio and video chunks) and metadata are represented as a `props` object and need to be passed to `createElement()`.
-
-```js
-    const Kontainer = require('kontainer-js'),
-        IsoBmff = Kontainer.IsoBmff,
-        element, buffer, string;
-
-    // IsoBmff.createElement()
-    //   Accepts: type, props, children...
-    //   Returns: KontainerElement
-    element = IsoBmff.createElement('file', null,
-      IsoBmff.createElement('ftyp', {majorBrand: 'isom'}),
-      IsoBmff.createElement('moov', null,
-        IsoBmff.createElement('mvhd', {creationTime: new Date(0), modificationTime: new Date(0), timeScale: 1, nextTrackId: 4}),
-        IsoBmff.createElement('trak', null,
-          IsoBmff.createElement('tkhd', {creationTime: new Date(0), modificationTime: new Date(0), trackId: 1, width: 640, height: 480}),
-          IsoBmff.createElement('mdia', null,
-            ...
-            // KontainerElement can be a child of other elements to compose a large nested tree.
-          )
-        )
-      )
-    );
-```
-
-Once an element is created, it can be serialized into a byte stream using `renderToBuffer()`.
+The actual media data (audio and video chunks) and the metadata are represented as a `props` object and passed to the `KontainerElement` as its attributes.
 
 ```js
-    // Kontainer.renderToBuffer()
-    //   Accepts: KontainerElement
-    //   Returns: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream
-    buffer = Kontainer.renderToBuffer(element);
-```
+import Kontainer from 'kontainer-js';
 
-Similarly, you can parse a byte stream and reproduce a KontainerElement from it.
-
-```js
-    // IsoBmff.createElementFromBuffer()
-    //   Accepts: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream [, offset=0]
-    //   Returns: KontainerElement.
-    element = IsoBmff.createElementFromBuffer(buffer, offset);
-
-```
-
-And then you can convert the element tree into a text using `renderToString()`.
-
-```js
-    // Kontainer.renderToString();
-    //   Accepts: KontainerElement[, Formatter]
-    //   Returns: A string that represetns the structure of media file.
-    string = Kontainer.renderToString(element, formatter);
-```
-
-The `formatter` is an optional and when specified, it needs to be an object with three functions that will be repeatedly called during the tree traversal.
-If you don't specify the `formatter` object, the default one will be used.
-
-```js
-    // The formatter needs to be an object with the following functions.
-    // (the first param is always the depth in the tree.)
-    {
-      header: (depth, typeName) => {
-        // Called when a certain type of object is found.
-      },
-      footer: (depth, typeName) => {
-        // Called when the processing of the object is completed.
-      },
-      body: (depth, key, value) => {
-        // Called for each key-value pair in the object's props.
-      }
-    }
-```
-
-Also, you can parse a byte stream and process it via a transform stream.
-
-```js
-import {IsoBmff} from 'kontainer-js';
-
-class MyBoxVisitor extends IsoBmff.BoxVisitor {
-  enter(type, props) {
-    // Implement this
-  }
-  exit(type, props) {
-    // Implement this
-  }
-}
-const visitor = new MyBoxVisitor();
-const transform = IsoBmff.transform(visitor);
-
-input.pipe(transform).pipe(process.stdout);
-```
-
-### JSX
-
-You can also use JSX to composite KontainerElements.
-
-```js
-import {IsoBmff} from 'kontainer-js';
+const IsoBmff = Kontainer.IsoBmff;
 
 export default class MP4 {
 
@@ -125,9 +34,9 @@ export default class MP4 {
     <file>
       <ftyp majorBrand="isom" />
       <moov>
-        <mvhd creationTime={new Date(0)} modificationTime={new Date(0)} timeScale={1} nextTrackId={4} />
+        <mvhd creationTime={new Date()} modificationTime={new Date()} timeScale={1} nextTrackId={4} />
         <trak>
-          <tkhd creationTime={new Date(0)} modificationTime={new Date(0)} trackId={1} width={this.width} height={this.height} />
+          <tkhd creationTime={new Date()} modificationTime={new Date()} trackId={1} width={this.width} height={this.height} />
           <mdia>
             ...
           </mdia>
@@ -139,8 +48,66 @@ export default class MP4 {
 }
 ```
 
-The above example is witten in ES2015 + JSX.
-Use `babel` to compile it.
+The above code is transpiled into the calls to `createElement()` using [`babel`](https://babeljs.io/) and a dedicated [plugin](https://www.npmjs.com/package/babel-plugin-transform-kontainer-js).
+
+```js
+    // IsoBmff.createElement()
+    //   Accepts: type, props, children...
+    //   Returns: KontainerElement
+    return IsoBmff.createElement('file', null,
+      IsoBmff.createElement('ftyp', {majorBrand: 'isom'}),
+      IsoBmff.createElement('moov', null,
+        IsoBmff.createElement('mvhd', {creationTime: new Date(0), modificationTime: new Date(), timeScale: 1, nextTrackId: 4}),
+        IsoBmff.createElement('trak', null,
+          IsoBmff.createElement('tkhd', {creationTime: new Date(0), modificationTime: new Date(), trackId: 1, width: 640, height: 480}),
+          IsoBmff.createElement('mdia', null,
+            ...
+            // KontainerElement can be a child of other elements to compose a large nested tree.
+          )
+        )
+      )
+    );
+```
+
+Once an element is obtained, it can be serialized into a byte stream using `renderToBuffer()`.
+
+```js
+    // Kontainer.renderToBuffer()
+    //   Accepts: KontainerElement
+    //   Returns: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream
+    buffer = Kontainer.renderToBuffer(element);
+```
+
+On the other hand, you can parse a byte stream and reproduce a KontainerElement from it.
+
+```js
+    // IsoBmff.createElementFromBuffer()
+    //   Accepts: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream [, offset=0]
+    //   Returns: KontainerElement.
+    element = IsoBmff.createElementFromBuffer(buffer, offset);
+
+```
+
+You can also create your hook and process a byte stream progressively.
+
+```js
+class MyBoxVisitor extends IsoBmff.BoxVisitor {
+  enter(type, props) {
+    // Implement this
+  }
+  exit(type, props) {
+    // Implement this
+  }
+}
+
+const transform = IsoBmff.transform(new MyBoxVisitor());
+
+input.pipe(transform).pipe(process.stdout);
+```
+
+### JSX
+
+To transpile JSX code into `createElement()` calls as well as your ES6 code, you need to install `babel` and its plugins.
 
 ```
 $ npm install babel-cli
@@ -148,7 +115,7 @@ $ npm install babel-preset-es2015
 $ npm install babel-plugin-transform-kontainer-js
 ```
 
-Put a .babelrc file in your project dir.
+Put a .babelrc file in the source directories that contain JSX.
 
 ```js
 {
@@ -157,7 +124,7 @@ Put a .babelrc file in your project dir.
 }
 ```
 
-Then you can convert the above code into ES5.
+Then use the `babel` command to transpile the code.
 
 ```
 $ babel src/ -d dist/
@@ -175,10 +142,10 @@ Usage:
     kontainer filePath [options]
 
 Example:
-';
+
     kontainer /path/to/file
 Options:
-';
+
   -h, --help    Print help
   -v, --version Print version
 ```
@@ -194,12 +161,10 @@ $ npm install
 // Test
 $ npm test
 
-// Build a client lib (uncompressed)
+// Build client libs
 $ npm run build
-// --> ./concatenated/kontainer.js
-
-// Build a client lib (compressed)
-$ npm run release-build
-// --> ./minified/kontainer.js
-// --> ./minified/kontainer.map.js
+// --> ./concatenated/kontainer.deb.js (with debug messages)
+// --> ./minified/kontainer.js (uncompressed)
+// --> ./minified/kontainer.min.js (compressed)
+// --> ./minified/kontainer.map.js (source map)
 ```

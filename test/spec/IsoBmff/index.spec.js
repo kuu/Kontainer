@@ -67,8 +67,8 @@ describe('IsoBmff', () => {
           super(options);
           this.data = null;
           this.on('finish', () => {
-            expect(fakeFuncs.enterCounter.calls.length).toEqual(ELEMENT_NUM);
-            expect(fakeFuncs.exitCounter.calls.length).toEqual(ELEMENT_NUM);
+            expect(fakeFuncs.enterCounter.calls.count()).toEqual(ELEMENT_NUM);
+            expect(fakeFuncs.exitCounter.calls.count()).toEqual(ELEMENT_NUM);
             cb();
           });
         }

@@ -12,20 +12,23 @@
   },
   "directories": {
     "src": "./src",
+    "lib": "./lib",
     "test": "./test"
   },
+  "files": ["lib"],
   "scripts": {
     "lint": "eslint src/ test/",
     "test": "npm run lint && npm run test-node && npm run test-browser",
     "test-node": "jasmine JASMINE_CONFIG_PATH=jasmine.json",
     "test-browser": "karma start karma.conf.js",
-    "clean": "rm -fR concatenated ; mkdir concatenated ; rm -fR minified ; mkdir minified",
-    "build": "npm run clean && npm run bundle",
-    "bundle": "browserify -t babelify src/index.js > concatenated/kontainer.js --debug",
-    "release-build": "npm run clean && npm run release-bundle && npm run minify",
-    "release-bundle": "NODE_ENV=production browserify -t babelify src/index.js > concatenated/kontainer.js",
-    "minify": "uglifyjs concatenated/kontainer.js --source-map-url kontainer.js.map -p 1 --source-map minified/kontainer.js.map -c -m -o minified/kontainer.js",
-    "prepublish": "dist-es6"
+    "clean": "rm -fR lib ; mkdir lib",
+    "build": "npm run clean && npm run debug-build && npm run release-build",
+    "debug-build": "npm run debug-bundle",
+    "debug-bundle": "browserify -t babelify src/index.js > lib/kontainer.deb.js --debug",
+    "release-build": "npm run release-bundle && npm run minify",
+    "release-bundle": "NODE_ENV=production browserify -t babelify src/index.js > lib/kontainer.js",
+    "minify": "uglifyjs lib/kontainer.js --source-map-url kontainer.js.map -p 1 --source-map lib/kontainer.js.map -c -m -o lib/kontainer.min.js",
+    "prepublish": "npm run build && dist-es6"
   },
   "author": "Kuu Miyazaki",
   "license": "MIT",

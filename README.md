@@ -1,7 +1,7 @@
 # Kontainer
 A media file format generator/parser that exposes a React-like API.
 
-![logo](logo.svg)
+![logo](logo.png)
 
 Kontainer aims to fully support the MP4 (ISO Base Media file format: ISO/IEC 14496-12) and WebM file format. The library can be used on Node.js and in the browser.
 

@@ -1,6 +1,6 @@
 {
   "name": "kontainer-js",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "A media file format generator/parser that exposes a React-like API.",
   "repository": {
     "type": "git",
@@ -15,7 +15,9 @@
     "lib": "./lib",
     "test": "./test"
   },
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "lint": "eslint src/ test/",
     "test": "npm run lint && npm run test-node && npm run test-browser",

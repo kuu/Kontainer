@@ -1,10 +1,8 @@
 import customMatchers from '../../helper/matcher';
+import Kontainer from '../../../src/';
 
-/*global describe, it, expect */
-describe('MP4AudioSampleEntry', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+describe('MP4AudioSampleEntry', () => {
+  const IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 36, // size=36
         109, 112, 52, 97, // type='mp4a'
@@ -28,43 +26,43 @@ describe('MP4AudioSampleEntry', function () {
         187, 128, 0, 0 // sample_rate=48kHz
       ];
 
-  it('supports mono/16bit/48kHz', function () {
-    var mp4aElement = IsoBmff.createElement('mp4a', {dataReferenceIndex: 1});
-    var buffer = Kontainer.renderToBuffer(mp4aElement);
+  it('supports mono/16bit/48kHz', () => {
+    const mp4aElement = IsoBmff.createElement('mp4a', {dataReferenceIndex: 1});
+    const buffer = Kontainer.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value1.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value1[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(mp4aElement, element)).toBe(true);
   });
 
-  it('supports stereo/24bit/48kHz', function () {
-    var mp4aElement = IsoBmff.createElement(
+  it('supports stereo/24bit/48kHz', () => {
+    const mp4aElement = IsoBmff.createElement(
       'mp4a',
       { dataReferenceIndex: 2, channelCount: 2, sampleSize: 24, sampleRate: 48000 }
     );
-    var buffer = Kontainer.renderToBuffer(mp4aElement);
+    const buffer = Kontainer.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value2.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value2[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(mp4aElement, element)).toBe(true);
   });

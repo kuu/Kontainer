@@ -1,16 +1,16 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class HintMediaHeaderBox extends FullBox {
+export default class HintMediaHeaderBox extends FullBox {
   constructor(props) {
     super(HintMediaHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
 
   static validate(context) {
-    var trackType = context.currentTrackType;
+    const trackType = context.currentTrackType;
     if (trackType && trackType !== 'hint') {
       return new Error(`"${HintMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
     }
@@ -18,12 +18,13 @@ class HintMediaHeaderBox extends FullBox {
   }
 
   serialize(buffer, offset=0) {
-    var props = this.props,
-        maxPDUSize = props.maxPDUSize,
-        avgPDUSize = props.avgPDUSize,
-        maxBitrate = props.maxBitrate,
-        avgBitrate = props.avgBitrate,
-        base = offset;
+    const props = this.props;
+    const maxPDUSize = props.maxPDUSize;
+    const avgPDUSize = props.avgPDUSize;
+    const maxBitrate = props.maxBitrate;
+    const avgBitrate = props.avgBitrate;
+    
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeFixedNumber(maxPDUSize, buffer, base, 2);
@@ -38,7 +39,7 @@ class HintMediaHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         maxPDUSize, avgPDUSize,
         maxBitrate, avgBitrate;
@@ -88,5 +89,3 @@ HintMediaHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = HintMediaHeaderBox;

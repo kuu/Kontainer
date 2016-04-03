@@ -1,4 +1,4 @@
-class Buffer {
+export default class Buffer {
   constructor(param) {
     if (global && global.Buffer) {
       this.buffer = new global.Buffer(param);
@@ -12,7 +12,7 @@ class Buffer {
   }
 
   getData() {
-    var buf = this.buffer;
+    const buf = this.buffer;
     if (global && global.Buffer && buf instanceof global.Buffer) {
       return buf;
     } else {
@@ -28,5 +28,3 @@ class Buffer {
     }
   }
 }
-
-module.exports = Buffer;

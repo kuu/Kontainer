@@ -1,19 +1,20 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class SampleDescriptionBox extends FullBox {
+export default class SampleDescriptionBox extends FullBox {
   constructor(props) {
     super(SampleDescriptionBox.COMPACT_NAME, props, 0, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- SampleDescriptionBox.serialize enter.');
-    var props = this.props,
-        entryCount = props.entryCount,
-        base = offset;
+    const props = this.props;
+    const entryCount = props.entryCount;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(entryCount, buffer, base, 4);
@@ -25,7 +26,7 @@ class SampleDescriptionBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         entryCount;
 
@@ -52,5 +53,3 @@ SampleDescriptionBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = SampleDescriptionBox;

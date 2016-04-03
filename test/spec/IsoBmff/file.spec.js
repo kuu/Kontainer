@@ -1,15 +1,14 @@
 import customMatchers from '../../helper/matcher';
 import sample from '../../helper/IsoBmff';
+import Kontainer from '../../../src/';
 
-/*global describe, it, expect */
-describe('File', function () {
-  var Kontainer = require('../../../src/');
-  var IsoBmff = Kontainer.IsoBmff,
+describe('File', () => {
+  const IsoBmff = Kontainer.IsoBmff,
       topLevelElement = sample.element,
       value = sample.buffer;
 
-  it('generates a binary data from KontainerElements', function () {
-    var buffer, elem, array;
+  it('generates a binary data from KontainerElements', () => {
+    let buffer, elem, array;
 
     buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null,
       IsoBmff.createElement('moov', null,
@@ -26,7 +25,7 @@ describe('File', function () {
       array = buffer;
     }
     expect(array.length).toBe(value.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value[i]);
       //console.log(`array[${i}]=${array[i]}`);
     }
@@ -34,8 +33,8 @@ describe('File', function () {
     expect(customMatchers.toHaveTheSamePropsAs(topLevelElement, elem)).toBe(true);
   });
 
-  it('parses a binary data into KontainerElements', function () {
-    var b, elem, buf, array;
+  it('parses a binary data into KontainerElements', () => {
+    let b, elem, buf, array;
 
     if (global.Buffer) {
       b = new global.Buffer(value);
@@ -53,7 +52,7 @@ describe('File', function () {
       array = buf;
     }
     expect(array.length).toBe(value.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value[i]);
     }
   });

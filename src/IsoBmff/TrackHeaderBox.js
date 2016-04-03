@@ -1,16 +1,16 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class TrackHeaderBox extends FullBox {
+export default class TrackHeaderBox extends FullBox {
   constructor(props) {
     super(TrackHeaderBox.COMPACT_NAME, props, props.version, TrackHeaderBox.encodeFlags(props.flags));
   }
 
   static encodeFlags(flags) {
-    var f = 0;
+    let f = 0;
     if (flags.enabled) {
       f |= 0x01;
     }
@@ -24,7 +24,7 @@ class TrackHeaderBox extends FullBox {
   }
 
   static decodeFlags(f) {
-    var flags = {
+    const flags = {
       enabled: false,
       inMovie: false,
       inPreview: false
@@ -44,20 +44,21 @@ class TrackHeaderBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- TrackHeaderBox.serialize enter.');
-    var props = this.props,
-        version = props.version,
-        creationTime = props.creationTime || new Date(),
-        modificationTime = props.modificationTime || new Date(),
-        trackId = props.trackId | 0,
-        duration = props.duration | 0,
-        layer = props.layer,
-        alternateGroup = props.alternateGroup | 0,
-        volume = props.volume,
-        matrix = props.matrix,
-        width = props.width,
-        height = props.height,
-        byteLength = version ? 8 : 4,
-        base = offset;
+    const props = this.props;
+    const version = props.version;
+    const creationTime = props.creationTime || new Date();
+    const modificationTime = props.modificationTime || new Date();
+    const trackId = props.trackId | 0;
+    const duration = props.duration | 0;
+    const layer = props.layer;
+    const alternateGroup = props.alternateGroup | 0;
+    const volume = props.volume;
+    const matrix = props.matrix;
+    const width = props.width;
+    const height = props.height;
+    const byteLength = version ? 8 : 4;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(FullBox.date2sec(creationTime), buffer, base, byteLength);
@@ -70,7 +71,7 @@ class TrackHeaderBox extends FullBox {
     base += Writer.writeNumber(alternateGroup, buffer, base, 2);
     base += Writer.writeFixedNumber(volume, buffer, base, 2);
     base += Writer.writeNumber(0, buffer, base, 2);
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
       base += Writer.writeFixedNumber(matrix[i], buffer, base, 4);
     }
     base += Writer.writeFixedNumber(width, buffer, base, 4);
@@ -83,7 +84,7 @@ class TrackHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props, byteLength,
         creationTime, modificationTime,
         trackId, duration, layer, alternateGroup,
@@ -120,7 +121,7 @@ class TrackHeaderBox extends FullBox {
 
     base += 2; // skip reserved
 
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
       [readBytesNum, matrix[i]] = Reader.readFixedNumber(buffer, base, 4);
       base += readBytesNum;
     }
@@ -189,5 +190,3 @@ TrackHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = TrackHeaderBox;

@@ -1,28 +1,29 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class MovieHeaderBox extends FullBox {
+export default class MovieHeaderBox extends FullBox {
   constructor(props) {
     super(MovieHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- MovieHeaderBox.serialize enter.');
-    var props = this.props,
-        version = props.version,
-        creationTime = props.creationTime || new Date(),
-        modificationTime = props.modificationTime || new Date(),
-        timeScale = props.timeScale | 0,
-        duration = props.duration | 0,
-        rate = props.rate,
-        volume = props.volume,
-        matrix = props.matrix,
-        nextTrackId = props.nextTrackId,
-        byteLength = version ? 8 : 4,
-        base = offset;
+    const props = this.props;
+    const version = props.version;
+    const creationTime = props.creationTime || new Date();
+    const modificationTime = props.modificationTime || new Date();
+    const timeScale = props.timeScale | 0;
+    const duration = props.duration | 0;
+    const rate = props.rate;
+    const volume = props.volume;
+    const matrix = props.matrix;
+    const nextTrackId = props.nextTrackId;
+    const byteLength = version ? 8 : 4;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(FullBox.date2sec(creationTime), buffer, base, byteLength);
@@ -32,7 +33,7 @@ class MovieHeaderBox extends FullBox {
     base += Writer.writeFixedNumber(rate, buffer, base, 4);
     base += Writer.writeFixedNumber(volume, buffer, base, 2);
     base += Writer.writeNumber(0, buffer, base, 10);
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
       base += Writer.writeFixedNumber(matrix[i], buffer, base, 4);
     }
     base += Writer.writeNumber(0, buffer, base, 24);
@@ -45,7 +46,7 @@ class MovieHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props, byteLength,
         creationTime, modificationTime,
         timeScale, duration, rate, volume,
@@ -75,7 +76,7 @@ class MovieHeaderBox extends FullBox {
 
     base += 10; // skip reserved
 
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
       [readBytesNum, matrix[i]] = Reader.readFixedNumber(buffer, base, 4);
       base += readBytesNum;
     }
@@ -126,5 +127,3 @@ MovieHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = MovieHeaderBox;

@@ -1,9 +1,9 @@
-var Box = require('./Box'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class FileTypeBox extends Box {
+export default class FileTypeBox extends Box {
   constructor(props) {
     super(FileTypeBox.COMPACT_NAME, props);
   }
@@ -17,10 +17,11 @@ class FileTypeBox extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- FileTypeBox.serialize enter.');
-    var majorBrand = this.props.majorBrand,
-        minorVersion = this.props.minorVersion,
-        compatibleBrands = this.props.compatibleBrands,
-        base = offset;
+    const majorBrand = this.props.majorBrand;
+    const minorVersion = this.props.minorVersion;
+    const compatibleBrands = this.props.compatibleBrands;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeString(majorBrand, buffer, base, 4);
@@ -36,7 +37,7 @@ class FileTypeBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props, boxEnd,
         majorBrand, minorVersion,
         brand, compatibleBrands;
@@ -82,5 +83,3 @@ FileTypeBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = FileTypeBox;

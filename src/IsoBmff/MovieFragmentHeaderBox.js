@@ -1,19 +1,20 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class MovieFragmentHeaderBox extends FullBox {
+export default class MovieFragmentHeaderBox extends FullBox {
   constructor(props) {
     super(MovieFragmentHeaderBox.COMPACT_NAME, props, 0, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- MovieFragmentHeaderBox.serialize enter.');
-    var props = this.props,
-        sequenceNumber = props.sequenceNumber,
-        base = offset;
+    const props = this.props;
+    const sequenceNumber = props.sequenceNumber;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(sequenceNumber, buffer, base, 4);
@@ -25,7 +26,7 @@ class MovieFragmentHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         sequenceNumber;
 
     [readBytesNum, props] = FullBox.parse(buffer, base);
@@ -51,5 +52,3 @@ MovieFragmentHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = MovieFragmentHeaderBox;

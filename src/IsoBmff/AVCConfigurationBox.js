@@ -1,16 +1,16 @@
-var Box = require('./Box'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader'),
-    Buffer = require('../core/Buffer');
+import Box from './Box';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
+import Buffer from '../core/Buffer';
 
-class AVCConfigurationBox extends Box {
+export default class AVCConfigurationBox extends Box {
   constructor(props) {
     super(AVCConfigurationBox.COMPACT_NAME, props);
   }
 
   static encodeProfile(profile) {
-    var p = 0;
+    let p = 0;
     if (profile === 'baseline') {
       p = 66;
     } else if (profile === 'main') {
@@ -22,7 +22,7 @@ class AVCConfigurationBox extends Box {
   }
 
   static decodeProfile(p) {
-    var profile = '';
+    let profile = '';
     if (p === 66) {
       profile = 'baseline';
     } else if (p === 77) {
@@ -36,7 +36,7 @@ class AVCConfigurationBox extends Box {
   }
 
   static encodeCompatibility(compat) {
-    var c = 0;
+    let c = 0;
     if (compat.constraintSet0Flag) {
       c |= 0x01;
     }
@@ -50,7 +50,7 @@ class AVCConfigurationBox extends Box {
   }
 
   static decodeCompatibility(c) {
-    var compat = {
+    const compat = {
       constraintSet0Flag: false,
       constraintSet1Flag: false,
       constraintSet2Flag: false
@@ -69,15 +69,16 @@ class AVCConfigurationBox extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- AVCConfigurationBox.serialize enter.');
-    var props = this.props,
-        configurationVersion = props.configurationVersion,
-        avcProfileIndication = props.avcProfileIndication,
-        profileCompatibility = props.profileCompatibility,
-        avcLevelIndication = props.avcLevelIndication,
-        lengthSizeMinusOne = props.lengthSize - 1,
-        sequenceParameterSets = props.sequenceParameterSets,
-        pictureParameterSets = props.pictureParameterSets,
-        i, length, data, base = offset;
+    const props = this.props;
+    const configurationVersion = props.configurationVersion;
+    const avcProfileIndication = props.avcProfileIndication;
+    const profileCompatibility = props.profileCompatibility;
+    const avcLevelIndication = props.avcLevelIndication;
+    const lengthSizeMinusOne = props.lengthSize - 1;
+    const sequenceParameterSets = props.sequenceParameterSets;
+    const pictureParameterSets = props.pictureParameterSets;
+
+    let i, length, data, base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(configurationVersion, buffer, base, 1);
@@ -119,7 +120,7 @@ class AVCConfigurationBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props, i, j, length, data, buf,
+    let base = offset, readBytesNum, props, i, j, length, data, buf,
         configurationVersion, avcProfileIndication, profileCompatibility,
         avcLevelIndication, lengthSizeMinusOne,
         numOfParameterSets,
@@ -231,5 +232,3 @@ AVCConfigurationBox.spec = {
   quantity: Box.QUANTITY_EXACTORY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = AVCConfigurationBox;

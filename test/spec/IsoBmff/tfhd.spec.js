@@ -1,10 +1,8 @@
 import customMatchers from '../../helper/matcher';
+import Kontainer from '../../../src/';
 
-/*global describe, it, expect */
-describe('TrackFragmentHeaderBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+describe('TrackFragmentHeaderBox', () => {
+  const IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 24, // size=24
         116, 102, 104, 100, // type='tfhd'
@@ -24,32 +22,32 @@ describe('TrackFragmentHeaderBox', function () {
         255, 255, 250, 128 // default_sample_flags={I-pic,disposable,no-redundant,7,true,65535}
       ];
 
-  it('supports some sets of optional values', function () {
-    var tfhdElement = IsoBmff.createElement('tfhd', {
+  it('supports some sets of optional values', () => {
+    const tfhdElement = IsoBmff.createElement('tfhd', {
       trackId: 1,
       sampleDescriptionIndex: 2,
       defaultSampleSize: 65536,
       durationIsEmpty: true
     });
-    var buffer = Kontainer.renderToBuffer(tfhdElement);
+    const buffer = Kontainer.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value1.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value1[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(tfhdElement, element)).toBe(true);
   });
 
-  it('supports other sets of optional values', function () {
-    var tfhdElement = IsoBmff.createElement('tfhd', {
+  it('supports other sets of optional values', () => {
+    const tfhdElement = IsoBmff.createElement('tfhd', {
       trackId: 3,
       baseDataOffset: Number.MAX_SAFE_INTEGER,
       defaultSampleDuration: 1,
@@ -62,24 +60,24 @@ describe('TrackFragmentHeaderBox', function () {
         sampleDegradationPriority: 65535
       }
     });
-    var buffer = Kontainer.renderToBuffer(tfhdElement);
+    const buffer = Kontainer.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value2.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value2[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(tfhdElement, element)).toBe(true);
   });
 
-  it('supports base-data-offset', function () {
+  it('supports base-data-offset', () => {
     let elem1 = IsoBmff.createElement('tfhd', {trackId: 1, baseDataOffset: 623});
     let buffer = Kontainer.renderToBuffer(elem1);
     let elem2 = IsoBmff.createElementFromBuffer(buffer);

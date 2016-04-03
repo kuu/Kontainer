@@ -1,6 +1,6 @@
-var Box = require('./Box');
+import Box from './Box';
 
-class TrackFragmentBox extends Box {
+export default class TrackFragmentBox extends Box {
   constructor(props) {
     super(TrackFragmentBox.COMPACT_NAME, props);
   }
@@ -13,5 +13,3 @@ TrackFragmentBox.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: ['tfhd']
 };
-
-module.exports = TrackFragmentBox;

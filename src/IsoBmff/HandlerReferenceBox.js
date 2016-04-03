@@ -1,16 +1,16 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class HandlerReferenceBox extends FullBox {
+export default class HandlerReferenceBox extends FullBox {
   constructor(props) {
     super(HandlerReferenceBox.COMPACT_NAME, props, props.version, 0);
   }
 
   static encodeHandlerType(handlerType) {
-    var t = 'vide';
+    let t = 'vide';
     if (handlerType === 'video') {
       t = 'vide';
     } else if (handlerType === 'audio') {
@@ -22,7 +22,7 @@ class HandlerReferenceBox extends FullBox {
   }
 
   static decodeHandlerType(t) {
-    var handlerType = 'video';
+    let handlerType = 'video';
     if (t === 'vide') {
       handlerType = 'video';
     } else if (t === 'soun') {
@@ -40,10 +40,11 @@ class HandlerReferenceBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- HandlerReferenceBox.serialize enter.');
-    var props = this.props,
-        handlerType = HandlerReferenceBox.encodeHandlerType(props.handlerType),
-        name = props.name,
-        base = offset;
+    const props = this.props;
+    const handlerType = HandlerReferenceBox.encodeHandlerType(props.handlerType);
+    const name = props.name;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(0, buffer, base, 4);
@@ -58,7 +59,7 @@ class HandlerReferenceBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         handlerType, name;
 
@@ -99,5 +100,3 @@ HandlerReferenceBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = HandlerReferenceBox;

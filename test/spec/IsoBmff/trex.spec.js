@@ -1,10 +1,8 @@
 import customMatchers from '../../helper/matcher';
+import Kontainer from '../../../src/';
 
-/*global describe, it, expect */
-describe('TrackExtendsBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+describe('TrackExtendsBox', () => {
+  const IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 32, // size=32
         116, 114, 101, 120, // type='trex'
@@ -26,8 +24,8 @@ describe('TrackExtendsBox', function () {
         255, 255, 250, 128 // default_sample_flags={I-pic,disposable,no-redundant,7,true,65535}
       ];
 
-  it('supports falthy values', function () {
-    var trexElement = IsoBmff.createElement('trex', {
+  it('supports falthy values', () => {
+    const trexElement = IsoBmff.createElement('trex', {
       trackId: 1,
       defaultSampleDescriptionIndex: 2,
       defaultSampleDuration: 0xFFFFFFFF,
@@ -41,25 +39,25 @@ describe('TrackExtendsBox', function () {
         sampleDegradationPriority: 0
       }
     });
-    var buffer = Kontainer.renderToBuffer(trexElement);
+    const buffer = Kontainer.renderToBuffer(trexElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value1.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value1[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(trexElement, element)).toBe(true);
   });
 
-  it('supports truethy values', function () {
-    var trexElement = IsoBmff.createElement('trex', {
+  it('supports truethy values', () => {
+    const trexElement = IsoBmff.createElement('trex', {
       trackId: 3,
       defaultSampleDescriptionIndex: 4,
       defaultSampleDuration: 1,
@@ -73,19 +71,19 @@ describe('TrackExtendsBox', function () {
         sampleDegradationPriority: 65535
       }
     });
-    var buffer = Kontainer.renderToBuffer(trexElement);
+    const buffer = Kontainer.renderToBuffer(trexElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value2.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value2[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(trexElement, element)).toBe(true);
   });

@@ -1,21 +1,22 @@
-var Box = require('./Box'),
-    PropTypes = require('../core/PropTypes'),
-    Buffer = require('../core/Buffer');
+import Box from './Box';
+import PropTypes from '../core/PropTypes';
+import Buffer from '../core/Buffer';
 
-class MediaDataBox extends Box {
+export default class MediaDataBox extends Box {
   constructor(props) {
     super(MediaDataBox.COMPACT_NAME, props);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- MediaDataBox.serialize enter.');
-    var data = this.props.data,
-        base = offset;
+    const data = this.props.data;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
     if (buffer) {
-      for (var i = 0, il = data.length; i < il; i++) {
+      for (let i = 0, il = data.length; i < il; i++) {
         buffer[base++] = data[i];
       }
     } else {
@@ -29,7 +30,7 @@ class MediaDataBox extends Box {
   }
 
   static parse(buffer, offset=-1) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         toBeRead, data, buf;
 
     [readBytesNum, props] = Box.parse(buffer, base);
@@ -39,7 +40,7 @@ class MediaDataBox extends Box {
     buf = new Buffer(toBeRead);
     data = buf.getView();
 
-    for (var i = 0; i < toBeRead; i++) {
+    for (let i = 0; i < toBeRead; i++) {
       data[i] = buffer[base++];
     }
     props.data = buf.getView();
@@ -59,5 +60,3 @@ MediaDataBox.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: []
 };
-
-module.exports = MediaDataBox;

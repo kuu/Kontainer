@@ -1,6 +1,6 @@
-var Box = require('./Box');
+import Box from './Box';
 
-class TrackBox extends Box {
+export default class TrackBox extends Box {
   constructor(props) {
     super(TrackBox.COMPACT_NAME, props);
   }
@@ -13,5 +13,3 @@ TrackBox.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER, // Actually one or more.
   mandatoryBoxList: ['tkhd', 'mdia']
 };
-
-module.exports = TrackBox;

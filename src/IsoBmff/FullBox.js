@@ -1,8 +1,8 @@
-var Box = require('./Box'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class FullBox extends Box {
+export default class FullBox extends Box {
   constructor(type, props, version, flags) {
     super(type, props);
     this.version = version;
@@ -11,9 +11,10 @@ class FullBox extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- FullBox.serialize enter.');
-    var version = this.version,
-        flags = this.flags,
-        base = offset;
+    const version = this.version;
+    const flags = this.flags;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -38,7 +39,7 @@ class FullBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         version, flags;
 
@@ -67,5 +68,3 @@ class FullBox extends Box {
     return new Date(Math.max(0, sec - SECONDS_BTW_1904_1970) * 1000);
   }
 }
-
-module.exports = FullBox;

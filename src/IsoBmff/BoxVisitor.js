@@ -1,6 +1,6 @@
 import Visitor from '../core/Visitor';
 
-class BoxVisitor extends Visitor {
+export class BoxVisitor extends Visitor {
   enter (type, props) {
     // To be overriddedn
   }
@@ -10,7 +10,7 @@ class BoxVisitor extends Visitor {
   }
 }
 
-class IsoBmffDumpVisitor extends BoxVisitor {
+export class IsoBmffDumpVisitor extends BoxVisitor {
   static formatBuffer(v) {
     if (global && global.Buffer) {
       return `[Buffer length=${v.length}]`;
@@ -26,15 +26,15 @@ class IsoBmffDumpVisitor extends BoxVisitor {
   }
 
   static padding(num) {
-    var str = '';
-    for (var i = 0; i < num; i++) {
+    let str = '';
+    for (let i = 0; i < num; i++) {
       str += '\t';
     }
     return str;
   }
 
   static formatValue(v) {
-    var str;
+    let str;
     if (typeof v === 'object' && !(v instanceof Date) && !IsoBmffDumpVisitor.isBuffer(v)) {
       str = '{';
       Object.keys(v).forEach(key => {
@@ -52,7 +52,7 @@ class IsoBmffDumpVisitor extends BoxVisitor {
   }
 
   static formatArray(a) {
-    var str = '[ ';
+    let str = '[ ';
     if (a.length > 100) {
       return str + `array of length=${a.length}]`;
     }
@@ -70,7 +70,7 @@ class IsoBmffDumpVisitor extends BoxVisitor {
   enter(type, props) {
     const depth = this.depth();
     console.log(`${IsoBmffDumpVisitor.padding(depth)}[${type.COMPACT_NAME}] >>>> start`);
-    Object.keys(props).forEach((key) => {
+    Object.keys(props).forEach(key => {
       let value = props[key];
       if (value instanceof Array) {
         value = IsoBmffDumpVisitor.formatArray(value);
@@ -86,8 +86,3 @@ class IsoBmffDumpVisitor extends BoxVisitor {
     console.log(`${IsoBmffDumpVisitor.padding(depth)}[${type.COMPACT_NAME}] <<<< end`);
   }
 }
-
-export {
-  BoxVisitor,
-  IsoBmffDumpVisitor
-};

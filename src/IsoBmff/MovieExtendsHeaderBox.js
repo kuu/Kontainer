@@ -1,20 +1,21 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class MovieExtendsHeaderBox extends FullBox {
+export default class MovieExtendsHeaderBox extends FullBox {
   constructor(props) {
     super(MovieExtendsHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- MovieExtendsHeaderBox.serialize enter.');
-    var props = this.props,
-        byteLength = props.version ? 8 : 4,
-        fragmentDuration = props.fragmentDuration,
-        base = offset;
+    const props = this.props;
+    const byteLength = props.version ? 8 : 4;
+    const fragmentDuration = props.fragmentDuration;
+    
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(fragmentDuration, buffer, base, byteLength);
@@ -26,7 +27,7 @@ class MovieExtendsHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props, byteLength,
         fragmentDuration;
 
@@ -60,5 +61,3 @@ MovieExtendsHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE, // Actually zero or one.
   mandatoryBoxList: []
 };
-
-module.exports = MovieExtendsHeaderBox;

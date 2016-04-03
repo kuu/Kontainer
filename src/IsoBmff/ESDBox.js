@@ -1,21 +1,22 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Buffer = require('../core/Buffer');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Buffer from '../core/Buffer';
 
-class ESDBox extends FullBox {
+export default class ESDBox extends FullBox {
   constructor(props) {
     super(ESDBox.COMPACT_NAME, props, props.version, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- ESDBox.serialize enter.');
-    var props = this.props,
-        esDescriptor = props.esDescriptor,
-        base = offset;
+    const props = this.props;
+    const esDescriptor = props.esDescriptor;
+    
+    let base = offset;
 
     base += super.serialize(buffer, base);
-    for (var i = 0, il = esDescriptor.length; i < il; i++) {
+    for (let i = 0, il = esDescriptor.length; i < il; i++) {
       buffer[base++] = esDescriptor[i];
     }
 
@@ -26,7 +27,7 @@ class ESDBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         toBeRead, esDescriptor, buf;
 
     [readBytesNum, props] = FullBox.parse(buffer, base);
@@ -35,7 +36,7 @@ class ESDBox extends FullBox {
     buf = new Buffer(toBeRead);
     esDescriptor = buf.getView();
 
-    for (var i = 0; i < toBeRead; i++) {
+    for (let i = 0; i < toBeRead; i++) {
       esDescriptor[i] = buffer[base++];
     }
     props.esDescriptor = buf.getData();
@@ -59,5 +60,3 @@ ESDBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = ESDBox;

@@ -1,6 +1,6 @@
 import Kontainer from '../../../src/';
 import Buffer from '../../../src/core/Buffer';
-import {BoxVisitor} from '../../../src/IsoBmff';
+import {BoxVisitor} from '../../../src/IsoBmff/BoxVisitor';
 import sample from '../../helper/IsoBmff';
 import customMatchers from '../../helper/matcher';
 
@@ -67,8 +67,8 @@ describe('IsoBmff', () => {
           super(options);
           this.data = null;
           this.on('finish', () => {
-            expect(fakeFuncs.enterCounter.calls.length).toEqual(ELEMENT_NUM);
-            expect(fakeFuncs.exitCounter.calls.length).toEqual(ELEMENT_NUM);
+            expect(fakeFuncs.enterCounter.calls.count()).toEqual(ELEMENT_NUM);
+            expect(fakeFuncs.exitCounter.calls.count()).toEqual(ELEMENT_NUM);
             cb();
           });
         }

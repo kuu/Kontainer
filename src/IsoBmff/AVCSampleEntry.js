@@ -1,15 +1,15 @@
-var Box = require('./Box'),
-    VisualSampleEntry = require('./VisualSampleEntry'),
-    PropTypes = require('../core/PropTypes');
+import Box from './Box';
+import VisualSampleEntry from './VisualSampleEntry';
+import PropTypes from '../core/PropTypes';
 
-class AVCSampleEntry extends VisualSampleEntry {
+export default class AVCSampleEntry extends VisualSampleEntry {
   constructor(props) {
     super(AVCSampleEntry.COMPACT_NAME, props);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- AVCSampleEntry.serialize enter.');
-    var base = offset;
+    let base = offset;
 
     base += super.serialize(buffer, base);
     super.setSize(base - offset, buffer, offset);
@@ -19,7 +19,7 @@ class AVCSampleEntry extends VisualSampleEntry {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props;
 
     [readBytesNum, props] = VisualSampleEntry.parse(buffer, base);
@@ -55,5 +55,3 @@ AVCSampleEntry.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: []
 };
-
-module.exports = AVCSampleEntry;

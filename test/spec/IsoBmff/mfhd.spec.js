@@ -1,10 +1,8 @@
 import customMatchers from '../../helper/matcher';
+import Kontainer from '../../../src/';
 
-/*global describe, it, expect */
-describe('MovieFragmentHeaderBox', function () {
-  var Kontainer = require('../../../src/');
-
-  var IsoBmff = Kontainer.IsoBmff,
+describe('MovieFragmentHeaderBox', () => {
+  const IsoBmff = Kontainer.IsoBmff,
       value1 = [
         0, 0, 0, 16, // size=16
         109, 102, 104, 100, // type='mfhd'
@@ -18,40 +16,40 @@ describe('MovieFragmentHeaderBox', function () {
         255, 255, 255, 255 // sequence_number=0xFFFFFFFF
       ];
 
-  it('supports the smallest sequence number.', function () {
-    var mfhdElement = IsoBmff.createElement('mfhd', {sequenceNumber: 0});
-    var buffer = Kontainer.renderToBuffer(mfhdElement);
+  it('supports the smallest sequence number.', () => {
+    const mfhdElement = IsoBmff.createElement('mfhd', {sequenceNumber: 0});
+    const buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value1.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value1[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(mfhdElement, element)).toBe(true);
   });
 
-  it('supports the largest sequence number.', function () {
-    var mfhdElement = IsoBmff.createElement('mfhd', {sequenceNumber: 0xFFFFFFFF});
-    var buffer = Kontainer.renderToBuffer(mfhdElement);
+  it('supports the largest sequence number.', () => {
+    const mfhdElement = IsoBmff.createElement('mfhd', {sequenceNumber: 0xFFFFFFFF});
+    const buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
-    var array;
+    let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
     } else {
       array = buffer;
     }
     expect(array.length).toBe(value2.length);
-    for (var i = 0, il = array.length; i < il; i++) {
+    for (let i = 0, il = array.length; i < il; i++) {
       expect(array[i]).toBe(value2[i]);
     }
-    var element = IsoBmff.createElementFromBuffer(buffer);
+    const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(customMatchers.toHaveTheSamePropsAs(mfhdElement, element)).toBe(true);
   });

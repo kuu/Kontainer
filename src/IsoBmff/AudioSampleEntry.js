@@ -1,19 +1,20 @@
-var SampleEntry = require('./SampleEntry'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import SampleEntry from './SampleEntry';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class AudioSampleEntry extends SampleEntry {
+export default class AudioSampleEntry extends SampleEntry {
   constructor(type, props) {
     super(type, props, props.dataReferenceIndex);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- AudioSampleEntry.serialize enter.');
-    var props = this.props,
-        channelCount = props.channelCount,
-        sampleSize = props.sampleSize,
-        sampleRate = props.sampleRate,
-        base = offset;
+    const props = this.props;
+    const channelCount = props.channelCount;
+    const sampleSize = props.sampleSize;
+    const sampleRate = props.sampleRate;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -30,7 +31,7 @@ class AudioSampleEntry extends SampleEntry {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         channelCount, sampleSize, sampleRate;
 
     [readBytesNum, props] = SampleEntry.parse(buffer, base);
@@ -56,5 +57,3 @@ class AudioSampleEntry extends SampleEntry {
     return [base - offset, props];
   }
 }
-
-module.exports = AudioSampleEntry;

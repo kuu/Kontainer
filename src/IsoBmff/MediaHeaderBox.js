@@ -1,25 +1,26 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class MediaHeaderBox extends FullBox {
+export default class MediaHeaderBox extends FullBox {
   constructor(props) {
     super(MediaHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- MediaHeaderBox.serialize enter.');
-    var props = this.props,
-        version = props.version,
-        creationTime = props.creationTime || new Date(),
-        modificationTime = props.modificationTime || new Date(),
-        timeScale = props.timeScale | 0,
-        duration = props.duration | 0,
-        language = props.language,
-        byteLength = version ? 8 : 4,
-        base = offset;
+    const props = this.props;
+    const version = props.version;
+    const creationTime = props.creationTime || new Date();
+    const modificationTime = props.modificationTime || new Date();
+    const timeScale = props.timeScale | 0;
+    const duration = props.duration | 0;
+    const language = props.language;
+    const byteLength = version ? 8 : 4;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(FullBox.date2sec(creationTime), buffer, base, byteLength);
@@ -36,7 +37,7 @@ class MediaHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props, byteLength,
         creationTime, modificationTime,
         timeScale, duration, language;
@@ -96,5 +97,3 @@ MediaHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = MediaHeaderBox;

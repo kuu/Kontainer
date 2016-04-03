@@ -1,25 +1,26 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class TimeToSampleBox extends FullBox {
+export default class TimeToSampleBox extends FullBox {
   constructor(props) {
     super(TimeToSampleBox.COMPACT_NAME, props, props.version, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- TimeToSampleBox.serialize enter.');
-    var props = this.props,
-        entries = props.entries,
-        entryCount = entries.length,
-        base = offset;
+    const props = this.props;
+    const entries = props.entries;
+    const entryCount = entries.length;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(entryCount, buffer, base, 4);
 
-    for (var i = 0; i < entryCount; i++) {
+    for (let i = 0; i < entryCount; i++) {
       base += Writer.writeNumber(entries[i].sampleCount, buffer, base, 4);
       base += Writer.writeNumber(entries[i].sampleDelta, buffer, base, 4);
     }
@@ -31,7 +32,7 @@ class TimeToSampleBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         entryCount, sampleCount, sampleDelta,
         entries = [];
@@ -42,7 +43,7 @@ class TimeToSampleBox extends FullBox {
     [readBytesNum, entryCount] = Reader.readNumber(buffer, base, 4);
     base += readBytesNum;
 
-    for (var i = 0; i < entryCount; i++) {
+    for (let i = 0; i < entryCount; i++) {
       [readBytesNum, sampleCount] = Reader.readNumber(buffer, base, 4);
       base += readBytesNum;
 
@@ -82,5 +83,3 @@ TimeToSampleBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = TimeToSampleBox;

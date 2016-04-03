@@ -1,17 +1,17 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    TrackExtendsBox = require('./TrackExtendsBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import TrackExtendsBox from './TrackExtendsBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class TrackRunBox extends FullBox {
+export default class TrackRunBox extends FullBox {
   constructor(props) {
     super(TrackRunBox.COMPACT_NAME, props, 0, TrackRunBox.encodeFlags(props));
   }
 
   static encodeFlags(props) {
-    var f = 0, samples = props.samples;
+    let f = 0, samples = props.samples;
 
     if (props.dataOffset !== void 0) {
       f |= (1 << 0);
@@ -40,7 +40,7 @@ class TrackRunBox extends FullBox {
   }
 
   static decodeFlags(f) {
-    var flags = {
+    const flags = {
       dataOffsetPresent: false,
       firstSampleFlagsPresent: false,
       sampleDurationPresent: false,
@@ -71,11 +71,12 @@ class TrackRunBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- TrackRunBox.serialize enter.');
-    var props = this.props,
-        samples = props.samples,
-        dataOffset = props.dataOffset,
-        firstSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.firstSampleFlags),
-        base = offset;
+    const props = this.props;
+    const samples = props.samples;
+    const dataOffset = props.dataOffset;
+    const firstSampleFlags = TrackExtendsBox.encodeDefaultSampleFlags(props.firstSampleFlags);
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -109,7 +110,7 @@ class TrackRunBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props, flags,
+    let base = offset, readBytesNum, props, flags,
         sampleCount, samples, dataOffset, firstSampleFlags,
         sample, sampleDuration, sampleSize,
         sampleFlags, sampleCompositionTimeOffset;
@@ -136,7 +137,7 @@ class TrackRunBox extends FullBox {
       props.firstSampleFlags = TrackExtendsBox.decodeDefaultSampleFlags(firstSampleFlags);
     }
 
-    for (var i = 0; i < sampleCount; i++) {
+    for (let i = 0; i < sampleCount; i++) {
       sample = samples[i] = {};
 
       if (flags.sampleDurationPresent) {
@@ -189,5 +190,3 @@ TrackRunBox.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: []
 };
-
-module.exports = TrackRunBox;

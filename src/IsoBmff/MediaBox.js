@@ -1,6 +1,6 @@
-var Box = require('./Box');
+import Box from './Box';
 
-class MediaBox extends Box {
+export default class MediaBox extends Box {
   constructor(props) {
     super(MediaBox.COMPACT_NAME, props);
   }
@@ -13,5 +13,3 @@ MediaBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: ['mdhd', 'hdlr', 'minf']
 };
-
-module.exports = MediaBox;

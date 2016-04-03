@@ -1,7 +1,6 @@
-/*global describe, it, expect */
-var Kontainer = require('../../../src/');
+import Kontainer from '../../../src/';
 
-var DEC4 = 15 / 16,
+const DEC4 = 15 / 16,
     DEC8 = 255 / 256,
     DEC12 = 4095 / 4096,
     DEC16 = 65535 / 65536,
@@ -82,16 +81,19 @@ var DEC4 = 15 / 16,
       }
     };
 
-describe('Writer', function () {
-  var Writer = Kontainer.Writer;
+describe('Writer', () => {
+  const Writer = Kontainer.Writer;
 
-  it('reads numbers', function () {
+  it('reads numbers', () => {
     Object.keys(testData).forEach(key => {
-      var entry = testData[key],
-          inputValues = entry.val,
-          expectedValue = entry.buf,
-          len = expectedValue.length,
-          buffer, writtenBytesNum;
+      const entry = testData[key];
+      const inputValues = entry.val;
+
+      let expectedValue = entry.buf;
+
+      const len = expectedValue.length;
+
+      let buffer, writtenBytesNum;
 
       //console.log(`[${key}]----`);
 
@@ -102,7 +104,7 @@ describe('Writer', function () {
       }
       writtenBytesNum = Writer.writeNumber(inputValues.unsignedInt, buffer, 0, len);
       expect(writtenBytesNum).toBe(len);
-      for (var i = 0, il = buffer.length; i < il; i++) {
+      for (let i = 0, il = buffer.length; i < il; i++) {
         expect(buffer[i]).toBe(expectedValue[i]);
         //console.log(`\tUINT: expected=${expectedValue[i]} actual=${buffer[i]}`);
       }
@@ -113,21 +115,21 @@ describe('Writer', function () {
 
       writtenBytesNum = Writer.writeFixedNumber(inputValues.unsignedDecimal, buffer, 0, len);
       expect(writtenBytesNum).toBe(len);
-      for (var i = 0, il = buffer.length; i < il; i++) {
+      for (let i = 0, il = buffer.length; i < il; i++) {
         expect(buffer[i]).toBe(expectedValue[i]);
         //console.log(`\tUDEC: expected=${expectedValue[i]} actual=${buffer[i]}`);
       }
 
       writtenBytesNum = Writer.writeNumber(inputValues.signedInt, buffer, 0, len);
       expect(writtenBytesNum).toBe(len);
-      for (var i = 0, il = buffer.length; i < il; i++) {
+      for (let i = 0, il = buffer.length; i < il; i++) {
         expect(buffer[i]).toBe(expectedValue[i]);
         //console.log(`\tINT: expected=${expectedValue[i]} actual=${buffer[i]}`);
       }
 
       writtenBytesNum = Writer.writeFixedNumber(inputValues.signedDecimal, buffer, 0, len);
       expect(writtenBytesNum).toBe(len);
-      for (var i = 0, il = buffer.length; i < il; i++) {
+      for (let i = 0, il = buffer.length; i < il; i++) {
         expect(buffer[i]).toBe(expectedValue[i]);
         //console.log(`\tDEC: expected=${expectedValue[i]} actual=${buffer[i]}`);
       }

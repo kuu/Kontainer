@@ -1,8 +1,8 @@
-var Box = require('./Box'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class SampleEntry extends Box {
+export default class SampleEntry extends Box {
   constructor(type, props, dataReferenceIndex) {
     super(type, props);
     this.dataReferenceIndex = dataReferenceIndex;
@@ -10,8 +10,9 @@ class SampleEntry extends Box {
 
   serialize(buffer, offset=0) {
     //console.log('--- SampleEntry.serialize enter.');
-    var dataReferenceIndex = this.dataReferenceIndex,
-        base = offset;
+    const dataReferenceIndex = this.dataReferenceIndex;
+    
+    let base = offset;
 
     base += super.serialize(buffer, base);
 
@@ -26,7 +27,7 @@ class SampleEntry extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         dataReferenceIndex;
 
@@ -43,5 +44,3 @@ class SampleEntry extends Box {
     return [base - offset, props];
   }
 }
-
-module.exports = SampleEntry;

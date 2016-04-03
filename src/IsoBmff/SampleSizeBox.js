@@ -1,26 +1,27 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class SampleSizeBox extends FullBox {
+export default class SampleSizeBox extends FullBox {
   constructor(props) {
     super(SampleSizeBox.COMPACT_NAME, props, 0, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- SampleSizeBox.serialize enter.');
-    var props = this.props,
-        sampleSize = props.sampleSize,
-        sampleSizeEntries = props.sampleSizeEntries,
-        base = offset;
+    const props = this.props;
+    const sampleSize = props.sampleSize;
+    const sampleSizeEntries = props.sampleSizeEntries;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(sampleSize, buffer, base, 4);
     base += Writer.writeNumber(sampleSizeEntries.length, buffer, base, 4);
 
-    for (var i = 0, il = sampleSizeEntries.length; i < il; i++) {
+    for (let i = 0, il = sampleSizeEntries.length; i < il; i++) {
       base += Writer.writeNumber(sampleSizeEntries[i], buffer, base, 4);
     }
 
@@ -31,7 +32,7 @@ class SampleSizeBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         sampleSize, sampleCount,
         entrySize, sampleSizeEntries = [];
 
@@ -45,7 +46,7 @@ class SampleSizeBox extends FullBox {
     base += readBytesNum;
 
     if (sampleSize === 0) {
-      for (var i = 0; i < sampleCount; i++) {
+      for (let i = 0; i < sampleCount; i++) {
         [readBytesNum, entrySize] = Reader.readNumber(buffer, base, 4);
         base += readBytesNum;
         sampleSizeEntries.push(entrySize);
@@ -78,5 +79,3 @@ SampleSizeBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = SampleSizeBox;

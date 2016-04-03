@@ -1,14 +1,14 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
 
-class NullMediaHeaderBox extends FullBox {
+export default class NullMediaHeaderBox extends FullBox {
   constructor(props) {
     super(NullMediaHeaderBox.COMPACT_NAME, props, props.version, 0);
   }
 
   serialize(buffer, offset=0) {
-    var base = offset;
+    let base = offset;
 
     base += super.serialize(buffer, base);
     super.setSize(base - offset, buffer, offset);
@@ -16,7 +16,7 @@ class NullMediaHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var readBytesNum, props;
+    let readBytesNum, props;
     [readBytesNum, props] = FullBox.parse(buffer, offset);
     return [readBytesNum, props];
   }
@@ -37,5 +37,3 @@ NullMediaHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = NullMediaHeaderBox;

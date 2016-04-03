@@ -1,15 +1,15 @@
-var Box = require('./Box'),
-    AudioSampleEntry = require('./AudioSampleEntry'),
-    PropTypes = require('../core/PropTypes');
+import Box from './Box';
+import AudioSampleEntry from './AudioSampleEntry';
+import PropTypes from '../core/PropTypes';
 
-class MP4AudioSampleEntry extends AudioSampleEntry {
+export default class MP4AudioSampleEntry extends AudioSampleEntry {
   constructor(props) {
     super(MP4AudioSampleEntry.COMPACT_NAME, props);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- MP4AudioSampleEntry.serialize enter.');
-    var base = offset;
+    let base = offset;
 
     base += super.serialize(buffer, base);
     super.setSize(base - offset, buffer, offset);
@@ -19,7 +19,7 @@ class MP4AudioSampleEntry extends AudioSampleEntry {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props;
 
     [readBytesNum, props] = AudioSampleEntry.parse(buffer, base);
@@ -49,5 +49,3 @@ MP4AudioSampleEntry.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: []
 };
-
-module.exports = MP4AudioSampleEntry;

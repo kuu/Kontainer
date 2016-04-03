@@ -1,20 +1,21 @@
-var Box = require('./Box'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class MPEG4BitRateBox extends Box {
+export default class MPEG4BitRateBox extends Box {
   constructor(props) {
     super(MPEG4BitRateBox.COMPACT_NAME, props);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- MPEG4BitRateBox.serialize enter.');
-    var props = this.props,
-        bufferSizeDB = props.bufferSizeDB,
-        maxBitrate = props.maxBitrate,
-        avgBitrate = props.avgBitrate,
-        base = offset;
+    const props = this.props;
+    const bufferSizeDB = props.bufferSizeDB;
+    const maxBitrate = props.maxBitrate;
+    const avgBitrate = props.avgBitrate;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(bufferSizeDB, buffer, base, 4);
@@ -28,7 +29,7 @@ class MPEG4BitRateBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         bufferSizeDB, maxBitrate, avgBitrate;
 
@@ -65,5 +66,3 @@ MPEG4BitRateBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = MPEG4BitRateBox;

@@ -10,9 +10,9 @@ const HELP = `
 Usage:
     kontainer filePath [options]
 
-Example:\n';
+Example:
     kontainer /path/to/file
-Options:\n';
+Options:
   -h, --help    Print help
   -v, --version Print version
 `;

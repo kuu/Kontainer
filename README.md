@@ -18,7 +18,7 @@ A media file like MP4 or WebM is composed of nested objects. In Kontainer, each 
 The actual media data (audio and video chunks) and metadata are represented as a `props` object and need to be passed to `createElement()`.
 
 ```js
-    var Kontainer = require('kontainer-js'),
+    const Kontainer = require('kontainer-js'),
         IsoBmff = Kontainer.IsoBmff,
         element, buffer, string;
 

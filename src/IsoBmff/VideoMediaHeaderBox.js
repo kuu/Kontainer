@@ -1,16 +1,16 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class VideoMediaHeaderBox extends FullBox {
+export default class VideoMediaHeaderBox extends FullBox {
   constructor(props) {
     super(VideoMediaHeaderBox.COMPACT_NAME, props, props.version, 1);
   }
 
   static validate(context) {
-    var trackType = context.currentTrackType;
+    const trackType = context.currentTrackType;
     if (trackType && trackType !== 'video') {
       return new Error(`"${VideoMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
     }
@@ -18,7 +18,7 @@ class VideoMediaHeaderBox extends FullBox {
   }
 
   static encodeGraphicsMode(mode) {
-    var m = 0;
+    let m = 0;
     if (mode === 'copy') {
       m = 0;
     }
@@ -26,7 +26,7 @@ class VideoMediaHeaderBox extends FullBox {
   }
 
   static decodeGraphicsMode(m) {
-    var mode = 'copy';
+    let mode = 'copy';
     if (m === 0) {
       mode = 'copy';
     }
@@ -34,10 +34,11 @@ class VideoMediaHeaderBox extends FullBox {
   }
   serialize(buffer, offset=0) {
     //console.log('--- VideoMediaHeaderBox.serialize enter.');
-    var props = this.props,
-        graphicsMode = VideoMediaHeaderBox.encodeGraphicsMode(props.graphicsMode),
-        opColor = props.opColor,
-        base = offset;
+    const props = this.props;
+    const graphicsMode = VideoMediaHeaderBox.encodeGraphicsMode(props.graphicsMode);
+    const opColor = props.opColor;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(graphicsMode, buffer, base, 2);
@@ -52,7 +53,7 @@ class VideoMediaHeaderBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         graphicsMode, r, g, b;
 
@@ -101,5 +102,3 @@ VideoMediaHeaderBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = VideoMediaHeaderBox;

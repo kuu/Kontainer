@@ -1,19 +1,20 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class TrackFragmentBaseMediaDecodeTimeBox extends FullBox {
+export default class TrackFragmentBaseMediaDecodeTimeBox extends FullBox {
   constructor(props) {
     super(TrackFragmentBaseMediaDecodeTimeBox.COMPACT_NAME, props, props.version, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- TrackFragmentBaseMediaDecodeTimeBox.serialize enter.');
-    var props = this.props,
-        baseMediaDecodeTime = props.baseMediaDecodeTime,
-        base = offset;
+    const props = this.props;
+    const baseMediaDecodeTime = props.baseMediaDecodeTime;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     if (this.version === 1) {
@@ -29,7 +30,7 @@ class TrackFragmentBaseMediaDecodeTimeBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         baseMediaDecodeTime;
 
     [readBytesNum, props] = FullBox.parse(buffer, base);
@@ -63,5 +64,3 @@ TrackFragmentBaseMediaDecodeTimeBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = TrackFragmentBaseMediaDecodeTimeBox;

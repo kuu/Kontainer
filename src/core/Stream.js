@@ -1,6 +1,6 @@
 import Buffer from './Buffer';
 
-let TransformStream;
+export let TransformStream;
 
 if (global && global.Buffer) {
   const Transform = require('stream').Transform;
@@ -35,8 +35,4 @@ if (global && global.Buffer) {
   TransformStream = NodeTransform;
 } else {
   // TODO (WhatWG's streams)
-}
-
-export {
-  TransformStream
 }

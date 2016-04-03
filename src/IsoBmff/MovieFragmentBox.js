@@ -1,6 +1,6 @@
-var Box = require('./Box');
+import Box from './Box';
 
-class MovieFragmentBox extends Box {
+export default class MovieFragmentBox extends Box {
   constructor(props) {
     super(MovieFragmentBox.COMPACT_NAME, props);
   }
@@ -13,5 +13,3 @@ MovieFragmentBox.spec = {
   quantity: Box.QUANTITY_ANY_NUMBER,
   mandatoryBoxList: ['mfhd']
 };
-
-module.exports = MovieFragmentBox;

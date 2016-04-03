@@ -1,16 +1,16 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class DataReferenceBox extends FullBox {
+export default class DataReferenceBox extends FullBox {
   constructor(props) {
     super(DataReferenceBox.COMPACT_NAME, props, props.version, 0);
   }
 
   static encodeFlags(flags) {
-    var f = 0;
+    let f = 0;
     if (flags && flags.inTheSameFile) {
       f |= 0x01;
     }
@@ -18,7 +18,7 @@ class DataReferenceBox extends FullBox {
   }
 
   static decodeFlags(f) {
-    var flags = {
+    const flags = {
       inTheSameFile: false
     };
 
@@ -30,9 +30,10 @@ class DataReferenceBox extends FullBox {
 
   serialize(buffer, offset=0) {
     //console.log('--- DataReferenceBox.serialize enter.');
-    var props = this.props,
-        entryCount = props.entryCount,
-        base = offset;
+    const props = this.props;
+    const entryCount = props.entryCount;
+
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(entryCount, buffer, base, 4);
@@ -44,7 +45,7 @@ class DataReferenceBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset,
+    let base = offset,
         readBytesNum, props,
         entryCount;
 
@@ -76,5 +77,3 @@ DataReferenceBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = DataReferenceBox;

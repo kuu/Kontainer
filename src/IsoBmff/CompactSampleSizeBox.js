@@ -1,27 +1,28 @@
-var Box = require('./Box'),
-    FullBox = require('./FullBox'),
-    PropTypes = require('../core/PropTypes'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Box from './Box';
+import FullBox from './FullBox';
+import PropTypes from '../core/PropTypes';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class CompactSampleSizeBox extends FullBox {
+export default class CompactSampleSizeBox extends FullBox {
   constructor(props) {
     super(CompactSampleSizeBox.COMPACT_NAME, props, 0, 0);
   }
 
   serialize(buffer, offset=0) {
     //console.log('--- CompactSampleSizeBox.serialize enter.');
-    var props = this.props,
-        fieldSize = props.fieldSize,
-        sampleSizeEntries = props.sampleSizeEntries,
-        base = offset, num;
+    const props = this.props;
+    const fieldSize = props.fieldSize;
+    const sampleSizeEntries = props.sampleSizeEntries;
+
+    let base = offset, num;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(0, buffer, base, 3); // reserved(24)
     base += Writer.writeNumber(fieldSize, buffer, base, 1);
     base += Writer.writeNumber(sampleSizeEntries.length, buffer, base, 4);
 
-    for (var i = 0, il = sampleSizeEntries.length; i < il; i++) {
+    for (let i = 0, il = sampleSizeEntries.length; i < il; i++) {
       if (fieldSize === 4) {
         if (i % 2 === 0) {
           num = (sampleSizeEntries[i] & 0x0F) << 4;
@@ -44,7 +45,7 @@ class CompactSampleSizeBox extends FullBox {
   }
 
   static parse(buffer, offset=0) {
-    var base = offset, readBytesNum, props,
+    let base = offset, readBytesNum, props,
         fieldSize, sampleCount,
         entrySize, sampleSizeEntries = [];
 
@@ -63,7 +64,7 @@ class CompactSampleSizeBox extends FullBox {
     [readBytesNum, sampleCount] = Reader.readNumber(buffer, base, 4);
     base += readBytesNum;
 
-    for (var i = 0; i < sampleCount; i++) {
+    for (let i = 0; i < sampleCount; i++) {
       if (fieldSize === 4) {
         if (i % 2 === 0) {
           [readBytesNum, entrySize] = Reader.readNumber(buffer, base, 1);
@@ -106,5 +107,3 @@ CompactSampleSizeBox.spec = {
   quantity: Box.QUANTITY_EXACTLY_ONE,
   mandatoryBoxList: []
 };
-
-module.exports = CompactSampleSizeBox;

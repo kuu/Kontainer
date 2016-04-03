@@ -1,8 +1,8 @@
-var Component = require('../core/Component'),
-    Writer = require('../core/Writer'),
-    Reader = require('../core/Reader');
+import Component from '../core/Component';
+import Writer from '../core/Writer';
+import Reader from '../core/Reader';
 
-class Box extends Component {
+export default class Box extends Component {
   constructor(type, props) {
     super(type, props);
     this.size = 0;
@@ -10,9 +10,10 @@ class Box extends Component {
 
   serialize(buffer, offset=0) {
     //console.log('--- Box.serialize enter.');
-    var base = offset,
-        size = this.size,
-        type = this.type;
+    const size = this.size;
+    const type = this.type;
+
+    let base = offset;
 
     if (size < 4294967296) {
       base += Writer.writeNumber(size, buffer, base, 4);
@@ -79,9 +80,9 @@ class Box extends Component {
     }
 
     return [base - offset, {
-      size: size,
-      type: type,
-      extendedType: extendedType
+      size,
+      type,
+      extendedType,
     }];
   }
 }
@@ -89,5 +90,3 @@ class Box extends Component {
 Box.QUANTITY_ANY_NUMBER = 0;
 Box.QUANTITY_EXACTLY_ONE = 1;
 Box.QUANTITY_ZERO_OR_ONE = 2;
-
-module.exports = Box;

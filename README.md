@@ -1,5 +1,5 @@
 # Kontainer
-A media file format generator/parser that exposes a React-like API.
+A media file format generator/parser that exposes a React-like API. `kontainer-js` is available as an [npm package](https://www.npmjs.com/package/kontainer-js).
 
 ![logo](logo.png)
 
@@ -107,7 +107,7 @@ input.pipe(transform).pipe(process.stdout);
 
 ### JSX
 
-To transpile JSX code into `createElement()` calls as well as your ES6 code, you need to install `babel` and its plugins.
+To transpile JSX code into `createElement()` calls together with your ES6 code, you need to install `babel` and its plugins.
 
 ```
 $ npm install babel-cli
@@ -130,7 +130,7 @@ Then use the `babel` command to transpile the code.
 $ babel src/ -d dist/
 ```
 
-See the [plugin code](https://github.com/kuu/babel-plugin-transform-kontainer-js) for the detail.
+See the [plugin code](https://github.com/kuu/babel-plugin-transform-kontainer-js) for the details.
 
 
 ## CLI
@@ -163,8 +163,8 @@ $ npm test
 
 // Build client libs
 $ npm run build
-// --> ./concatenated/kontainer.deb.js (with debug messages)
-// --> ./minified/kontainer.js (uncompressed)
-// --> ./minified/kontainer.min.js (compressed)
-// --> ./minified/kontainer.map.js (source map)
+// --> ./lib/kontainer.deb.js (uncompressed with debug messages)
+// --> ./lib/kontainer.js (uncompressed)
+// --> ./lib/kontainer.min.js (compressed)
+// --> ./lib/kontainer.map.js (source map)
 ```

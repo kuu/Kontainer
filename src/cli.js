@@ -1,11 +1,8 @@
 import fs from 'fs';
 import yargs from 'yargs';
-import pkg from './package.json';
 import Kontainer from '.';
 
-
 const argv = yargs.argv;
-
 const HELP = `
 Usage:
     kontainer filePath [options]
@@ -16,6 +13,15 @@ Options:
   -h, --help    Print help
   -v, --version Print version
 `;
+
+let pkg;
+
+try {
+  pkg = require('./package.json');
+} catch (e) {
+  // Being executed locally
+  pkg = require('../package.json');
+}
 
 const VERSION = `v${pkg.version}`;
 const filePath = argv._[0];

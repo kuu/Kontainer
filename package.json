@@ -32,7 +32,8 @@
     "release-build": "npm run release-bundle && npm run minify",
     "release-bundle": "NODE_ENV=production browserify -t babelify src/index.js > lib/kontainer.js",
     "minify": "uglifyjs lib/kontainer.js --source-map-url kontainer.js.map -p 1 --source-map lib/kontainer.js.map -c -m -o lib/kontainer.min.js",
-    "prepublish": "npm run build && dist-es6"
+    "prepublish": "npm run build && dist-es6",
+    "self": "kontainer"
   },
   "author": "Kuu Miyazaki",
   "license": "MIT",

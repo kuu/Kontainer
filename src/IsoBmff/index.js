@@ -194,8 +194,8 @@ function parse(buffer, offset, visitor) {
     stack[stack.length - 1].children.push(result);
   }
 
-  //console.log(`parse exit.: type=${boxType} readBytesNum=${base - offset}`);
-  return base - offset;
+  //console.log(`parse exit.: type=${boxType} readBytesNum=${Math.min(base - offset, boxSize)}`);
+  return Math.min(base - offset, boxSize);
 }
 
 class ElementVisitor extends BoxVisitor {

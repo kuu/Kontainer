@@ -1,6 +1,6 @@
 import fs from 'fs';
 import yargs from 'yargs';
-import pkg from '../package.json';
+import pkg from './package.json';
 import Kontainer from '.';
 
 

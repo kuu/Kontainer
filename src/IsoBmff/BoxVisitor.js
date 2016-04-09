@@ -15,7 +15,7 @@ export class IsoBmffDumpVisitor extends BoxVisitor {
     if (global && global.Buffer) {
       return `[Buffer length=${v.length}]`;
     }
-    return v;
+    return v + '';
   }
 
   static isBuffer(v) {
@@ -34,37 +34,35 @@ export class IsoBmffDumpVisitor extends BoxVisitor {
   }
 
   static formatValue(v) {
-    let str;
-    if (typeof v === 'object' && !(v instanceof Date) && !IsoBmffDumpVisitor.isBuffer(v)) {
-      str = '{';
-      Object.keys(v).forEach(key => {
-        str += (key + ': ' + IsoBmffDumpVisitor.formatValue(v[key]) + ', ');
-      });
-      return str + '}';
-    }
-    if (typeof v === 'string') {
-      return '"' + v + '"';
-    }
-    if (IsoBmffDumpVisitor.isBuffer(v)) {
+    if (v instanceof Date) {
+      return v + '';
+    } else if (IsoBmffDumpVisitor.isBuffer(v)) {
       return IsoBmffDumpVisitor.formatBuffer(v);
+    } else if (typeof v === 'object') {
+      const arr = [];
+      Object.keys(v).forEach(key => {
+        arr.push(key + ': ' + IsoBmffDumpVisitor.formatValue(v[key]));
+      });
+      return `{${arr.join(', ')}}`;
+    } else if (typeof v === 'string') {
+      return '"' + v + '"';
     }
     return v;
   }
 
   static formatArray(a) {
-    let str = '[ ';
     if (a.length > 100) {
-      return str + `array of length=${a.length}]`;
+      return `[array of length=${a.length}]`;
     }
+    const arr = [];
     a.forEach(v => {
       if (v instanceof Array) {
-        str += IsoBmffDumpVisitor.formatArray(v);
+        arr.push(IsoBmffDumpVisitor.formatArray(v));
       } else {
-        str += IsoBmffDumpVisitor.formatValue(v);
+        arr.push(IsoBmffDumpVisitor.formatValue(v));
       }
-      str += ', ';
     });
-    return str + ' ]';
+    return `[${arr.join(', ')}]`;
   }
 
   enter(type, props) {

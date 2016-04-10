@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('TrackRunBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -27,7 +27,7 @@ describe('TrackRunBox', () => {
       ];
 
   it('supports some sets of optional values', () => {
-    const trunElement = IsoBmff.createElement('trun', {
+    const trunElement = <trun {...{
       dataOffset: 1,
       firstSampleFlags: {
         sampleDependsOn: 'I-picture',
@@ -37,7 +37,7 @@ describe('TrackRunBox', () => {
         sampleIsDifferenceSample: true,
         sampleDegradationPriority: 65535
       }
-    });
+    }} />;
     const buffer = Kontainer.renderToBuffer(trunElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -56,7 +56,7 @@ describe('TrackRunBox', () => {
   });
 
   it('supports other sets of optional values', () => {
-    const trunElement = IsoBmff.createElement('trun', {
+    const trunElement = <trun {...{
       samples: [
         {
           duration: 0,
@@ -85,7 +85,7 @@ describe('TrackRunBox', () => {
           compositionTimeOffset: 0xFFFFFFFF
         }
       ]
-    });
+    }} />;
     const buffer = Kontainer.renderToBuffer(trunElement);
     expect(buffer).not.toBe(null);
     let array;

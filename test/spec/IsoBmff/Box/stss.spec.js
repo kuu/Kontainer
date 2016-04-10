@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('SyncSampleBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -20,7 +20,7 @@ describe('SyncSampleBox', () => {
       ];
 
   it('supports zero entry', () => {
-    const stssElement = IsoBmff.createElement('stss', {entries: []});
+    const stssElement = <stss entries={[]} />;
     const buffer = Kontainer.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -39,7 +39,7 @@ describe('SyncSampleBox', () => {
   });
 
   it('supports multiple entries', () => {
-    const stssElement = IsoBmff.createElement('stss', {entries: [1, 2, 3]});
+    const stssElement = <stss entries={[1, 2, 3]} />;
     const buffer = Kontainer.renderToBuffer(stssElement);
     expect(buffer).not.toBe(null);
     let array;

@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('CompactSampleSizeBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -32,7 +32,7 @@ describe('CompactSampleSizeBox', () => {
       ];
 
   it('handles 4 bit field size', () => {
-    const stz2Element = IsoBmff.createElement('stz2', {fieldSize: 4, sampleSizeEntries: [1, 2, 3, 4, 5]});
+    const stz2Element = <stz2 {...{fieldSize: 4, sampleSizeEntries: [1, 2, 3, 4, 5]}} />;
     const buffer = Kontainer.renderToBuffer(stz2Element);
     expect(buffer).not.toBe(null);
     let array;
@@ -51,7 +51,7 @@ describe('CompactSampleSizeBox', () => {
   });
 
   it('handles 8 bit field size', () => {
-    const stz2Element = IsoBmff.createElement('stz2', {fieldSize: 8, sampleSizeEntries: [1, 2, 3, 4, 5]});
+    const stz2Element = <stz2 {...{fieldSize: 8, sampleSizeEntries: [1, 2, 3, 4, 5]}} />;
     const buffer = Kontainer.renderToBuffer(stz2Element);
     expect(buffer).not.toBe(null);
     let array;
@@ -70,7 +70,7 @@ describe('CompactSampleSizeBox', () => {
   });
 
   it('handles 16 bit field size', () => {
-    const stz2Element = IsoBmff.createElement('stz2', {fieldSize: 16, sampleSizeEntries: [1, 2, 3, 4, 5]});
+    const stz2Element = <stz2 {...{fieldSize: 16, sampleSizeEntries: [1, 2, 3, 4, 5]}} />;
     const buffer = Kontainer.renderToBuffer(stz2Element);
     expect(buffer).not.toBe(null);
     let array;

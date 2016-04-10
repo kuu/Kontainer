@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('MovieExtendsHeaderBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -18,7 +18,7 @@ describe('MovieExtendsHeaderBox', () => {
       ];
 
   it('supports 32 bit duration', () => {
-    const mehdElement = IsoBmff.createElement('mehd', {fragmentDuration: 16777216});
+    const mehdElement = <mehd fragmentDuration={16777216} />;
     const buffer = Kontainer.renderToBuffer(mehdElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -37,7 +37,7 @@ describe('MovieExtendsHeaderBox', () => {
   });
 
   it('supports 64 bit duration', () => {
-    const mehdElement = IsoBmff.createElement('mehd', {version: 1, fragmentDuration: 4294967296});
+    const mehdElement = <mehd version={1} fragmentDuration={4294967296} />;
     const buffer = Kontainer.renderToBuffer(mehdElement);
     expect(buffer).not.toBe(null);
     let array;

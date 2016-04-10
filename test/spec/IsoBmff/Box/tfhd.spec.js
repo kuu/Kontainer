@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('TrackFragmentHeaderBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -23,12 +23,12 @@ describe('TrackFragmentHeaderBox', () => {
       ];
 
   it('supports some sets of optional values', () => {
-    const tfhdElement = IsoBmff.createElement('tfhd', {
+    const tfhdElement = <tfhd {...{
       trackId: 1,
       sampleDescriptionIndex: 2,
       defaultSampleSize: 65536,
       durationIsEmpty: true
-    });
+    }} />;
     const buffer = Kontainer.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -47,7 +47,7 @@ describe('TrackFragmentHeaderBox', () => {
   });
 
   it('supports other sets of optional values', () => {
-    const tfhdElement = IsoBmff.createElement('tfhd', {
+    const tfhdElement = <tfhd {...{
       trackId: 3,
       baseDataOffset: Number.MAX_SAFE_INTEGER,
       defaultSampleDuration: 1,
@@ -59,7 +59,7 @@ describe('TrackFragmentHeaderBox', () => {
         sampleIsDifferenceSample: true,
         sampleDegradationPriority: 65535
       }
-    });
+    }} />;
     const buffer = Kontainer.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -78,7 +78,7 @@ describe('TrackFragmentHeaderBox', () => {
   });
 
   it('supports base-data-offset', () => {
-    let elem1 = IsoBmff.createElement('tfhd', {trackId: 1, baseDataOffset: 623});
+    let elem1 = <tfhd {...{trackId: 1, baseDataOffset: 623}} />;
     let buffer = Kontainer.renderToBuffer(elem1);
     let elem2 = IsoBmff.createElementFromBuffer(buffer);
     expect(elem2.props.baseDataOffset).toBe(623);

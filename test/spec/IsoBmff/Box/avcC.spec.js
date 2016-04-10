@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('AVCConfigurationBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -30,25 +30,22 @@ describe('AVCConfigurationBox', () => {
     for (let i = 0, j = 7; i < 8; i++, j--) {
       pps[i] = (1 << j);
     }
-    let element = IsoBmff.createElement(
-      'avcC',
-      {
-        avcProfileIndication: 'baseline',
-        profileCompatibility: {
-          constraintSet0Flag: false,
-          constraintSet1Flag: false,
-          constraintSet2Flag: false
-        },
-        avcLevelIndication: 2.1,
-        lengthSize: 4,
-        sequenceParameterSets: [
-          {length: 8, data: sps}
-        ],
-        pictureParameterSets: [
-          {length: 8, data: pps}
-        ]
-      }
-    );
+    let element = <avcC {...{
+      avcProfileIndication: 'baseline',
+      profileCompatibility: {
+        constraintSet0Flag: false,
+        constraintSet1Flag: false,
+        constraintSet2Flag: false
+      },
+      avcLevelIndication: 2.1,
+      lengthSize: 4,
+      sequenceParameterSets: [
+        {length: 8, data: sps}
+      ],
+      pictureParameterSets: [
+        {length: 8, data: pps}
+      ]
+    }} />;
     let buffer = Kontainer.renderToBuffer(element);
     expect(buffer).not.toBe(null);
     let array;

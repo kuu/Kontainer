@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('TrackFragmentBaseMediaDecodeTimeBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -11,7 +11,7 @@ describe('TrackFragmentBaseMediaDecodeTimeBox', () => {
       ];
 
   it('provides the decode time of the first sample in the track fragment', () => {
-    let element = IsoBmff.createElement('tfdt', {baseMediaDecodeTime: 65536});
+    let element = <tfdt baseMediaDecodeTime={65536} />;
     let buffer = Kontainer.renderToBuffer(element);
     expect(buffer).not.toBe(null);
     let array;

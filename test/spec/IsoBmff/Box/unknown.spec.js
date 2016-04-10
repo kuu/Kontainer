@@ -1,4 +1,4 @@
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 import Buffer from '../../../../src/core/Buffer';
 import UnknownBox from '../../../../src/IsoBmff/Box/UnknownBox';
 

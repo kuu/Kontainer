@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('SampleToChunkBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -26,7 +26,7 @@ describe('SampleToChunkBox', () => {
       ];
 
   it('supports zero entry', () => {
-    const stscElement = IsoBmff.createElement('stsc');
+    const stscElement = <stsc />;
     const buffer = Kontainer.renderToBuffer(stscElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -45,28 +45,25 @@ describe('SampleToChunkBox', () => {
   });
 
   it('supports variable size', () => {
-    const stscElement = IsoBmff.createElement(
-      'stsc',
-      {
-        entries: [
-          {
-            firstChunk: 1,
-            samplesPerChunk: 10,
-            sampleDescriptionIndex: 1
-          },
-          {
-            firstChunk: 101,
-            samplesPerChunk: 5,
-            sampleDescriptionIndex: 2
-          },
-          {
-            firstChunk: 201,
-            samplesPerChunk: 2,
-            sampleDescriptionIndex: 3
-          }
-        ]
-      }
-    );
+    const stscElement = <stsc {...{
+      entries: [
+        {
+          firstChunk: 1,
+          samplesPerChunk: 10,
+          sampleDescriptionIndex: 1
+        },
+        {
+          firstChunk: 101,
+          samplesPerChunk: 5,
+          sampleDescriptionIndex: 2
+        },
+        {
+          firstChunk: 201,
+          samplesPerChunk: 2,
+          sampleDescriptionIndex: 3
+        }
+      ]
+    }} />;
     const buffer = Kontainer.renderToBuffer(stscElement);
     expect(buffer).not.toBe(null);
     let array;

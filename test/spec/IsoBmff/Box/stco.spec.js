@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('ChunkOffsetBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -20,7 +20,7 @@ describe('ChunkOffsetBox', () => {
       ];
 
   it('supports zero entry', () => {
-    const stcoElement = IsoBmff.createElement('stco');
+    const stcoElement = <stco />;
     const buffer = Kontainer.renderToBuffer(stcoElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -39,10 +39,7 @@ describe('ChunkOffsetBox', () => {
   });
 
   it('supports multiple entries', () => {
-    const stcoElement = IsoBmff.createElement(
-      'stco',
-      { entries: [1, 2, 3] }
-    );
+    const stcoElement = <stco entries={[1, 2, 3]} />;
     const buffer = Kontainer.renderToBuffer(stcoElement);
     expect(buffer).not.toBe(null);
     let array;

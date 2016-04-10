@@ -1,4 +1,4 @@
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('MediaDataBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -14,7 +14,7 @@ describe('MediaDataBox', () => {
     for (let i = 0; i < 8; i++) {
       data[i] = (1 << i);
     }
-    const buffer = Kontainer.renderToBuffer(IsoBmff.createElement('mdat', {data}));
+    const buffer = Kontainer.renderToBuffer(<mdat {...{data}} />);
     expect(buffer).not.toBe(null);
     let array;
     if (buffer instanceof ArrayBuffer) {

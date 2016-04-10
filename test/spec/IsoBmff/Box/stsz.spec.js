@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('CompactSampleSizeBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -22,7 +22,7 @@ describe('CompactSampleSizeBox', () => {
       ];
 
   it('supports constant size', () => {
-    const stszElement = IsoBmff.createElement('stsz', {sampleSize: 5});
+    const stszElement = <stsz sampleSize={5} />;
     const buffer = Kontainer.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -41,7 +41,7 @@ describe('CompactSampleSizeBox', () => {
   });
 
   it('supports variable size', () => {
-    const stszElement = IsoBmff.createElement('stsz', {sampleSizeEntries: [1, 2, 3]});
+    const stszElement = <stsz sampleSizeEntries={[1, 2, 3]} />;
     const buffer = Kontainer.renderToBuffer(stszElement);
     expect(buffer).not.toBe(null);
     let array;

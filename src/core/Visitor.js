@@ -3,6 +3,7 @@ export default class Visitor {
   constructor() {
     this.stack = [];
     this.offset = 0;
+    this.results = [];
   }
 
   // This method will be called when entering a node.

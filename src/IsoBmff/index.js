@@ -190,8 +190,12 @@ function parse(buffer, offset, visitor) {
   const result = visitor.exit(boxClass, props, children);
   stack.pop();
   visitor.offset = base;
-  if (result && stack.length > 0) {
-    stack[stack.length - 1].children.push(result);
+  if (result) {
+    if (stack.length > 0) {
+      stack[stack.length - 1].children.push(result);
+    } else {
+      visitor.results.push(result);
+    }
   }
 
   //console.log(`parse exit.: type=${boxType} readBytesNum=${Math.min(base - offset, boxSize)}`);
@@ -201,7 +205,6 @@ function parse(buffer, offset, visitor) {
 class ElementVisitor extends BoxVisitor {
   constructor() {
     super();
-    this.topLevel = [];
   }
 
   enter (type, props) {
@@ -211,9 +214,6 @@ class ElementVisitor extends BoxVisitor {
   exit (type, props, children) {
     const {element} = this.getData();
     element.props.children = children;
-    if (this.depth() === 0) {
-      this.topLevel.push(element);
-    }
     return element;
   }
 }
@@ -240,15 +240,17 @@ function createElementFromBuffer(buffer, offset=0) {
     return null;
   }
   //console.log(`IsoBmff.createElementFromBuffer: Done. ${base - offset} bytes read.`);
-  if (visitor.topLevel.length === 0) {
+  if (visitor.results.length === 0) {
     return null;
-  } else if (visitor.topLevel.length === 1) {
-    return visitor.topLevel[0];
+  } else if (visitor.results.length === 1) {
+    return visitor.results[0];
   }
-  return MediaFormat.createElement(clazz.file, null, visitor.topLevel);
+  return MediaFormat.createElement(clazz.file, null, visitor.results);
 }
 
 function transform(visitor) {
+  const Kontainer = require('..').default; // Ugly..
+
   return new TransformStream((buffer, offset, done) => {
     let base = visitor.offset;
     let buf = buffer.getData();
@@ -275,11 +277,15 @@ function transform(visitor) {
       const {type, props, children} = stack[stack.length - 1];
       const result = visitor.exit(type, props, children);
       stack.pop();
-      if (result && stack.length > 0) {
-        stack[stack.length - 1].children.push(result);
+      if (result) {
+        if (stack.length > 0) {
+          stack[stack.length - 1].children.push(result);
+        } else {
+          visitor.results.push(result);
+        }
       }
     }
-    done(null, null);
+    done(null, Kontainer.renderToBuffer(MediaFormat.createElement(clazz.file, null, visitor.results)));
   });
 }
 
@@ -288,5 +294,6 @@ export default {
   createElementFromBuffer,
   transform,
   BoxVisitor,
+  ElementVisitor,
   IsoBmffDumpVisitor
 };

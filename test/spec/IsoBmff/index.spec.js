@@ -151,6 +151,47 @@ describe('IsoBmff', () => {
         const output = new OutputStream(cb);
         input.pipe(transform).pipe(output);
       });
+
+      class ElementOutputStream extends Writable {
+        constructor(cb, options) {
+          super(options);
+          this.data = null;
+          this.on('finish', () => {
+            expect(this.data instanceof global.Buffer).toEqual(true);
+            expect(this.data.length).toEqual(BUFFER.length);
+            cb();
+          });
+        }
+
+        _write(chunk, encoding, done) {
+          if (chunk && chunk instanceof global.Buffer) {
+            if (this.data) {
+              this.data = global.Buffer.concat([this.data, chunk]);
+            } else {
+              this.data = chunk;
+            }
+          }
+          done();
+        }
+      }
+
+      it('can convert buffer to element and revert it back', (cb) => {
+        const visitor = new IsoBmff.ElementVisitor();
+
+        InputStream.prototype._read = function (size) {
+          if (this.finished) {
+            this.push(null);
+          } else {
+            this.push(buffer);
+            this.finished = true;
+          }
+        };
+
+        const input = new InputStream();
+        const transform = IsoBmff.transform(visitor);
+        const output = new ElementOutputStream(cb);
+        input.pipe(transform).pipe(output);
+      });
     });
   }
 });

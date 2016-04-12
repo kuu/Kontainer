@@ -22,7 +22,13 @@ if (global && global.Buffer) {
           this.buffer = chunk;
         }
         this.parser(new Buffer(this.buffer), this.offset, (err, buf) => {
-          done(err, buf && buf.getData());
+          let b;
+          if (buf && buf instanceof Buffer) {
+            b = buf.getData();
+          } else {
+            b = buf;
+          }
+          done(err, b);
         });
       }
     }

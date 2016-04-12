@@ -1,6 +1,6 @@
 {
   "name": "kontainer-js",
-  "version": "1.6.14",
+  "version": "1.6.15",
   "description": "A media file format generator/parser that exposes a React-like API.",
   "repository": {
     "type": "git",

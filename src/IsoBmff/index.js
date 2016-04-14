@@ -171,6 +171,7 @@ function parse(buffer, offset, visitor) {
 
   if (!boxClass) {
     console.error(`IsoBmff.createElementFromBuffer: Unsupported type - "${boxType}"`);
+    visitor.offset += boxSize;
     return boxSize;
   }
 

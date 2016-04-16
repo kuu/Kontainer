@@ -12,12 +12,17 @@ export default class ESDBox extends FullBox {
     //console.log('--- ESDBox.serialize enter.');
     const props = this.props;
     const esDescriptor = props.esDescriptor;
-    
+
     let base = offset;
 
     base += super.serialize(buffer, base);
-    for (let i = 0, il = esDescriptor.length; i < il; i++) {
-      buffer[base++] = esDescriptor[i];
+
+    if (buffer) {
+      for (let i = 0, il = esDescriptor.length; i < il; i++) {
+        buffer[base++] = esDescriptor[i];
+      }
+    } else {
+      base += esDescriptor.length;
     }
 
     super.setSize(base - offset, buffer, offset);

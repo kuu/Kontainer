@@ -76,9 +76,25 @@ describe('IsoBmff', () => {
       }
 
       class TestVisitor extends Visitor {
+        constructor() {
+          super();
+          this.expectedStackLength = 0;
+        }
+
+        enter(...params) {
+          super.enter(...params);
+          this.expectedStackLength++;
+        }
+
+        exit(...params) {
+          super.exit(...params);
+          this.expectedStackLength--;
+        }
+
         visit(type, props) {
           fakeFuncs.visitCounter();
           customMatchers.toHaveTheSamePropsAs(ELEMENT.querySelector(type.COMPACT_NAME), {props});
+          expect(this.depth()).toEqual(this.expectedStackLength - 1);
         }
       }
 

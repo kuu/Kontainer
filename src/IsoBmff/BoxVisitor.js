@@ -56,6 +56,7 @@ export class IsoBmffDumpVisitor extends Visitor {
   }
 
   enter(type, props) {
+    super.enter(type, props);
     const depth = this.depth();
     console.log(`${IsoBmffDumpVisitor.padding(depth)}[${type.COMPACT_NAME}] >>>> start`);
     Object.keys(props).forEach(key => {
@@ -67,7 +68,6 @@ export class IsoBmffDumpVisitor extends Visitor {
       }
       console.log(`${IsoBmffDumpVisitor.padding(depth)}\t${key}: ${value}`);
     });
-    super.enter(type, props);
   }
 
   visit(type) {

@@ -17,8 +17,9 @@ export class Visitor {
   // The return value will be stored in the children property of the parent node.
   exit() {
     const stack = this.stack;
-    const {type, props, children} = stack.pop();
+    const {type, props, children} = stack[stack.length - 1];
     const result = this.visit(type, props, children);
+    stack.pop();
     if (result) {
       if (stack.length > 0) {
         stack[stack.length - 1].children.push(result);

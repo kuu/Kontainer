@@ -7,6 +7,7 @@ import customMatchers from '../../helper/matcher';
 const IsoBmff = Kontainer.IsoBmff;
 const ELEMENT = sample.element;
 const BUFFER = sample.buffer;
+const UNKNOWN = sample.unknownBuffer;
 const ELEMENT_NUM = 22;
 
 describe('IsoBmff', () => {
@@ -43,6 +44,7 @@ describe('IsoBmff', () => {
       const Readable = streams.Readable;
       const Writable = streams.Writable;
       const buffer = (new Buffer(BUFFER)).getData();
+      const unknownBuffer = (new Buffer(UNKNOWN)).getData();
 
       const fakeFuncs = {
         visitCounter () {},
@@ -163,12 +165,12 @@ describe('IsoBmff', () => {
       });
 
       class ElementOutputStream extends Writable {
-        constructor(cb, options) {
+        constructor(cb, buffer, options) {
           super(options);
           this.data = null;
           this.on('finish', () => {
             expect(this.data instanceof global.Buffer).toEqual(true);
-            expect(this.data.length).toEqual(BUFFER.length);
+            expect(this.data.length).toEqual(buffer.length);
             cb();
           });
         }
@@ -199,7 +201,48 @@ describe('IsoBmff', () => {
 
         const input = new InputStream();
         const transform = IsoBmff.transform(visitor);
-        const output = new ElementOutputStream(cb);
+        const output = new ElementOutputStream(cb, buffer);
+        input.pipe(transform).pipe(output);
+      });
+
+      it('keeps unknown boxes untouched', (cb) => {
+        const visitor = new IsoBmff.ElementVisitor();
+
+        InputStream.prototype._read = function (size) {
+          if (this.finished) {
+            this.push(null);
+          } else {
+            this.push(unknownBuffer);
+            this.finished = true;
+          }
+        };
+
+        const input = new InputStream();
+        const transform = IsoBmff.transform(visitor);
+        const output = new ElementOutputStream(cb, unknownBuffer);
+        input.pipe(transform).pipe(output);
+      });
+
+      it('is safe even if paused when parsing unknown box', (cb) => {
+        const visitor = new IsoBmff.ElementVisitor();
+
+        InputStream.prototype._read = function (size) {
+          const count = this.count;
+          if (count === 2) {
+            this.push(null);
+          } else {
+            if (count === 0) {
+              this.push(unknownBuffer.slice(0, 34));
+            } else {
+              this.push(unknownBuffer.slice(34, unknownBuffer.length));
+            }
+            this.count++;
+          }
+        };
+
+        const input = new InputStream();
+        const transform = IsoBmff.transform(visitor);
+        const output = new ElementOutputStream(cb, unknownBuffer);
         input.pipe(transform).pipe(output);
       });
     });

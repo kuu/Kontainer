@@ -1,5 +1,6 @@
 import {createElement as createBaseElement} from '../core/MediaFormat';
 import Box from './Box/Box';
+import UnknownBox from './Box/UnknownBox';
 import {TransformStream} from '../core/Stream';
 import {Visitor, ElementVisitor} from '../core/Visitor';
 import {IsoBmffDumpVisitor} from './BoxVisitor';
@@ -94,7 +95,7 @@ function validateChild(context, child) {
   return [true, null];
 }
 
-function createElement(type) {
+function createElement(type, ...otherParams) {
   let componentClass, element, context = {},
       spec, result, errorMessage, checkList;
 
@@ -105,8 +106,8 @@ function createElement(type) {
       console.error('IsoBmff.createElement: invalid type: "' + type + '"');
       return null;
     }
-    arguments[0] = componentClass;
-  } else if (!type || !(type.prototype instanceof Box)) {
+    type = componentClass;
+  } else if (!type || !(type instanceof Box)) {
     console.error('IsoBmff.createElement: "type" should be a subclass of the Box.');
     return null;
   } else {
@@ -114,7 +115,7 @@ function createElement(type) {
   }
 
   // Create element.
-  if (!(element = createBaseElement.apply(this, arguments))) {
+  if (!(element = createBaseElement(type, ...otherParams))) {
     return null;
   }
 
@@ -166,17 +167,17 @@ function parse(buffer, offset, visitor) {
   const boxSize = props.size || buffer.length - offset;
   const boxEnd = offset + boxSize;
   const boxType = (props.type === 'uuid' ? props.extendedType : props.type);
-  const boxClass = clazz[boxType];
+  let boxClass = clazz[boxType];
 
   //console.log(`parse enter.: type=${boxType} size=${boxSize} offset=${offset}`);
 
   if (!boxClass) {
     console.error(`IsoBmff.createElementFromBuffer: Unsupported type - "${boxType}"`);
-    visitor.offset += boxSize;
-    return boxSize;
+    [readBytesNum, props] = UnknownBox.parse(buffer, offset, boxType);
+    boxClass = UnknownBox;
+  } else {
+    [readBytesNum, props] = boxClass.parse(buffer, offset);
   }
-
-  [readBytesNum, props] = boxClass.parse(buffer, offset);
   base += readBytesNum;
 
   visitor.offset = base;
@@ -220,7 +221,7 @@ function createElementFromBuffer(buffer, offset=0) {
   } else if (visitor.results.length === 1) {
     return visitor.results[0];
   }
-  return createBaseElement(clazz.file, null, visitor.results);
+  return createBaseElement(clazz.file, null, ...visitor.results);
 }
 
 function transform(visitor) {
@@ -264,7 +265,7 @@ function transform(visitor) {
     while (vtor.stack.length) {
       vtor.exit();
     }
-    done(null, Kontainer.renderToBuffer(createBaseElement(clazz.file, null, vtor.results)));
+    done(null, Kontainer.renderToBuffer(createBaseElement(clazz.file, null, ...vtor.results)));
   });
 }
 

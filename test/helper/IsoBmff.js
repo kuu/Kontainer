@@ -203,5 +203,20 @@ export default {
     115, 116, 99, 111, // type='stco'
     0, 0, 0, 0, // version=0, flags=0
     0, 0, 0, 0 // entry_count=0
+  ],
+  unknownBuffer: [
+    0, 0, 0, 16, // size=16
+    102, 116, 121, 112, // type='ftyp'
+    105, 115, 111, 109, // major_brand='isom'
+    0, 0, 0, 0, // minor_version=0
+    0, 0, 0, 36, // size=20
+    109, 111, 111, 118, // type='moov'
+    0, 0, 0, 12, // size=12
+    119, 104, 97, 116, // type='what' (unknown)
+    0, 0, 0, 0, // version=0, flags=0
+    0, 0, 0, 16, // size=16
+    115, 116, 99, 111, // type='stco'
+    0, 0, 0, 0, // version=0, flags=0
+    0, 0, 0, 0 // entry_count=0
   ]
 }

@@ -1,5 +1,7 @@
+import {createElement} from './MediaFormat';
+
 // Base class for the Visitor pattern.
-export default class Visitor {
+export class Visitor {
   constructor() {
     this.stack = [];
     this.offset = 0;
@@ -8,13 +10,27 @@ export default class Visitor {
 
   // This method will be called when entering a node.
   enter(type, props) {
-    // To be overridden
+    this.stack.push({type, props, children: []});
   }
 
   // This method will be called when exiting a node.
   // The return value will be stored in the children property of the parent node.
-  exit(type, props, children) {
-    // To be overridden
+  exit() {
+    const stack = this.stack;
+    const {type, props, children} = stack.pop();
+    const result = this.visit(type, props, children);
+    if (result) {
+      if (stack.length > 0) {
+        stack[stack.length - 1].children.push(result);
+      } else {
+        this.results.push(result);
+      }
+    }
+  }
+
+  visit(type, props, children) {
+    // Implement this in a subclass
+    return null;
   }
 
   // You can attach any data to the current stack.
@@ -37,5 +53,15 @@ export default class Visitor {
 
   depth() {
     return this.stack.length - 1;
+  }
+}
+
+export class ElementVisitor extends Visitor {
+  constructor() {
+    super();
+  }
+
+  visit (type, props, children) {
+    return createElement(type, props, children);
   }
 }

@@ -1,16 +1,6 @@
-import Visitor from '../core/Visitor';
+import {Visitor} from '../core/Visitor';
 
-export class BoxVisitor extends Visitor {
-  enter (type, props) {
-    // To be overriddedn
-  }
-
-  exit (type, props, children) {
-    // To be overriddedn
-  }
-}
-
-export class IsoBmffDumpVisitor extends BoxVisitor {
+export class IsoBmffDumpVisitor extends Visitor {
   static formatBuffer(v) {
     if (global && global.Buffer) {
       return `[Buffer length=${v.length}]`;
@@ -77,9 +67,10 @@ export class IsoBmffDumpVisitor extends BoxVisitor {
       }
       console.log(`${IsoBmffDumpVisitor.padding(depth)}\t${key}: ${value}`);
     });
+    super.enter(type, props);
   }
 
-  exit(type) {
+  visit(type) {
     const depth = this.depth();
     console.log(`${IsoBmffDumpVisitor.padding(depth)}[${type.COMPACT_NAME}] <<<< end`);
   }

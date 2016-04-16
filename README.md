@@ -91,18 +91,15 @@ On the other hand, you can parse a byte stream and reproduce a KontainerElement 
 You can also create your hook and process a byte stream progressively.
 
 ```js
-class MyBoxVisitor extends IsoBmff.BoxVisitor {
-  enter(type, props) {
-    // Implement this
-  }
-  exit(type, props) {
-    // Implement this
-  }
-}
-
-const transform = IsoBmff.transform(new MyBoxVisitor());
-
-input.pipe(transform).pipe(process.stdout);
+  const input = fs.createReadStream('./test.mp4');
+  const transform = IsoBmff.transform((type, props, children) => {
+    if (type === 'tkhd') {
+      // Change video dimensions
+      props.width /= 2;
+      props.height /= 2;
+    }
+  });
+  input.pipe(transform).pipe(process.stdout);
 ```
 
 ### JSX

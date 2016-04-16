@@ -1,6 +1,6 @@
 import Kontainer from '../../../src/';
 import Buffer from '../../../src/core/Buffer';
-import {BoxVisitor} from '../../../src/IsoBmff/BoxVisitor';
+import {Visitor} from '../../../src/core/Visitor';
 import sample from '../../helper/IsoBmff';
 import customMatchers from '../../helper/matcher';
 
@@ -45,13 +45,11 @@ describe('IsoBmff', () => {
       const buffer = (new Buffer(BUFFER)).getData();
 
       const fakeFuncs = {
-        enterCounter () {},
-        exitCounter () {}
+        visitCounter () {},
       };
 
       beforeEach(() => {
-        spyOn(fakeFuncs, 'enterCounter');
-        spyOn(fakeFuncs, 'exitCounter');
+        spyOn(fakeFuncs, 'visitCounter');
       });
 
       class InputStream extends Readable {
@@ -67,8 +65,7 @@ describe('IsoBmff', () => {
           super(options);
           this.data = null;
           this.on('finish', () => {
-            expect(fakeFuncs.enterCounter.calls.count()).toEqual(ELEMENT_NUM);
-            expect(fakeFuncs.exitCounter.calls.count()).toEqual(ELEMENT_NUM);
+            expect(fakeFuncs.visitCounter.calls.count()).toEqual(ELEMENT_NUM);
             cb();
           });
         }
@@ -78,13 +75,10 @@ describe('IsoBmff', () => {
         }
       }
 
-      class TestVisitor extends BoxVisitor {
-        enter(type, props) {
-          fakeFuncs.enterCounter();
+      class TestVisitor extends Visitor {
+        visit(type, props) {
+          fakeFuncs.visitCounter();
           customMatchers.toHaveTheSamePropsAs(ELEMENT.querySelector(type.COMPACT_NAME), {props});
-        }
-        exit(type, props, children) {
-          fakeFuncs.exitCounter();
         }
       }
 

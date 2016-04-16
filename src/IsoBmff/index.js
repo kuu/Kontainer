@@ -1,7 +1,8 @@
-import MediaFormat from '../core/MediaFormat';
+import {createElement as createBaseElement} from '../core/MediaFormat';
 import Box from './Box/Box';
 import {TransformStream} from '../core/Stream';
-import {BoxVisitor, IsoBmffDumpVisitor} from './BoxVisitor';
+import {Visitor, ElementVisitor} from '../core/Visitor';
+import {IsoBmffDumpVisitor} from './BoxVisitor';
 import {BufferReadError} from '../core/Error';
 
 const clazz = {
@@ -113,7 +114,7 @@ function createElement(type) {
   }
 
   // Create element.
-  if (!(element = MediaFormat.createElement.apply(this, arguments))) {
+  if (!(element = createBaseElement.apply(this, arguments))) {
     return null;
   }
 
@@ -178,45 +179,18 @@ function parse(buffer, offset, visitor) {
   [readBytesNum, props] = boxClass.parse(buffer, offset);
   base += readBytesNum;
 
-  const stack = visitor.stack;
   visitor.offset = base;
-  stack.push({type: boxClass, props, children: []});
   visitor.enter(boxClass, props);
 
   while (base < boxEnd) {
     readBytesNum = parse(buffer, base, visitor);
     base += readBytesNum;
   }
-  const children = stack[stack.length - 1].children;
-  const result = visitor.exit(boxClass, props, children);
-  stack.pop();
+  visitor.exit();
   visitor.offset = base;
-  if (result) {
-    if (stack.length > 0) {
-      stack[stack.length - 1].children.push(result);
-    } else {
-      visitor.results.push(result);
-    }
-  }
 
   //console.log(`parse exit.: type=${boxType} readBytesNum=${Math.min(base - offset, boxSize)}`);
   return Math.min(base - offset, boxSize);
-}
-
-class ElementVisitor extends BoxVisitor {
-  constructor() {
-    super();
-  }
-
-  enter (type, props) {
-    this.setData({element: MediaFormat.createElement(type, props)});
-  }
-
-  exit (type, props, children) {
-    const {element} = this.getData();
-    element.props.children = children;
-    return element;
-  }
 }
 
 function createElementFromBuffer(buffer, offset=0) {
@@ -246,24 +220,37 @@ function createElementFromBuffer(buffer, offset=0) {
   } else if (visitor.results.length === 1) {
     return visitor.results[0];
   }
-  return MediaFormat.createElement(clazz.file, null, visitor.results);
+  return createBaseElement(clazz.file, null, visitor.results);
 }
 
 function transform(visitor) {
   const Kontainer = require('..').default; // Ugly..
+  let vtor;
+
+  if (visitor instanceof Visitor) {
+    vtor = visitor;
+  } else {
+    // Received a filter function
+    class TransformVisitor extends ElementVisitor {
+      visit(type, props, children) {
+        visitor(type, props, children);
+        return super.visit(type, props, children);
+      }
+    }
+    vtor = new TransformVisitor();
+  }
 
   return new TransformStream((buffer, offset, done) => {
-    let base = visitor.offset;
+    let base = vtor.offset;
     let buf = buffer.getData();
 
     if (buf instanceof ArrayBuffer) {
       buf = new Uint8Array(buf);
     }
     const endOfBuffer = buf.length;
-    const stack = visitor.stack;
     try {
       while (base < endOfBuffer) {
-        const readBytesNum = parse(buf, base, visitor);
+        const readBytesNum = parse(buf, base, vtor);
         base += readBytesNum;
       }
     } catch (err) {
@@ -274,19 +261,10 @@ function transform(visitor) {
       return;
     }
 
-    while (stack.length) {
-      const {type, props, children} = stack[stack.length - 1];
-      const result = visitor.exit(type, props, children);
-      stack.pop();
-      if (result) {
-        if (stack.length > 0) {
-          stack[stack.length - 1].children.push(result);
-        } else {
-          visitor.results.push(result);
-        }
-      }
+    while (vtor.stack.length) {
+      vtor.exit();
     }
-    done(null, Kontainer.renderToBuffer(MediaFormat.createElement(clazz.file, null, visitor.results)));
+    done(null, Kontainer.renderToBuffer(createBaseElement(clazz.file, null, vtor.results)));
   });
 }
 
@@ -294,7 +272,6 @@ export default {
   createElement,
   createElementFromBuffer,
   transform,
-  BoxVisitor,
   ElementVisitor,
   IsoBmffDumpVisitor
 };

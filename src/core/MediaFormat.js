@@ -48,7 +48,7 @@ function isValidComponentClass(type) {
   return false;
 }
 
-function createElement(type, props, children) {
+export function createElement(type, props, children) {
   const childrenArgsLen = arguments.length - 2;
   const childArray = [];
 
@@ -81,7 +81,3 @@ function createElement(type, props, children) {
   }
   return new Element(type, props);
 }
-
-export default {
-  createElement
-};

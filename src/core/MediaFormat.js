@@ -26,16 +26,6 @@ class Element {
   }
 }
 
-function extractChild(child, childArray) {
-  if (child instanceof Element) {
-    childArray.push(child);
-  } else if (child instanceof Array) {
-    child.forEach(item => {
-      extractChild(item, childArray);
-    });
-  }
-}
-
 function isValidComponentClass(type) {
   const proto = type.prototype;
 
@@ -48,27 +38,16 @@ function isValidComponentClass(type) {
   return false;
 }
 
-export function createElement(type, props, children) {
-  const childrenArgsLen = arguments.length - 2;
-  const childArray = [];
-
+export function createElement(type, props, ...children) {
   props = props || {};
+  children = children.filter(child => child instanceof Element);
 
   // Validate type
   if (!isValidComponentClass(type)) {
     console.error(`MediaFormat.createElement: the class (${type.name}) does not implement necessary methods.`);
     return null;
   }
-
-  // Resolve children
-  if (childrenArgsLen === 1) {
-    extractChild(children, childArray);
-  } else if (childrenArgsLen > 1) {
-    for (let i = 0; i < childrenArgsLen; i++) {
-      extractChild(arguments[i + 2], childArray);
-    }
-  }
-  props.children = childArray;
+  props.children = children;
 
   // Resolve default props
   const defaultProps = type.defaultProps;

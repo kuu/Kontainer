@@ -63,6 +63,6 @@ export class ElementVisitor extends Visitor {
   }
 
   visit (type, props, children) {
-    return createElement(type, props, children);
+    return createElement(type, props, ...children);
   }
 }

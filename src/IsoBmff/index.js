@@ -167,9 +167,16 @@ function parse(buffer, offset, visitor) {
   const boxSize = props.size || buffer.length - offset;
   const boxEnd = offset + boxSize;
   const boxType = (props.type === 'uuid' ? props.extendedType : props.type);
-  let boxClass = clazz[boxType];
 
   //console.log(`parse enter.: type=${boxType} size=${boxSize} offset=${offset}`);
+
+  if (boxType.length < 4) {
+    console.error(`IsoBmff.createElementFromBuffer: Invalid type - "${boxType}"`);
+    visitor.offset += readBytesNum;
+    return boxSize;
+  }
+
+  let boxClass = clazz[boxType];
 
   if (!boxClass) {
     console.error(`IsoBmff.createElementFromBuffer: Unsupported type - "${boxType}"`);

@@ -233,7 +233,7 @@ function transform(visitor) {
     // Received a filter function
     class TransformVisitor extends ElementVisitor {
       visit(type, props, children) {
-        visitor(type, props, children);
+        visitor(type.COMPACT_NAME, props, children);
         return super.visit(type, props, children);
       }
     }

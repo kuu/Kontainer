@@ -38,8 +38,29 @@ function isValidComponentClass(type) {
   return false;
 }
 
+function unfold(list) {
+  const plain = [];
+  list.forEach(function f(item) {
+    if (Array.isArray(item)) {
+      item.forEach(f);
+    } else {
+      plain.push(item);
+    }
+  });
+  return plain;
+}
+
 export function createElement(type, props, ...children) {
   props = props || {};
+
+  const childArray = [];
+  children.forEach(function f(child) {
+    if (Array.isArray(child)) {
+      child.forEach(f);
+    }
+    return child;
+  });
+  children = unfold(children);
   children = children.filter(child => child instanceof Element);
 
   // Validate type

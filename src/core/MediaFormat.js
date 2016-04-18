@@ -53,13 +53,6 @@ function unfold(list) {
 export function createElement(type, props, ...children) {
   props = props || {};
 
-  const childArray = [];
-  children.forEach(function f(child) {
-    if (Array.isArray(child)) {
-      child.forEach(f);
-    }
-    return child;
-  });
   children = unfold(children);
   children = children.filter(child => child instanceof Element);
 

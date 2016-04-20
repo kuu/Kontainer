@@ -1,6 +1,6 @@
 import customMatchers from '../../../helper/matcher';
 import sample from '../../../helper/IsoBmff';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('File', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -10,11 +10,13 @@ describe('File', () => {
   it('generates a binary data from KontainerElements', () => {
     let buffer, elem, array;
 
-    buffer = Kontainer.renderToBuffer(IsoBmff.createElement('file', null,
-      IsoBmff.createElement('moov', null,
-        IsoBmff.createElement('mvhd')
-      )
-    ));
+    buffer = Kontainer.renderToBuffer(
+      <file>
+        <moov>
+          <mvhd />
+        </moov>
+      </file>
+    );
     expect(buffer).toBe(null);
 
     buffer = Kontainer.renderToBuffer(topLevelElement);

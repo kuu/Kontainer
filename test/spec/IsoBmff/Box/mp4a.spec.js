@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('MP4AudioSampleEntry', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -27,7 +27,7 @@ describe('MP4AudioSampleEntry', () => {
       ];
 
   it('supports mono/16bit/48kHz', () => {
-    const mp4aElement = IsoBmff.createElement('mp4a', {dataReferenceIndex: 1});
+    const mp4aElement = <mp4a dataReferenceIndex={1} />;
     const buffer = Kontainer.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -46,10 +46,7 @@ describe('MP4AudioSampleEntry', () => {
   });
 
   it('supports stereo/24bit/48kHz', () => {
-    const mp4aElement = IsoBmff.createElement(
-      'mp4a',
-      { dataReferenceIndex: 2, channelCount: 2, sampleSize: 24, sampleRate: 48000 }
-    );
+    const mp4aElement = <mp4a {...{dataReferenceIndex: 2, channelCount: 2, sampleSize: 24, sampleRate: 48000 }} />;
     const buffer = Kontainer.renderToBuffer(mp4aElement);
     expect(buffer).not.toBe(null);
     let array;

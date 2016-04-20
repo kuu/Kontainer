@@ -247,39 +247,33 @@ describe('IsoBmff', () => {
       });
 
       it('can handle nested createElement call', () => {
-        var t = IsoBmff.createElement('stbl', {},
-          [
-          IsoBmff.createElement('stsd', {'entryCount': 1},
-            [
-            IsoBmff.createElement('avc1', {
+        var t = <stbl>
+          <stsd entryCount={1}>
+            <avc1 {...{
                 'dataReferenceIndex': 'trackId',
                 'width': 1920,
                 'height': 1080,
                 'frameCount': 1
-              },
-              [
-                IsoBmff.createElement('avcC', {
-                  'avcProfileIndication': 'baseline',
-                  'profileCompatibility': {
-                    constraintSet0Flag: false,
-                    constraintSet1Flag: false,
-                    constraintSet2Flag: false
-                  },
-                  'avcLevelIndication': 3,
-                  'lengthSize': 4,
-                  'sequenceParameterSets': [{ data: buffer, length: buffer.length }],
-                  'pictureParameterSets': [{ data: buffer, length: buffer.length }]
-                }, null)
-              ]
-            )
-            ]
-          ),
-          IsoBmff.createElement('stts', {'entries': []}, null),
-          IsoBmff.createElement('stsc', {}, null),
-          IsoBmff.createElement('stsz', {}, null),
-          IsoBmff.createElement('stco', {}, null)
-        ]
-        );
+              }}>
+              <avcC {...{
+                'avcProfileIndication': 'baseline',
+                'profileCompatibility': {
+                  constraintSet0Flag: false,
+                  constraintSet1Flag: false,
+                  constraintSet2Flag: false
+                },
+                'avcLevelIndication': 3,
+                'lengthSize': 4,
+                'sequenceParameterSets': [{ data: buffer, length: buffer.length }],
+                'pictureParameterSets': [{ data: buffer, length: buffer.length }]
+              }} />
+            </avc1>
+          </stsd>
+          <stts entries={[]} />
+          <stsc />
+          <stsz />
+          <stco />
+        </stbl>;
         expect(t).not.toBe(null);
       });
     });

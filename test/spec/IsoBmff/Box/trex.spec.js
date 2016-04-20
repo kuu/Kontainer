@@ -1,5 +1,5 @@
 import customMatchers from '../../../helper/matcher';
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('TrackExtendsBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -25,7 +25,7 @@ describe('TrackExtendsBox', () => {
       ];
 
   it('supports falthy values', () => {
-    const trexElement = IsoBmff.createElement('trex', {
+    const trexElement = <trex {...{
       trackId: 1,
       defaultSampleDescriptionIndex: 2,
       defaultSampleDuration: 0xFFFFFFFF,
@@ -38,7 +38,7 @@ describe('TrackExtendsBox', () => {
         sampleIsDifferenceSample: false,
         sampleDegradationPriority: 0
       }
-    });
+    }} />;
     const buffer = Kontainer.renderToBuffer(trexElement);
     expect(buffer).not.toBe(null);
     let array;
@@ -57,7 +57,7 @@ describe('TrackExtendsBox', () => {
   });
 
   it('supports truethy values', () => {
-    const trexElement = IsoBmff.createElement('trex', {
+    const trexElement = <trex {...{
       trackId: 3,
       defaultSampleDescriptionIndex: 4,
       defaultSampleDuration: 1,
@@ -70,7 +70,7 @@ describe('TrackExtendsBox', () => {
         sampleIsDifferenceSample: true,
         sampleDegradationPriority: 65535
       }
-    });
+    }} />;
     const buffer = Kontainer.renderToBuffer(trexElement);
     expect(buffer).not.toBe(null);
     let array;

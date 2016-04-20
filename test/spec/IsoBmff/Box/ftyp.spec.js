@@ -1,4 +1,4 @@
-import Kontainer from '../../../../src/';
+import Kontainer from 'kontainer-js';
 
 describe('FileTypeBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -18,12 +18,12 @@ describe('FileTypeBox', () => {
       ];
 
   it('requires major_brand', () => {
-    const buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp'));
+    const buffer = Kontainer.renderToBuffer(<ftyp />);
     expect(buffer).toBe(null);
   });
 
   it('can be initialized with the default values', () => {
-    const buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'isom'}));
+    const buffer = Kontainer.renderToBuffer(<ftyp majorBrand="isom" />);
     let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);
@@ -37,7 +37,7 @@ describe('FileTypeBox', () => {
   });
 
   it('can be initialized with the specified values', () => {
-    const buffer = Kontainer.renderToBuffer(IsoBmff.createElement('ftyp', {majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}));
+    const buffer = Kontainer.renderToBuffer(<ftyp {...{majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}} />);
     let array;
     if (buffer instanceof ArrayBuffer) {
       array = new Uint8Array(buffer);

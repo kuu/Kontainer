@@ -10,6 +10,9 @@ Kontainer aims to fully support the MP4 (ISO Base Media file format: ISO/IEC 144
 ```
 $ npm install -g kontainer-js
 ```
+## Overview
+
+![logo](how-it-works.png)
 
 ## API
 

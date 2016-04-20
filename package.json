@@ -64,7 +64,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "dist-es6": "^0.1.14",
+    "dist-es6": "^0.1.15",
     "yargs": "^4.6.0"
   }
 }

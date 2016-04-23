@@ -48,6 +48,8 @@ const clazz = {
   'tfhd': require('./Box/TrackFragmentHeaderBox').default,
   'trun': require('./Box/TrackRunBox').default,
   'tfdt': require('./Box/TrackFragmentBaseMediaDecodeTimeBox').default,
+  'edts': require('./Box/EditBox').default,
+  'elst': require('./Box/EditListBox').default,
 };
 
 function validateChild(context, child) {

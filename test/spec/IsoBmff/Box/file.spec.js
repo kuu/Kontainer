@@ -1,6 +1,10 @@
+import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 import sample from '../../../helper/IsoBmff';
-import Kontainer from 'kontainer-js';
+
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+});
 
 describe('File', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -21,18 +25,9 @@ describe('File', () => {
 
     buffer = Kontainer.renderToBuffer(topLevelElement);
     expect(buffer).not.toBe(null);
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(value.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(value[i]);
-      //console.log(`array[${i}]=${array[i]}`);
-    }
+    expect(buffer).toBeTheSameBuffer(value);
     elem = IsoBmff.createElementFromBuffer(buffer);
-    expect(customMatchers.toHaveTheSamePropsAs(topLevelElement, elem)).toBe(true);
+    expect(elem).toHaveTheSameProps(topLevelElement);
   });
 
   it('parses a binary data into KontainerElements', () => {
@@ -48,14 +43,6 @@ describe('File', () => {
     expect(elem).not.toBe(null);
     buf = Kontainer.renderToBuffer(elem);
     expect(buf).not.toBe(null);
-    if (buf instanceof ArrayBuffer) {
-      array = new Uint8Array(buf);
-    } else {
-      array = buf;
-    }
-    expect(array.length).toBe(value.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(value[i]);
-    }
+    expect(buf).toBeTheSameBuffer(value);
   });
 });

@@ -1,4 +1,4 @@
-import Kontainer from '../../../src/';
+import Kontainer from 'kontainer-js';
 
 const DEC4 = 15 / 16,
     DEC8 = 255 / 256,

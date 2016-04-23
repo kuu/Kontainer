@@ -1,5 +1,9 @@
-import customMatchers from '../../../helper/matcher';
 import Kontainer from 'kontainer-js';
+import customMatchers from '../../../helper/matcher';
+
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+});
 
 describe('TrackFragmentHeaderBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -31,19 +35,10 @@ describe('TrackFragmentHeaderBox', () => {
     }} />;
     const buffer = Kontainer.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(value1.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(value1[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(value1);
     const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(customMatchers.toHaveTheSamePropsAs(tfhdElement, element)).toBe(true);
+    expect(tfhdElement).toHaveTheSameProps(element);
   });
 
   it('supports other sets of optional values', () => {
@@ -58,23 +53,15 @@ describe('TrackFragmentHeaderBox', () => {
         samplePaddingValue: 7,
         sampleIsDifferenceSample: true,
         sampleDegradationPriority: 65535
-      }
+      },
+      durationIsEmpty: false
     }} />;
     const buffer = Kontainer.renderToBuffer(tfhdElement);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(value2.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(value2[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(value2);
     const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(customMatchers.toHaveTheSamePropsAs(tfhdElement, element)).toBe(true);
+    expect(tfhdElement).toHaveTheSameProps(element);
   });
 
   it('supports base-data-offset', () => {

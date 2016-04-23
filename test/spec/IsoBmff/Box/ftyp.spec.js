@@ -1,4 +1,9 @@
 import Kontainer from 'kontainer-js';
+import customMatchers from '../../../helper/matcher';
+
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+});
 
 describe('FileTypeBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -24,29 +29,11 @@ describe('FileTypeBox', () => {
 
   it('can be initialized with the default values', () => {
     const buffer = Kontainer.renderToBuffer(<ftyp majorBrand="isom" />);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(defaultValue.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(defaultValue[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(defaultValue);
   });
 
   it('can be initialized with the specified values', () => {
     const buffer = Kontainer.renderToBuffer(<ftyp {...{majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}} />);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(avc1Value.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(avc1Value[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(avc1Value);
   });
 });

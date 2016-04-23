@@ -1,5 +1,9 @@
-import customMatchers from '../../../helper/matcher';
 import Kontainer from 'kontainer-js';
+import customMatchers from '../../../helper/matcher';
+
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+});
 
 describe('MovieFragmentHeaderBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -20,37 +24,19 @@ describe('MovieFragmentHeaderBox', () => {
     const mfhdElement = <mfhd sequenceNumber={0} />;
     const buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(value1.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(value1[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(value1);
     const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(customMatchers.toHaveTheSamePropsAs(mfhdElement, element)).toBe(true);
+    expect(mfhdElement).toHaveTheSameProps(element);
   });
 
   it('supports the largest sequence number.', () => {
     const mfhdElement = <mfhd sequenceNumber={0xFFFFFFFF} />;
     const buffer = Kontainer.renderToBuffer(mfhdElement);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(value2.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(value2[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(value2);
     const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(customMatchers.toHaveTheSamePropsAs(mfhdElement, element)).toBe(true);
+    expect(mfhdElement).toHaveTheSameProps(element);
   });
 });

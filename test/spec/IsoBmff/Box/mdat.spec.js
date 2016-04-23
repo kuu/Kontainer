@@ -1,4 +1,9 @@
 import Kontainer from 'kontainer-js';
+import customMatchers from '../../../helper/matcher';
+
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+});
 
 describe('MediaDataBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -16,15 +21,6 @@ describe('MediaDataBox', () => {
     }
     const buffer = Kontainer.renderToBuffer(<mdat {...{data}} />);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(mdatValue.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(mdatValue[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(mdatValue);
   });
 });

@@ -1,5 +1,9 @@
-import customMatchers from '../../../helper/matcher';
 import Kontainer from 'kontainer-js';
+import customMatchers from '../../../helper/matcher';
+
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+});
 
 describe('TrackFragmentBaseMediaDecodeTimeBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -14,18 +18,8 @@ describe('TrackFragmentBaseMediaDecodeTimeBox', () => {
     let element = <tfdt baseMediaDecodeTime={65536} />;
     let buffer = Kontainer.renderToBuffer(element);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(tfdtValue.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(tfdtValue[i]);
-      //console.log('a[' + i + ']=' + array[i] + ', b[' + i + ']=' + tfdtValue[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(tfdtValue);
     const element2 = IsoBmff.createElementFromBuffer(buffer);
-    expect(customMatchers.toHaveTheSamePropsAs(element, element2)).toBe(true);
+    expect(element).toHaveTheSameProps(element2);
   });
 });

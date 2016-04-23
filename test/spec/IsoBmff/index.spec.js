@@ -1,14 +1,18 @@
-import Kontainer from '../../../src/';
+import Kontainer from 'kontainer-js';
+import customMatchers from '../../helper/matcher';
 import Buffer from '../../../src/core/Buffer';
 import {Visitor} from '../../../src/core/Visitor';
 import sample from '../../helper/IsoBmff';
-import customMatchers from '../../helper/matcher';
 
 const IsoBmff = Kontainer.IsoBmff;
 const ELEMENT = sample.element;
 const BUFFER = sample.buffer;
 const UNKNOWN = sample.unknownBuffer;
 const ELEMENT_NUM = 22;
+
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+});
 
 describe('IsoBmff', () => {
 
@@ -95,7 +99,7 @@ describe('IsoBmff', () => {
 
         visit(type, props) {
           fakeFuncs.visitCounter();
-          customMatchers.toHaveTheSamePropsAs(ELEMENT.querySelector(type.COMPACT_NAME), {props});
+          expect(ELEMENT.querySelector(type.COMPACT_NAME)).toHaveTheSameProps({props});
           expect(this.depth()).toEqual(this.expectedStackLength - 1);
         }
       }

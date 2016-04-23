@@ -1,5 +1,9 @@
-import customMatchers from '../../../helper/matcher';
 import Kontainer from 'kontainer-js';
+import customMatchers from '../../../helper/matcher';
+
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+});
 
 describe('AVCConfigurationBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -48,18 +52,8 @@ describe('AVCConfigurationBox', () => {
     }} />;
     let buffer = Kontainer.renderToBuffer(element);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(avcCValue.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(avcCValue[i]);
-      //console.log('a[' + i + ']=' + array[i] + ', b[' + i + ']=' + avcCValue[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(avcCValue);
     const element2 = IsoBmff.createElementFromBuffer(buffer);
-    expect(customMatchers.toHaveTheSamePropsAs(element, element2)).toBe(true);
+    expect(element).toHaveTheSameProps(element2);
   });
 });

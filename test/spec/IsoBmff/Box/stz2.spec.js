@@ -1,5 +1,9 @@
-import customMatchers from '../../../helper/matcher';
 import Kontainer from 'kontainer-js';
+import customMatchers from '../../../helper/matcher';
+
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+});
 
 describe('CompactSampleSizeBox', () => {
   const IsoBmff = Kontainer.IsoBmff,
@@ -35,56 +39,29 @@ describe('CompactSampleSizeBox', () => {
     const stz2Element = <stz2 {...{fieldSize: 4, sampleSizeEntries: [1, 2, 3, 4, 5]}} />;
     const buffer = Kontainer.renderToBuffer(stz2Element);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(value1.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(value1[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(value1);
     const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(customMatchers.toHaveTheSamePropsAs(stz2Element, element)).toBe(true);
+    expect(stz2Element).toHaveTheSameProps(element);
   });
 
   it('handles 8 bit field size', () => {
     const stz2Element = <stz2 {...{fieldSize: 8, sampleSizeEntries: [1, 2, 3, 4, 5]}} />;
     const buffer = Kontainer.renderToBuffer(stz2Element);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(value2.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(value2[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(value2);
     const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(customMatchers.toHaveTheSamePropsAs(stz2Element, element)).toBe(true);
+    expect(stz2Element).toHaveTheSameProps(element);
   });
 
   it('handles 16 bit field size', () => {
     const stz2Element = <stz2 {...{fieldSize: 16, sampleSizeEntries: [1, 2, 3, 4, 5]}} />;
     const buffer = Kontainer.renderToBuffer(stz2Element);
     expect(buffer).not.toBe(null);
-    let array;
-    if (buffer instanceof ArrayBuffer) {
-      array = new Uint8Array(buffer);
-    } else {
-      array = buffer;
-    }
-    expect(array.length).toBe(value3.length);
-    for (let i = 0, il = array.length; i < il; i++) {
-      expect(array[i]).toBe(value3[i]);
-    }
+    expect(buffer).toBeTheSameBuffer(value3);
     const element = IsoBmff.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
-    expect(customMatchers.toHaveTheSamePropsAs(stz2Element, element)).toBe(true);
+    expect(stz2Element).toHaveTheSameProps(element);
   });
 });

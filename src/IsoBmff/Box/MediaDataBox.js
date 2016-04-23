@@ -1,13 +1,9 @@
 import Box from './Box';
 import PropTypes from '../../core/PropTypes';
 import Buffer from '../../core/Buffer';
+import Reader from '../../core/Reader';
 import {BufferReadError} from '../../core/Error';
 
-function ASSERT(buffer, offset, bytesToRead) {
-  if ((buffer.length - offset) < bytesToRead) {
-    throw new BufferReadError();
-  }
-}
 
 export default class MediaDataBox extends Box {
   constructor(props) {
@@ -44,8 +40,7 @@ export default class MediaDataBox extends Box {
     base += readBytesNum;
     toBeRead = props.size - readBytesNum;
 
-    ASSERT(buffer, base, toBeRead);
-
+    Reader.ASSERT(buffer, base, toBeRead);
     buf = new Buffer(toBeRead);
     data = buf.getView();
 

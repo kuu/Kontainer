@@ -2,6 +2,7 @@ import Box from './Box';
 import FullBox from './FullBox';
 import PropTypes from '../../core/PropTypes';
 import Buffer from '../../core/Buffer';
+import Reader from '../../core/Reader';
 
 export default class ESDBox extends FullBox {
   constructor(props) {
@@ -38,6 +39,7 @@ export default class ESDBox extends FullBox {
     [readBytesNum, props] = FullBox.parse(buffer, base);
     base += readBytesNum;
     toBeRead = props.size - readBytesNum;
+    Reader.ASSERT(buffer, base, toBeRead);
     buf = new Buffer(toBeRead);
     esDescriptor = buf.getView();
 

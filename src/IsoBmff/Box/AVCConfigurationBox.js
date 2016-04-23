@@ -154,6 +154,7 @@ export default class AVCConfigurationBox extends Box {
       [readBytesNum, length] = Reader.readNumber(buffer, base, 2);
       base += readBytesNum;
 
+      Reader.ASSERT(buffer, base, length);
       buf = new Buffer(length);
       data = buf.getView();
       for (j = 0; j < length; j++) {
@@ -169,6 +170,7 @@ export default class AVCConfigurationBox extends Box {
       [readBytesNum, length] = Reader.readNumber(buffer, base, 2);
       base += readBytesNum;
 
+      Reader.ASSERT(buffer, base, length);
       buf = new Buffer(length);
       data = buf.getView();
       for (j = 0; j < length; j++) {

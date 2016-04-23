@@ -200,5 +200,6 @@ export default {
   readString,
   readNumber,
   readFixedNumber,
-  readIso639Lang
+  readIso639Lang,
+  ASSERT
 };

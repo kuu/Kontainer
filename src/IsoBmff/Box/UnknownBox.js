@@ -2,7 +2,6 @@ import Box from './Box';
 import PropTypes from '../../core/PropTypes';
 import Buffer from '../../core/Buffer';
 import Reader from '../../core/Reader';
-import {BufferReadError} from '../../core/Error';
 
 export default class UnknownBox extends Box {
   constructor(props) {

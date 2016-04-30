@@ -188,5 +188,5 @@ TrackHeaderBox.defaultProps = {
 TrackHeaderBox.spec = {
   container: 'trak',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

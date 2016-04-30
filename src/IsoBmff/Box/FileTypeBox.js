@@ -12,7 +12,6 @@ export default class FileTypeBox extends Box {
     context.majorBrand = props.majorBrand;
     context.minorVersion = props.minorVersion;
     context.compatibleBrands = props.compatibleBrands;
-    return null;
   }
 
   serialize(buffer, offset=0) {
@@ -81,5 +80,5 @@ FileTypeBox.defaultProps = {
 FileTypeBox.spec = {
   container: 'file',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

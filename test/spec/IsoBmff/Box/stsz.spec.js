@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('CompactSampleSizeBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 20, // size=20
         115, 116, 115, 122, // type='stsz'
         0, 0, 0, 0, // version=0, flags=0
@@ -27,20 +27,20 @@ describe('CompactSampleSizeBox', () => {
 
   it('supports constant size', () => {
     const stszElement = <stsz sampleSize={5} />;
-    const buffer = Kontainer.renderToBuffer(stszElement);
+    const buffer = Kontainer.render(stszElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(stszElement).toHaveTheSameProps(element);
   });
 
   it('supports variable size', () => {
     const stszElement = <stsz sampleSizeEntries={[1, 2, 3]} />;
-    const buffer = Kontainer.renderToBuffer(stszElement);
+    const buffer = Kontainer.render(stszElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(stszElement).toHaveTheSameProps(element);
   });

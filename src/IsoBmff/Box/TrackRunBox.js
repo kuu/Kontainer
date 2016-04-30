@@ -188,5 +188,5 @@ TrackRunBox.defaultProps = {
 TrackRunBox.spec = {
   container: 'traf',
   quantity: Box.QUANTITY_ANY_NUMBER,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

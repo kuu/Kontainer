@@ -3,6 +3,7 @@ import FullBox from './FullBox';
 import PropTypes from '../../core/PropTypes';
 import Writer from '../../core/Writer';
 import Reader from '../../core/Reader';
+import {throwException} from '../../core/Util';
 
 export default class HintMediaHeaderBox extends FullBox {
   constructor(props) {
@@ -12,9 +13,8 @@ export default class HintMediaHeaderBox extends FullBox {
   static validate(context) {
     const trackType = context.currentTrackType;
     if (trackType && trackType !== 'hint') {
-      return new Error(`"${HintMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
+      throwException(`"${HintMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
     }
-    return null;
   }
 
   serialize(buffer, offset=0) {
@@ -23,7 +23,7 @@ export default class HintMediaHeaderBox extends FullBox {
     const avgPDUSize = props.avgPDUSize;
     const maxBitrate = props.maxBitrate;
     const avgBitrate = props.avgBitrate;
-    
+
     let base = offset;
 
     base += super.serialize(buffer, base);
@@ -87,5 +87,5 @@ HintMediaHeaderBox.defaultProps = {
 HintMediaHeaderBox.spec = {
   container: 'minf',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

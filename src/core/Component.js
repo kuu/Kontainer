@@ -7,7 +7,6 @@ export default class Component {
   // To be overridden
   static validate(context, props) {
     void props;
-    return null;
   }
 
   // To be overridden
@@ -34,3 +33,7 @@ export default class Component {
     void offset;
   }
 }
+
+Component.QUANTITY_ANY_NUMBER = 0;
+Component.QUANTITY_EXACTLY_ONE = 1;
+Component.QUANTITY_ZERO_OR_ONE = 2;

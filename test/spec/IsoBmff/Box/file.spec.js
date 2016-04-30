@@ -4,17 +4,17 @@ import sample from '../../../helper/IsoBmff';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('File', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      topLevelElement = sample.element,
+  const topLevelElement = sample.element,
       value = sample.buffer;
 
   it('generates a binary data from KontainerElements', () => {
     let buffer, elem, array;
 
-    buffer = Kontainer.renderToBuffer(
+    buffer = Kontainer.render(
       <file>
         <moov>
           <mvhd />
@@ -23,10 +23,10 @@ describe('File', () => {
     );
     expect(buffer).toBe(null);
 
-    buffer = Kontainer.renderToBuffer(topLevelElement);
+    buffer = Kontainer.render(topLevelElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value);
-    elem = IsoBmff.createElementFromBuffer(buffer);
+    elem = Kontainer.createElementFromBuffer(buffer);
     expect(elem).toHaveTheSameProps(topLevelElement);
   });
 
@@ -39,9 +39,9 @@ describe('File', () => {
       buf = new Uint8Array(value);
       b = buf.buffer;
     }
-    elem = IsoBmff.createElementFromBuffer(b);
+    elem = Kontainer.createElementFromBuffer(b);
     expect(elem).not.toBe(null);
-    buf = Kontainer.renderToBuffer(elem);
+    buf = Kontainer.render(elem);
     expect(buf).not.toBe(null);
     expect(buf).toBeTheSameBuffer(value);
   });

@@ -67,5 +67,5 @@ DataEntryUrnBox.defaultProps = {
 DataEntryUrnBox.spec = {
   container: 'dref',
   quantity: Box.QUANTITY_ANY_NUMBER,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

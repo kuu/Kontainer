@@ -11,5 +11,5 @@ MediaBox.COMPACT_NAME = 'mdia';
 MediaBox.spec = {
   container: 'trak',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: ['mdhd', 'hdlr', 'minf']
+  mandatoryList: ['mdhd', 'hdlr', 'minf']
 };

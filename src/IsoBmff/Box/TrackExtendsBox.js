@@ -175,5 +175,5 @@ TrackExtendsBox.defaultProps = {
 TrackExtendsBox.spec = {
   container: 'mvex',
   quantity: Box.QUANTITY_ANY_NUMBER, // Actually exactly one for each track.
-  mandatoryBoxList: []
+  mandatoryList: []
 };

@@ -14,7 +14,7 @@ function readCharacter(buffer, offset) {
 
   const decodeMultiBytes = (numBytes) => {
     const firstByteMask = (1 << (8 - numBytes)) - 1;
-    const trailingBytes = numBytes = 1;
+    const trailingBytes = numBytes - 1;
 
     let multiByteChar = firstByte & firstByteMask;
 
@@ -46,7 +46,7 @@ function readCharacter(buffer, offset) {
     // 6 byte
     charCode = decodeMultiBytes(6);
   } else {
-    console.error('util.readCharacter: Invalid char code - ' + firstByte);
+    console.error('Reader.readCharacter: Invalid char code - ' + firstByte);
     return [0, null];
   }
   return [base - offset, charCode ? String.fromCharCode(charCode) : null];
@@ -75,7 +75,7 @@ function readString(buffer, offset, length) {
   return [base - offset, str];
 }
 
-function readNumber(buffer, offset, length=4, signed=false) {
+function readNumber(buffer, offset, length=4, signed=false, safeLimit=true) {
   ASSERT(buffer, offset, length);
 
   let base = offset, left = 0, right = 0, i, negative, result;
@@ -109,10 +109,12 @@ function readNumber(buffer, offset, length=4, signed=false) {
     }
   }
 
-  if (result < 0) {
-    result = Math.max(result, Number.MIN_SAFE_INTEGER);
-  } else {
-    result = Math.min(result, Number.MAX_SAFE_INTEGER);
+  if (safeLimit) {
+    if (result < 0) {
+      result = Math.max(result, Number.MIN_SAFE_INTEGER);
+    } else {
+      result = Math.min(result, Number.MAX_SAFE_INTEGER);
+    }
   }
 
   return [base - offset, result];

@@ -11,5 +11,5 @@ TrackBox.COMPACT_NAME = 'trak';
 TrackBox.spec = {
   container: 'moov',
   quantity: Box.QUANTITY_ANY_NUMBER, // Actually one or more.
-  mandatoryBoxList: ['tkhd', 'mdia']
+  mandatoryList: ['tkhd', 'mdia']
 };

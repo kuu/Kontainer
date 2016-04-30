@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('TrackExtendsBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 32, // size=32
         116, 114, 101, 120, // type='trex'
         0, 0, 0, 0, // version=0, flags=0
@@ -43,10 +43,10 @@ describe('TrackExtendsBox', () => {
         sampleDegradationPriority: 0
       }
     }} />;
-    const buffer = Kontainer.renderToBuffer(trexElement);
+    const buffer = Kontainer.render(trexElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(trexElement).toHaveTheSameProps(element);
   });
@@ -66,10 +66,10 @@ describe('TrackExtendsBox', () => {
         sampleDegradationPriority: 65535
       }
     }} />;
-    const buffer = Kontainer.renderToBuffer(trexElement);
+    const buffer = Kontainer.render(trexElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(trexElement).toHaveTheSameProps(element);
   });

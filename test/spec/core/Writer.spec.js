@@ -1,4 +1,5 @@
 import Kontainer from 'kontainer-js';
+import Writer from '../../../src/core/Writer';
 
 const DEC4 = 15 / 16,
     DEC8 = 255 / 256,
@@ -82,8 +83,6 @@ const DEC4 = 15 / 16,
     };
 
 describe('Writer', () => {
-  const Writer = Kontainer.Writer;
-
   it('reads numbers', () => {
     Object.keys(testData).forEach(key => {
       const entry = testData[key];

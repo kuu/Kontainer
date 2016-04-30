@@ -68,5 +68,5 @@ SyncSampleBox.defaultProps = {
 SyncSampleBox.spec = {
   container: 'stbl',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

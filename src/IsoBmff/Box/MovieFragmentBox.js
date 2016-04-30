@@ -11,5 +11,5 @@ MovieFragmentBox.COMPACT_NAME = 'moof';
 MovieFragmentBox.spec = {
   container: 'file',
   quantity: Box.QUANTITY_ANY_NUMBER,
-  mandatoryBoxList: ['mfhd']
+  mandatoryList: ['mfhd']
 };

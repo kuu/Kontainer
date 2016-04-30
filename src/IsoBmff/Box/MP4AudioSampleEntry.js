@@ -47,5 +47,5 @@ MP4AudioSampleEntry.defaultProps = {
 MP4AudioSampleEntry.spec = {
   container: 'stsd',
   quantity: Box.QUANTITY_ANY_NUMBER,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

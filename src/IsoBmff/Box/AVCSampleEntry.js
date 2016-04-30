@@ -53,5 +53,5 @@ AVCSampleEntry.defaultProps = {
 AVCSampleEntry.spec = {
   container: 'stsd',
   quantity: Box.QUANTITY_ANY_NUMBER,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

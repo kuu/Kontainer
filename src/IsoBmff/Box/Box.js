@@ -18,7 +18,7 @@ export default class Box extends Component {
     if (size < 4294967296) {
       base += Writer.writeNumber(size, buffer, base, 4);
     } else {
-      console.error('IsoBmff.Box.serialize: largesize(>4GB) is not supported.');
+      console.error(`IsoBmff.Box.serialize(${size}): largesize(>4GB) is not supported.`);
       return 0;
     }
 
@@ -42,7 +42,7 @@ export default class Box extends Component {
     if (size < 4294967296) {
       Writer.writeNumber(size, buffer, offset, 4);
     } else {
-      console.error('IsoBmff.Box.serialize: largesize(>4GB) is not supported.');
+      console.error(`IsoBmff.Box.setSize(${size}): largesize(>4GB) is not supported.`);
       return 0;
     }
     this.size = size;
@@ -87,6 +87,6 @@ export default class Box extends Component {
   }
 }
 
-Box.QUANTITY_ANY_NUMBER = 0;
-Box.QUANTITY_EXACTLY_ONE = 1;
-Box.QUANTITY_ZERO_OR_ONE = 2;
+Box.QUANTITY_ANY_NUMBER = Component.QUANTITY_ANY_NUMBER;
+Box.QUANTITY_EXACTLY_ONE = Component.QUANTITY_EXACTLY_ONE;
+Box.QUANTITY_ZERO_OR_ONE = Component.QUANTITY_ZERO_OR_ONE;

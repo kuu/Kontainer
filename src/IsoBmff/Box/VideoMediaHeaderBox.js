@@ -3,6 +3,7 @@ import FullBox from './FullBox';
 import PropTypes from '../../core/PropTypes';
 import Writer from '../../core/Writer';
 import Reader from '../../core/Reader';
+import {throwException} from '../../core/Util';
 
 export default class VideoMediaHeaderBox extends FullBox {
   constructor(props) {
@@ -12,9 +13,8 @@ export default class VideoMediaHeaderBox extends FullBox {
   static validate(context) {
     const trackType = context.currentTrackType;
     if (trackType && trackType !== 'video') {
-      return new Error(`"${VideoMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
+      throwException(`"${VideoMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
     }
-    return null;
   }
 
   static encodeGraphicsMode(mode) {
@@ -100,5 +100,5 @@ VideoMediaHeaderBox.defaultProps = {
 VideoMediaHeaderBox.spec = {
   container: 'minf',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

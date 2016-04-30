@@ -1,4 +1,5 @@
 import Kontainer from 'kontainer-js';
+import Reader from '../../../src/core/Reader';
 
 const DEC4 = 15 / 16,
     DEC8 = 255 / 256,
@@ -80,8 +81,6 @@ const DEC4 = 15 / 16,
     };
 
 describe('Reader', () => {
-
-  const Reader = Kontainer.Reader;
 
   it('reads numbers', () => {
     Object.keys(testData).forEach(key => {

@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('MediaDataBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      mdatValue = [
+  const mdatValue = [
         0, 0, 0, 16, // size=16
         109, 100, 97, 116, // type='mdat'
         1, 2, 4, 8,
@@ -19,7 +19,7 @@ describe('MediaDataBox', () => {
     for (let i = 0; i < 8; i++) {
       data[i] = (1 << i);
     }
-    const buffer = Kontainer.renderToBuffer(<mdat {...{data}} />);
+    const buffer = Kontainer.render(<mdat {...{data}} />);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(mdatValue);
   });

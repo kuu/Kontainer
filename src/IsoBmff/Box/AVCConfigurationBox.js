@@ -232,5 +232,5 @@ AVCConfigurationBox.defaultProps = {
 AVCConfigurationBox.spec = {
   container: 'avc1',
   quantity: Box.QUANTITY_EXACTORY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

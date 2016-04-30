@@ -25,5 +25,5 @@ export default class File extends Box {
 File.COMPACT_NAME = 'file';
 
 File.spec = {
-  mandatoryBoxList: []
+  mandatoryList: []
 };

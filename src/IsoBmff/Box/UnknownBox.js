@@ -3,58 +3,59 @@ import PropTypes from '../../core/PropTypes';
 import Buffer from '../../core/Buffer';
 import Reader from '../../core/Reader';
 
-export default class UnknownBox extends Box {
-  constructor(props) {
-    super(props.name, props);
-  }
+export default function createUnknownBox(name) {
+  class UnknownBox extends Box {
+    constructor(props) {
+      super(UnknownBox.COMPACT_NAME, props);
+    }
 
-  serialize(buffer, offset=0) {
-    //console.log('--- UnknownBox.serialize enter.');
-    const data = this.props.data;
+    serialize(buffer, offset=0) {
+      //console.log('--- UnknownBox.serialize enter.');
+      const data = this.props.data;
 
-    let base = offset;
+      let base = offset;
 
-    base += super.serialize(buffer, base);
+      base += super.serialize(buffer, base);
 
-    if (buffer) {
-      for (let i = 0, il = data.length; i < il; i++) {
-        buffer[base++] = data[i];
+      if (buffer) {
+        for (let i = 0, il = data.length; i < il; i++) {
+          buffer[base++] = data[i];
+        }
+      } else {
+        base += data.length;
       }
-    } else {
-      base += data.length;
+
+      super.setSize(base - offset, buffer, offset);
+
+      //console.log(`--- UnknownBox.serialize exit. size=${this.size}`);
+      return this.size;
     }
 
-    super.setSize(base - offset, buffer, offset);
+    static parse(buffer, offset=-1) {
+      let base = offset, readBytesNum, props,
+          toBeRead, data, buf;
 
-    //console.log(`--- UnknownBox.serialize exit. size=${this.size}`);
-    return this.size;
-  }
+      [readBytesNum, props] = Box.parse(buffer, base);
+      base += readBytesNum;
+      toBeRead = props.size - readBytesNum;
 
-  static parse(buffer, offset=-1, name) {
-    let base = offset, readBytesNum, props,
-        toBeRead, data, buf;
+      Reader.ASSERT(buffer, base, toBeRead);
+      buf = new Buffer(toBeRead);
+      data = buf.getView();
 
-    [readBytesNum, props] = Box.parse(buffer, base);
-    props.name = name;
-    base += readBytesNum;
-    toBeRead = props.size - readBytesNum;
+      for (let i = 0; i < toBeRead; i++) {
+        data[i] = buffer[base++];
+      }
+      props.data = buf.getView();
 
-    Reader.ASSERT(buffer, base, toBeRead);
-    buf = new Buffer(toBeRead);
-    data = buf.getView();
-
-    for (let i = 0; i < toBeRead; i++) {
-      data[i] = buffer[base++];
+      return [base - offset, props];
     }
-    props.data = buf.getView();
-
-    return [base - offset, props];
   }
+
+  UnknownBox.COMPACT_NAME = name;
+
+  UnknownBox.propTypes = {
+    data: PropTypes.any.isRequired
+  };
+  return UnknownBox;
 }
-
-UnknownBox.COMPACT_NAME = 'unknown';
-
-UnknownBox.propTypes = {
-  name: PropTypes.string.isRequired,
-  data: PropTypes.any.isRequired
-};

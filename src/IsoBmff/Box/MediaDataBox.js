@@ -60,5 +60,5 @@ MediaDataBox.propTypes = {
 MediaDataBox.spec = {
   container: 'file',
   quantity: Box.QUANTITY_ANY_NUMBER,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

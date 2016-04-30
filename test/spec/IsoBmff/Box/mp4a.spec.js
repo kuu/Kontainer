@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('MP4AudioSampleEntry', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 36, // size=36
         109, 112, 52, 97, // type='mp4a'
         0, 0, 0, 0, // reserved (8)[6]
@@ -32,20 +32,20 @@ describe('MP4AudioSampleEntry', () => {
 
   it('supports mono/16bit/48kHz', () => {
     const mp4aElement = <mp4a dataReferenceIndex={1} />;
-    const buffer = Kontainer.renderToBuffer(mp4aElement);
+    const buffer = Kontainer.render(mp4aElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(mp4aElement).toHaveTheSameProps(element);
   });
 
   it('supports stereo/24bit/48kHz', () => {
     const mp4aElement = <mp4a {...{dataReferenceIndex: 2, channelCount: 2, sampleSize: 24, sampleRate: 48000 }} />;
-    const buffer = Kontainer.renderToBuffer(mp4aElement);
+    const buffer = Kontainer.render(mp4aElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(mp4aElement).toHaveTheSameProps(element);
   });

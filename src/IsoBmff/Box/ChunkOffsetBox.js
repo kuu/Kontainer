@@ -66,5 +66,5 @@ ChunkOffsetBox.defaultProps = {
 ChunkOffsetBox.spec = {
   container: 'stbl',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

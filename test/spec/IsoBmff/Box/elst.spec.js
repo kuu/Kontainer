@@ -2,9 +2,13 @@ import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 import Buffer from '../../../../src/core/Buffer';
 
+beforeEach(() => {
+  jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
+});
+
 describe('EditListBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 40, // size=40
         101, 108, 115, 116, // type='elst'
         0, 0, 0, 0, // version=0, flags=0
@@ -46,14 +50,14 @@ describe('EditListBox', () => {
         mediaRate: 1
       }
     ]} />;
-    const buffer = Kontainer.renderToBuffer(elstElement);
+    const buffer = Kontainer.render(elstElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element1 = IsoBmff.createElementFromBuffer(buffer);
+    const element1 = Kontainer.createElementFromBuffer(buffer);
     expect(element1).not.toBe(null);
     expect(element1).toHaveTheSameProps(elstElement);
 
-    const element2 = IsoBmff.createElementFromBuffer((new Buffer(value2)).getData());
+    const element2 = Kontainer.createElementFromBuffer((new Buffer(value2)).getData());
     expect(element2).not.toBe(null);
     expect(element2).toHaveTheSameProps(elstElement);
   });

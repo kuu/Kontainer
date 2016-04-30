@@ -11,5 +11,5 @@ MovieExtendsBox.COMPACT_NAME = 'mvex';
 MovieExtendsBox.spec = {
   container: 'moov',
   quantity: Box.QUANTITY_EXACTLY_ONE, // Actually zero or one.
-  mandatoryBoxList: ['trex']
+  mandatoryList: ['trex']
 };

@@ -1,10 +1,5 @@
-import {createElement as createBaseElement} from '../core/MediaFormat';
 import Box from './Box/Box';
-import UnknownBox from './Box/UnknownBox';
-import {TransformStream} from '../core/Stream';
-import {Visitor, ElementVisitor} from '../core/Visitor';
-import {IsoBmffDumpVisitor} from './BoxVisitor';
-import {BufferReadError} from '../core/Error';
+import createUnknownBox from './Box/UnknownBox';
 
 const clazz = {
   'file': require('./Box/File').default,
@@ -52,236 +47,40 @@ const clazz = {
   'elst': require('./Box/EditListBox').default,
 };
 
-function validateChild(context, child) {
-  const childSpec = child.type.spec;
-  const childName = child.type.COMPACT_NAME;
-  const checkList = context.mandatoryCheckList;
-  const quantityTable = context.quantityTable;
-
-  let container, quantity;
-
-  // Container check.
-  if (childSpec.container) {
-    if (childSpec.container instanceof Array) {
-      container = childSpec.container;
-    } else {
-      container = [childSpec.container];
-    }
-    if (container.indexOf(context.container) === -1) {
-      return [false, '"' + childName + '" cannot be a child of "' + context.container + '"'];
-    }
-  }
-
-  // Mandatory check.
-  checkList[childName] = true;
-
-  // Quantity check.
-  if ((quantity = childSpec.quantity) !== Box.QUANTITY_ANY_NUMBER) {
-    // Increment
-    if (quantityTable[childName] === void 0) {
-      quantityTable[childName] = 1;
-    } else {
-      quantityTable[childName]++;
-    }
-    // Validate
-    if (quantity === Box.QUANTITY_EXACTLY_ONE) {
-      if (quantityTable[childName] !== 1) {
-        return [false, 'Quantity of ' + childName + ' should be exactly one.'];
-      }
-    } else if (quantity === Box.QUANTITY_ZERO_OR_ONE) {
-      if (quantityTable[childName] > 1) {
-        return [false, 'Quantity of ' + childName + ' should be zero or one.'];
-      }
-    }
-  }
-  return [true, null];
+function getComponentClass(name) {
+  return clazz[name];
 }
 
-function createElement(type, ...otherParams) {
-  let componentClass, element, context = {},
-      spec, result, errorMessage, checkList;
+function parseTypeAndSize(buffer, offset) {
+  let readBytesNum, props;
 
-  // Validate type.
-  if (typeof type === 'string') {
-    componentClass = clazz[type];
-    if (!componentClass) {
-      console.error('IsoBmff.createElement: invalid type: "' + type + '"');
-      return null;
-    }
-    type = componentClass;
-  } else if (!type || !(type instanceof Box)) {
-    console.error('IsoBmff.createElement: "type" should be a subclass of the Box.');
-    return null;
-  } else {
-    componentClass = type;
-  }
-
-  // Create element.
-  if (!(element = createBaseElement(type, ...otherParams))) {
-    return null;
-  }
-
-  // Validate children.
-  spec = componentClass.spec;
-  context = {
-    container: componentClass.COMPACT_NAME,
-    mandatoryCheckList: {},
-    quantityTable: {}
-  };
-
-  if (!element.props.children.every(child => {
-      [result, errorMessage] = validateChild(context, child);
-      return result;
-    })) {
-    console.error('IsoBmff.createElement: Breaking the composition rule: ' + errorMessage);
-    return null;
-  }
-
-  checkList = context.mandatoryCheckList;
-
-  spec.mandatoryBoxList.forEach(boxType => {
-    if (boxType instanceof Array) {
-      if (boxType.some(box => checkList[box])) {
-        return;
-      }
-      boxType = boxType.join('", or "');
-    } else {
-      if (checkList[boxType]) {
-        return;
-      }
-    }
-    console.error('IsoBmff.createElement: Breaking the composition rule: "' +
-      boxType + '" is required as a child of "' + context.container + '"');
-    element = null;
-  });
-
-  return element;
-}
-
-function parse(buffer, offset, visitor) {
-  let readBytesNum;
-  let props;
-  let base = offset;
-
-  // Read the Box params as we don't know the type.
   [readBytesNum, props] = Box.parse(buffer, offset);
 
+  //console.log(`IsoBmff.parseTypeAndSize: props.type="${props.type}"`);
+
   const boxSize = props.size || buffer.length - offset;
-  const boxEnd = offset + boxSize;
   const boxType = (props.type === 'uuid' ? props.extendedType : props.type);
 
-  //console.log(`parse enter.: type=${boxType} size=${boxSize} offset=${offset}`);
-
   if (boxType.length < 4) {
-    console.error(`IsoBmff.createElementFromBuffer: Invalid type - "${boxType}"`);
-    visitor.offset += readBytesNum;
-    return boxSize;
+    console.error(`IsoBmff.parseTypeAndSize: Invalid type - "${boxType}"`);
+    return [null, boxSize];
   }
 
   let boxClass = clazz[boxType];
 
   if (!boxClass) {
-    console.error(`IsoBmff.createElementFromBuffer: Unsupported type - "${boxType}"`);
-    [readBytesNum, props] = UnknownBox.parse(buffer, offset, boxType);
-    boxClass = UnknownBox;
-  } else {
-    [readBytesNum, props] = boxClass.parse(buffer, offset);
+    console.error(`IsoBmff.parseTypeAndSize: Unsupported type - "${boxType}"`);
+    return [createUnknownBox(boxType), boxSize];
   }
-  base += readBytesNum;
-
-  visitor.offset = base;
-  visitor.enter(boxClass, props);
-
-  while (base < boxEnd) {
-    readBytesNum = parse(buffer, base, visitor);
-    base += readBytesNum;
-  }
-  visitor.exit();
-  visitor.offset = base;
-
-  //console.log(`parse exit.: type=${boxType} readBytesNum=${Math.min(base - offset, boxSize)}`);
-  return Math.min(base - offset, boxSize);
+  return [boxClass, boxSize];
 }
 
-function createElementFromBuffer(buffer, offset=0) {
-  let base = offset;
-
-  if (buffer instanceof ArrayBuffer) {
-    buffer = new Uint8Array(buffer);
-  }
-  const endOfBuffer = base + buffer.length;
-
-  const visitor = new ElementVisitor();
-
-  try {
-    while (base < endOfBuffer) {
-      const readBytesNum = parse(buffer, base, visitor);
-      base += readBytesNum;
-    }
-  } catch (err) {
-    if (err.message !== BufferReadError.ERROR_MESSAGE) {
-      console.error(`IsoBmff.transform: An error occurred in parsing the buffer: ${err.stack}`);
-    }
-    return null;
-  }
-  //console.log(`IsoBmff.createElementFromBuffer: Done. ${base - offset} bytes read.`);
-  if (visitor.results.length === 0) {
-    return null;
-  } else if (visitor.results.length === 1) {
-    return visitor.results[0];
-  }
-  return createBaseElement(clazz.file, null, ...visitor.results);
-}
-
-function transform(visitor) {
-  const Kontainer = require('..').default; // Ugly..
-  let vtor;
-
-  if (visitor instanceof Visitor) {
-    vtor = visitor;
-  } else {
-    // Received a filter function
-    class TransformVisitor extends ElementVisitor {
-      visit(type, props, children) {
-        visitor(type.COMPACT_NAME, props, children);
-        return super.visit(type, props, children);
-      }
-    }
-    vtor = new TransformVisitor();
-  }
-
-  return new TransformStream((buffer, offset, done) => {
-    let base = vtor.offset;
-    let buf = buffer.getData();
-
-    if (buf instanceof ArrayBuffer) {
-      buf = new Uint8Array(buf);
-    }
-    const endOfBuffer = buf.length;
-    try {
-      while (base < endOfBuffer) {
-        const readBytesNum = parse(buf, base, vtor);
-        base += readBytesNum;
-      }
-    } catch (err) {
-      if (err.message !== BufferReadError.ERROR_MESSAGE) {
-        console.error(`IsoBmff.transform: An error occurred in parsing the buffer: ${err.stack}`);
-      }
-      done(null, null);
-      return;
-    }
-
-    while (vtor.stack.length) {
-      vtor.exit();
-    }
-    done(null, Kontainer.renderToBuffer(createBaseElement(clazz.file, null, ...vtor.results)));
-  });
+function getRootWrapperClass() {
+  return clazz['file'];
 }
 
 export default {
-  createElement,
-  createElementFromBuffer,
-  transform,
-  ElementVisitor,
-  IsoBmffDumpVisitor
+  getComponentClass,
+  parseTypeAndSize,
+  getRootWrapperClass
 };

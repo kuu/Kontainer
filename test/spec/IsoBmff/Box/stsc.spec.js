@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('SampleToChunkBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 16, // size=16
         115, 116, 115, 99, // type='stsc'
         0, 0, 0, 0, // version=0, flags=0
@@ -31,10 +31,10 @@ describe('SampleToChunkBox', () => {
 
   it('supports zero entry', () => {
     const stscElement = <stsc />;
-    const buffer = Kontainer.renderToBuffer(stscElement);
+    const buffer = Kontainer.render(stscElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(stscElement).toHaveTheSameProps(element);
   });
@@ -59,10 +59,10 @@ describe('SampleToChunkBox', () => {
         }
       ]
     }} />;
-    const buffer = Kontainer.renderToBuffer(stscElement);
+    const buffer = Kontainer.render(stscElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(stscElement).toHaveTheSameProps(element);
   });

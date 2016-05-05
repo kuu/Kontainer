@@ -65,5 +65,5 @@ ESDBox.defaultProps = {
 ESDBox.spec = {
   container: ['mp4v', 'mp4a', 'mp4s'],
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

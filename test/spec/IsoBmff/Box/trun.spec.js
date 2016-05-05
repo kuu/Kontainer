@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('TrackRunBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 24, // size=24
         116, 114, 117, 110, // type='trun'
         0, 0, 0, 5, // version=0, flags=data-offset-present|first-sample-flags-present
@@ -42,10 +42,10 @@ describe('TrackRunBox', () => {
         sampleDegradationPriority: 65535
       }
     }} />;
-    const buffer = Kontainer.renderToBuffer(trunElement);
+    const buffer = Kontainer.render(trunElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(trunElement).toHaveTheSameProps(element);
   });
@@ -81,10 +81,10 @@ describe('TrackRunBox', () => {
         }
       ]
     }} />;
-    const buffer = Kontainer.renderToBuffer(trunElement);
+    const buffer = Kontainer.render(trunElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(trunElement).toHaveTheSameProps(element);
   });

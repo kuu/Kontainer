@@ -11,5 +11,5 @@ EditBox.COMPACT_NAME = 'edts';
 EditBox.spec = {
   container: 'trak',
   quantity: Box.QUANTITY_ZERO_OR_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

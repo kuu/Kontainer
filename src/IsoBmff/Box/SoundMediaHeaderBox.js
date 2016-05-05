@@ -3,6 +3,7 @@ import FullBox from './FullBox';
 import PropTypes from '../../core/PropTypes';
 import Writer from '../../core/Writer';
 import Reader from '../../core/Reader';
+import {throwException} from '../../core/Util';
 
 export default class SoundMediaHeaderBox extends FullBox {
   constructor(props) {
@@ -12,9 +13,8 @@ export default class SoundMediaHeaderBox extends FullBox {
   static validate(context) {
     const trackType = context.currentTrackType;
     if (trackType && trackType !== 'audio') {
-      return new Error(`"${SoundMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
+      throwException(`"${SoundMediaHeaderBox.COMPACT_NAME}" box cannot be placed within ${trackType} track.`);
     }
-    return null;
   }
 
   serialize(buffer, offset=0) {
@@ -66,5 +66,5 @@ SoundMediaHeaderBox.defaultProps = {
 SoundMediaHeaderBox.spec = {
   container: 'minf',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

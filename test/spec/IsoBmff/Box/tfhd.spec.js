@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('TrackFragmentHeaderBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 24, // size=24
         116, 102, 104, 100, // type='tfhd'
         0, 1, 0, 18, // version=0, flags=sample-description-index-present|default-sample-size-present|duration-is-empty
@@ -33,10 +33,10 @@ describe('TrackFragmentHeaderBox', () => {
       defaultSampleSize: 65536,
       durationIsEmpty: true
     }} />;
-    const buffer = Kontainer.renderToBuffer(tfhdElement);
+    const buffer = Kontainer.render(tfhdElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(tfhdElement).toHaveTheSameProps(element);
   });
@@ -56,18 +56,18 @@ describe('TrackFragmentHeaderBox', () => {
       },
       durationIsEmpty: false
     }} />;
-    const buffer = Kontainer.renderToBuffer(tfhdElement);
+    const buffer = Kontainer.render(tfhdElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(tfhdElement).toHaveTheSameProps(element);
   });
 
   it('supports base-data-offset', () => {
     let elem1 = <tfhd {...{trackId: 1, baseDataOffset: 623}} />;
-    let buffer = Kontainer.renderToBuffer(elem1);
-    let elem2 = IsoBmff.createElementFromBuffer(buffer);
+    let buffer = Kontainer.render(elem1);
+    let elem2 = Kontainer.createElementFromBuffer(buffer);
     expect(elem2.props.baseDataOffset).toBe(623);
   });
 

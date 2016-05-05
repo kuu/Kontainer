@@ -62,5 +62,5 @@ TrackFragmentBaseMediaDecodeTimeBox.defaultProps = {
 TrackFragmentBaseMediaDecodeTimeBox.spec = {
   container: 'traf',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

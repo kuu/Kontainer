@@ -51,5 +51,5 @@ SampleDescriptionBox.propTypes = {
 SampleDescriptionBox.spec = {
   container: 'stbl',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

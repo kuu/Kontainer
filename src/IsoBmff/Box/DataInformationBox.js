@@ -11,5 +11,5 @@ DataInformationBox.COMPACT_NAME = 'dinf';
 DataInformationBox.spec = {
   container: 'minf',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: ['dref']
+  mandatoryList: ['dref']
 };

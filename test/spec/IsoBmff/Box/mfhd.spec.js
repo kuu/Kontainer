@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('MovieFragmentHeaderBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 16, // size=16
         109, 102, 104, 100, // type='mfhd'
         0, 0, 0, 0, // version=0, flags=0
@@ -22,20 +22,20 @@ describe('MovieFragmentHeaderBox', () => {
 
   it('supports the smallest sequence number.', () => {
     const mfhdElement = <mfhd sequenceNumber={0} />;
-    const buffer = Kontainer.renderToBuffer(mfhdElement);
+    const buffer = Kontainer.render(mfhdElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(mfhdElement).toHaveTheSameProps(element);
   });
 
   it('supports the largest sequence number.', () => {
     const mfhdElement = <mfhd sequenceNumber={0xFFFFFFFF} />;
-    const buffer = Kontainer.renderToBuffer(mfhdElement);
+    const buffer = Kontainer.render(mfhdElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(mfhdElement).toHaveTheSameProps(element);
   });

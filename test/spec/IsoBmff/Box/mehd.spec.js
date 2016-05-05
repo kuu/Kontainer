@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('MovieExtendsHeaderBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 16, // size=16
         109, 101, 104, 100, // type='mehd'
         0, 0, 0, 0, // version=0, flags=0
@@ -23,20 +23,20 @@ describe('MovieExtendsHeaderBox', () => {
 
   it('supports 32 bit duration', () => {
     const mehdElement = <mehd fragmentDuration={16777216} />;
-    const buffer = Kontainer.renderToBuffer(mehdElement);
+    const buffer = Kontainer.render(mehdElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(mehdElement).toHaveTheSameProps(element);
   });
 
   it('supports 64 bit duration', () => {
     const mehdElement = <mehd version={1} fragmentDuration={4294967296} />;
-    const buffer = Kontainer.renderToBuffer(mehdElement);
+    const buffer = Kontainer.render(mehdElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(mehdElement).toHaveTheSameProps(element);
   });

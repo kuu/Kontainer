@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('FileTypeBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      defaultValue = [
+  const defaultValue = [
         0, 0, 0, 16, // size=16
         102, 116, 121, 112, // type='ftyp'
         105, 115, 111, 109, // major_brand='isom'
@@ -23,17 +23,17 @@ describe('FileTypeBox', () => {
       ];
 
   it('requires major_brand', () => {
-    const buffer = Kontainer.renderToBuffer(<ftyp />);
+    const buffer = Kontainer.render(<ftyp />);
     expect(buffer).toBe(null);
   });
 
   it('can be initialized with the default values', () => {
-    const buffer = Kontainer.renderToBuffer(<ftyp majorBrand="isom" />);
+    const buffer = Kontainer.render(<ftyp majorBrand="isom" />);
     expect(buffer).toBeTheSameBuffer(defaultValue);
   });
 
   it('can be initialized with the specified values', () => {
-    const buffer = Kontainer.renderToBuffer(<ftyp {...{majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}} />);
+    const buffer = Kontainer.render(<ftyp {...{majorBrand: 'avc1', minorVersion: 2, compatibleBrands: ['isom', 'iso2']}} />);
     expect(buffer).toBeTheSameBuffer(avc1Value);
   });
 });

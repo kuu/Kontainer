@@ -59,5 +59,5 @@ MovieExtendsHeaderBox.defaultProps = {
 MovieExtendsHeaderBox.spec = {
   container: 'mvex',
   quantity: Box.QUANTITY_EXACTLY_ONE, // Actually zero or one.
-  mandatoryBoxList: []
+  mandatoryList: []
 };

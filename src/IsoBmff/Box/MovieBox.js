@@ -11,5 +11,5 @@ MovieBox.COMPACT_NAME = 'moov';
 MovieBox.spec = {
   container: 'file',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: ['mvhd', 'trak']
+  mandatoryList: ['mvhd', 'trak']
 };

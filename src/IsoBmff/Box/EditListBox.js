@@ -82,5 +82,5 @@ EditListBox.propTypes = {
 EditListBox.spec = {
   container: 'edts',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

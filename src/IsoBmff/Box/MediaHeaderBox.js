@@ -95,5 +95,5 @@ MediaHeaderBox.defaultProps = {
 MediaHeaderBox.spec = {
   container: 'mdia',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

@@ -1,15 +1,33 @@
 import IsoBmff from './IsoBmff';
-import PropTypes from './core/PropTypes';
+import Matroska from './Matroska';
 import Reader from './core/Reader';
 import Writer from './core/Writer';
 import Buffer from './core/Buffer';
+import Component from './core/Component';
+import {Visitor, ElementVisitor, DumpVisitor} from './core/Visitor';
+import {TransformStream} from './core/Stream';
+import {BufferReadError} from './core/Error';
+import {createElement as createBaseElement} from './core/MediaFormat';
+import {throwException} from './core/Util';
+
+let currentFormat = IsoBmff;
+
+function use(format) {
+  if (format === 'mp4') {
+    currentFormat = IsoBmff;
+  } else if (format === 'webm') {
+    currentFormat = Matroska;
+  } else {
+    console.error(`[Kontainer.use] Unsupported format: "${format}"`);
+  }
+}
 
 function traverse(context, element, buffer, offset=0) {
   let type, props, children, instance,
       propTypes, base = offset, err;
 
   if (!element) {
-    console.warn('Kontainer.renderToBuffer: null element.');
+    console.warn('Kontainer.render: null element.');
     return 0;
   }
 
@@ -31,15 +49,11 @@ function traverse(context, element, buffer, offset=0) {
         }
         return true;
       })) {
-        console.error('Kontainer.renderToBuffer: Prop validation failed: ' + err.message);
-        return 0;
+        throwException('Kontainer.render: Prop validation failed: ' + err.message);
       }
     }
     // Validate context
-    err = type.validate(context, props);
-    if (err) {
-      console.error('Kontainer.renderToBuffer: Context validation failed: ' + err.message);
-    }
+    type.validate(context, props);
     // Instantiation
     instance = element.instance = new type(props);
   }
@@ -59,55 +73,18 @@ function traverse(context, element, buffer, offset=0) {
   return instance.getSize();
 }
 
-function printProps(context, element) {
-  const indent = context.indent;
-  const formatter = context.formatter;
-
-  let type, props, children;
-
-  if (!element) {
-    console.warn('Kontainer.renderToString: null element.');
-    return;
-  }
-
-  type = element.type;
-  props = element.props;
-  children = props.children;
-
-  //console.log(`printProps enter. type=${type.COMPACT_NAME}`);
-
-  context.string += formatter.header(indent, type.COMPACT_NAME);
-
-  // Write self to the string.
-  Object.keys(props).forEach(key => {
-    if (key === 'children' || key === 'type') {
-      return;
-    }
-    if (key === 'extendedType' && props.type !== 'uuid') {
-      return;
-    }
-    context.string += formatter.body(indent, key, props[key]);
-  });
-
-  // Write children to the array buffer.
-  context.indent++;
-  children.forEach(child => {
-    printProps(context, child);
-  });
-
-  context.indent--;
-  context.string += formatter.footer(indent, type.COMPACT_NAME);
-
-  //console.log(`printProps exit. type=${type.COMPACT_NAME}`);
-}
-
-function renderToBuffer(element) {
+function render(element) {
   let size, buffer, context = {};
 
-  // Culculate the entire byte size.
-  size = traverse(context, element);
+  try {
+    // Culculate the entire byte size.
+    size = traverse(context, element);
+  } catch (err) {
+    console.error(`render: An error occurred in culculating the buffer size: ${err.stack}`);
+    return null;
+  }
 
-  if (!size) {
+  if (size === 0) {
     return null;
   }
 
@@ -118,90 +95,235 @@ function renderToBuffer(element) {
   return buffer.getData();
 }
 
-const defaultPropsFormatter = {
-  buffer: (v) => {
-    if (global && global.Buffer) {
-      return `[Buffer length=${v.length}]`;
-    }
-    return v;
-  },
-  isBuffer: (v) => {
-    if (global && global.Buffer) {
-      return (v instanceof global.Buffer);
-    }
-    return (v instanceof ArrayBuffer);
-  },
-  padding: (num) => {
-    let str = '';
-    for (let i = 0; i < num; i++) {
-      str += '\t';
-    }
-    return str;
-  },
-  value: (v) => {
-    let str;
-    if (typeof v === 'object' && !(v instanceof Date) && !defaultPropsFormatter.isBuffer(v)) {
-      str = '{';
-      Object.keys(v).forEach(key => {
-        str += (key + ': ' + defaultPropsFormatter.value(v[key]) + ', ');
-      });
-      return str + '}';
-    }
-    if (typeof v === 'string') {
-      return '"' + v + '"';
-    }
-    if (defaultPropsFormatter.isBuffer(v)) {
-      return defaultPropsFormatter.buffer(v);
-    }
-    return v;
-  },
-  array: (a) => {
-    let str = '[ ';
-    if (a.length > 100) {
-      return str + `array of length=${a.length}]`;
-    }
-    a.forEach(v => {
-      if (v instanceof Array) {
-        str += defaultPropsFormatter.array(v);
-      } else {
-        str += defaultPropsFormatter.value(v);
-      }
-      str += ', ';
-    });
-    return str + ' ]';
-  },
-  header: (indentNum, typeName) => {
-    return defaultPropsFormatter.padding(indentNum) + '[' + typeName + '] >>>> start' + '\n';
-  },
-  footer: (indentNum, typeName) => {
-    return defaultPropsFormatter.padding(indentNum) + '[' + typeName + '] <<<< end' + '\n';
-  },
-  body: (indentNum, key, value) => {
-    let v;
-    if (value instanceof Array) {
-      v = defaultPropsFormatter.array(value);
-    } else {
-      v = defaultPropsFormatter.value(value);
-    }
-    return defaultPropsFormatter.padding(indentNum) + '\t' + key + ': ' + v + '\n';
-  }
-};
+function validateChild(context, child) {
+  const childSpec = child.type.spec;
+  const childName = child.type.COMPACT_NAME;
+  const checkList = context.mandatoryCheckList;
+  const quantityTable = context.quantityTable;
 
-function renderToString(element, propsFormatter) {
-  const context = {
-    string: '',
-    indent: 0,
-    formatter: propsFormatter || defaultPropsFormatter
+  let container, quantity;
+
+  // Container check.
+  if (childSpec.container) {
+    if (childSpec.container instanceof Array) {
+      container = childSpec.container;
+    } else {
+      container = [childSpec.container];
+    }
+    if (container.indexOf(context.container) === -1) {
+      return [false, '"' + childName + '" cannot be a child of "' + context.container + '"'];
+    }
+  }
+
+  // Mandatory check.
+  checkList[childName] = true;
+
+  // Quantity check.
+  if ((quantity = childSpec.quantity) !== Component.QUANTITY_ANY_NUMBER) {
+    // Increment
+    if (quantityTable[childName] === void 0) {
+      quantityTable[childName] = 1;
+    } else {
+      quantityTable[childName]++;
+    }
+    // Validate
+    if (quantity === Component.QUANTITY_EXACTLY_ONE) {
+      if (quantityTable[childName] !== 1) {
+        return [false, 'Quantity of ' + childName + ' should be exactly one.'];
+      }
+    } else if (quantity === Component.QUANTITY_ZERO_OR_ONE) {
+      if (quantityTable[childName] > 1) {
+        return [false, 'Quantity of ' + childName + ' should be zero or one.'];
+      }
+    }
+  }
+  return [true, null];
+}
+
+function createElement(type, ...otherParams) {
+  let componentClass, element, context = {},
+      spec, result, errorMessage, checkList;
+
+  // Validate type.
+  if (typeof type === 'string') {
+    componentClass = currentFormat.getComponentClass(type);
+    if (!componentClass) {
+      console.error(`createElement: invalid type: "${type}"`);
+      return null;
+    }
+  } else if (!type || !(type instanceof Component)) {
+    console.error('createElement: "type" should be a subclass of the Component.');
+    return null;
+  } else {
+    componentClass = type;
+  }
+
+  // Create element.
+  if (!(element = createBaseElement(componentClass, ...otherParams))) {
+    return null;
+  }
+
+  // Validate children.
+  spec = componentClass.spec;
+  context = {
+    container: componentClass.COMPACT_NAME,
+    mandatoryCheckList: {},
+    quantityTable: {}
   };
-  printProps(context, element);
-  return context.string;
+
+  if (!element.props.children.every(child => {
+      [result, errorMessage] = validateChild(context, child);
+      return result;
+    })) {
+    console.error(`createElement: Breaking the composition rule: ${errorMessage}`);
+    return null;
+  }
+
+  checkList = context.mandatoryCheckList;
+
+  spec.mandatoryList.forEach(boxType => {
+    if (boxType instanceof Array) {
+      if (boxType.some(box => checkList[box])) {
+        return;
+      }
+      boxType = boxType.join('", or "');
+    } else {
+      if (checkList[boxType]) {
+        return;
+      }
+    }
+    console.error(`createElement: Breaking the composition rule: "${boxType}" is required as a child of "${context.container}"`);
+    element = null;
+  });
+
+  return element;
+}
+
+function parse(buffer, offset, visitor) {
+  let readBytesNum;
+  let props;
+  let base = offset;
+
+  let componentClass, componentSize;
+
+  // Read the first bytes as we don't know the type and the size.
+  [componentClass, componentSize] = currentFormat.parseTypeAndSize(buffer, offset);
+
+  if (componentSize === -1) {
+    // TODO: Unknown size.
+    throwException('Unknown size is not supported');
+  }
+
+  if (!componentClass) {
+    visitor.offset += componentSize;
+    return componentSize;
+  }
+  const componentEnd = offset + componentSize;
+  const componentName = componentClass.COMPACT_NAME;
+
+  //console.log(`parse enter.: type=${componentName} size=${componentSize} offset=${offset}`);
+
+  [readBytesNum, props] = componentClass.parse(buffer, offset);
+  base += readBytesNum;
+
+  visitor.offset = base;
+  visitor.enter(componentClass, props);
+
+  while (base < componentEnd) {
+    readBytesNum = parse(buffer, base, visitor);
+    base += readBytesNum;
+  }
+  visitor.exit();
+  visitor.offset = base;
+
+  //console.log(`parse exit.: type=${componentName} readBytesNum=${Math.min(base - offset, componentSize)}`);
+
+  return Math.min(base - offset, componentSize);
+}
+
+function createElementFromBuffer(buffer, offset=0) {
+  let base = offset;
+
+  if (buffer instanceof ArrayBuffer) {
+    buffer = new Uint8Array(buffer);
+  }
+  const endOfBuffer = base + buffer.length;
+
+  const visitor = new ElementVisitor();
+
+  try {
+    while (base < endOfBuffer) {
+      const readBytesNum = parse(buffer, base, visitor);
+      base += readBytesNum;
+    }
+  } catch (err) {
+    if (err.message !== BufferReadError.ERROR_MESSAGE) {
+      console.error(`createElementFromBuffer: An error occurred in parsing the buffer: ${err.stack}`);
+    }
+    return null;
+  }
+  //console.log(`createElementFromBuffer: Done. ${base - offset} bytes read.`);
+  if (visitor.results.length === 0) {
+    return null;
+  } else if (visitor.results.length === 1) {
+    return visitor.results[0];
+  }
+  return createBaseElement(currentFormat.getRootWrapperClass(), null, ...visitor.results);
+}
+
+function transform(visitor) {
+  let vtor;
+
+  if (visitor instanceof Visitor) {
+    vtor = visitor;
+  } else {
+    // Received a filter function
+    class TransformVisitor extends ElementVisitor {
+      visit(type, props, children) {
+        visitor && visitor(type.COMPACT_NAME, props, children);
+        return super.visit(type, props, children);
+      }
+    }
+    vtor = new TransformVisitor();
+  }
+
+  return new TransformStream((buffer, offset, done) => {
+    let base = vtor.offset;
+    let buf = buffer.getData();
+
+    if (buf instanceof ArrayBuffer) {
+      buf = new Uint8Array(buf);
+    }
+    const endOfBuffer = buf.length;
+    try {
+      while (base < endOfBuffer) {
+        const readBytesNum = parse(buf, base, vtor);
+        base += readBytesNum;
+      }
+    } catch (err) {
+      if (err.message !== BufferReadError.ERROR_MESSAGE) {
+        console.error(`transform: An error occurred in parsing the buffer: ${err.stack}`);
+      }
+      done(null, null);
+      return;
+    }
+
+    while (vtor.stack.length) {
+      vtor.exit();
+    }
+    done(null, render(createBaseElement(currentFormat.getRootWrapperClass(), null, ...vtor.results)));
+  });
 }
 
 export default {
-  renderToBuffer,
-  renderToString,
-  IsoBmff,
-  PropTypes,
-  Reader,
-  Writer
+  use,
+  get mode() {
+    return currentFormat === Matroska ? 'webm' : 'mp4';
+  },
+  render,
+  createElement,
+  createElementFromBuffer,
+  transform,
+  ElementVisitor,
+  DumpVisitor
 };

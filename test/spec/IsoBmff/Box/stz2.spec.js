@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('CompactSampleSizeBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 23, // size=23
         115, 116, 122, 50, // type='stz2'
         0, 0, 0, 0, // version=0, flags=0
@@ -37,30 +37,30 @@ describe('CompactSampleSizeBox', () => {
 
   it('handles 4 bit field size', () => {
     const stz2Element = <stz2 {...{fieldSize: 4, sampleSizeEntries: [1, 2, 3, 4, 5]}} />;
-    const buffer = Kontainer.renderToBuffer(stz2Element);
+    const buffer = Kontainer.render(stz2Element);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(stz2Element).toHaveTheSameProps(element);
   });
 
   it('handles 8 bit field size', () => {
     const stz2Element = <stz2 {...{fieldSize: 8, sampleSizeEntries: [1, 2, 3, 4, 5]}} />;
-    const buffer = Kontainer.renderToBuffer(stz2Element);
+    const buffer = Kontainer.render(stz2Element);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(stz2Element).toHaveTheSameProps(element);
   });
 
   it('handles 16 bit field size', () => {
     const stz2Element = <stz2 {...{fieldSize: 16, sampleSizeEntries: [1, 2, 3, 4, 5]}} />;
-    const buffer = Kontainer.renderToBuffer(stz2Element);
+    const buffer = Kontainer.render(stz2Element);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value3);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(stz2Element).toHaveTheSameProps(element);
   });

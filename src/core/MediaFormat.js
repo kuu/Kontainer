@@ -58,7 +58,7 @@ export function createElement(type, props, ...children) {
 
   // Validate type
   if (!isValidComponentClass(type)) {
-    console.error(`MediaFormat.createElement: the class (${type.name}) does not implement necessary methods.`);
+    console.error(`MediaFormat.createElement: the class (${type}) does not implement necessary methods.`);
     return null;
   }
   props.children = children;

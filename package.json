@@ -33,7 +33,8 @@
     "release-bundle": "NODE_ENV=production browserify -t babelify src/index.js > lib/kontainer.js",
     "minify": "uglifyjs lib/kontainer.js --source-map-url kontainer.js.map -p 1 --source-map lib/kontainer.js.map -c -m -o lib/kontainer.min.js",
     "prepublish": "npm run build && dist-es6",
-    "self": "kontainer"
+    "self": "kontainer",
+    "test-webm": "kontainer --webm"
   },
   "author": "Kuu Miyazaki",
   "license": "MIT",
@@ -45,26 +46,29 @@
     "audio",
     "MP4",
     "ISO BMFF",
-    "ISO/IEC 14496-12"
+    "ISO/IEC 14496-12",
+    "WebM",
+    "Matroska",
+    "EBML"
   ],
   "devDependencies": {
-    "babel-plugin-transform-kontainer-js": "0.0.3",
+    "babel-plugin-transform-kontainer-js": "0.1.0",
     "babel-preset-es2015": "^6.6.0",
-    "babelify": "^7.2.0",
+    "babelify": "^7.3.0",
     "browserify": "^13.0.0",
-    "eslint": "^2.7.0",
+    "eslint": "^2.9.0",
     "jasmine-core": "^2.4.1",
-    "jasmine-es6": "^0.1.8",
+    "jasmine-es6": "^0.1.9",
     "karma": "^0.13.22",
-    "karma-browserify": "^5.0.3",
-    "karma-chrome-launcher": "^0.2.3",
-    "karma-cli": "^0.1.2",
-    "karma-jasmine": "^0.3.8",
+    "karma-browserify": "^5.0.4",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-cli": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
     "uglify-js": "^2.6.2",
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "dist-es6": "^0.1.15",
-    "yargs": "^4.6.0"
+    "dist-es6": "^0.1.17",
+    "yargs": "^4.7.0"
   }
 }

@@ -22,7 +22,8 @@ const TO_BE_OMITTED = [
   'type',
   'extendedType',
   'version',
-  'flags'
+  'flags',
+  'initialSizeLen'
 ];
 
 function checkProps(actualProps, expectedProps) {
@@ -83,6 +84,7 @@ export default {
         for (let i = 0, il = array.length; i < il; i++) {
           //console.log('a[' + i + ']=' + array[i] + ', b[' + i + ']=' + expected[i]);
           if (array[i] !== expected[i]) {
+            console.error(`The first different byte found at actual[${i}](${array[i]}) !== expected[${i}](${expected[i]})`);
             return result;
           }
         }

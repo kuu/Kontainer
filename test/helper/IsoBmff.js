@@ -1,6 +1,6 @@
 import Kontainer from '../../src/';
 
-const IsoBmff = Kontainer.IsoBmff;
+Kontainer.use('mp4');
 
 export default {
   element:  (

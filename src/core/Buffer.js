@@ -1,9 +1,13 @@
 export default class Buffer {
-  constructor(param) {
+  constructor(...params) {
     if (global && global.Buffer) {
-      this.buffer = new global.Buffer(param);
+      this.buffer = new global.Buffer(...params);
     } else {
-      this.buffer = new Uint8Array(param);
+      if (params.length === 1 && params[0].length !== void 0) {
+        this.buffer = Uint8Array.from(params[0]);
+      } else {
+        this.buffer = new Uint8Array(...params);
+      }
     }
   }
 

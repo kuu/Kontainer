@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('AVCConfigurationBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      avcCValue = [
+  const avcCValue = [
         0, 0, 0, 35, // size=35
         97, 118, 99, 67, // type='avcC'
         1, 66, 0, 21, // configurationVersion=1, AVCProfileIndication='baseline', profile_compatibility=0:false,1:false,2:false, AVCLevelIndication=2.1
@@ -50,10 +50,10 @@ describe('AVCConfigurationBox', () => {
         {length: 8, data: pps}
       ]
     }} />;
-    let buffer = Kontainer.renderToBuffer(element);
+    let buffer = Kontainer.render(element);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(avcCValue);
-    const element2 = IsoBmff.createElementFromBuffer(buffer);
+    const element2 = Kontainer.createElementFromBuffer(buffer);
     expect(element).toHaveTheSameProps(element2);
   });
 });

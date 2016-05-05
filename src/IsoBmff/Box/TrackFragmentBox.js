@@ -11,5 +11,5 @@ TrackFragmentBox.COMPACT_NAME = 'traf';
 TrackFragmentBox.spec = {
   container: 'moof',
   quantity: Box.QUANTITY_ANY_NUMBER,
-  mandatoryBoxList: ['tfhd']
+  mandatoryList: ['tfhd']
 };

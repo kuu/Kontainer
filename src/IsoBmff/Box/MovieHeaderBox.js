@@ -125,5 +125,5 @@ MovieHeaderBox.defaultProps = {
 MovieHeaderBox.spec = {
   container: 'moov',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

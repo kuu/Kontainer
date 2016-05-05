@@ -139,7 +139,7 @@ function createInstanceTypeChecker(expectedClass) {
   function validate(props, propName, componentName) {
     if (!(props[propName] instanceof expectedClass)) {
       let expectedClassName = expectedClass.name || ANONYMOUS;
-      
+
       return new Error(
         `Invalid \`${propName}\` supplied to ` +
         `\`${componentName}\`, expected instance of \`${expectedClassName}\`.`
@@ -194,7 +194,7 @@ function createObjectOfTypeChecker(typeChecker) {
   return createChainableTypeChecker(validate);
 }
 
-function createUnionTypeChecker(arrayOfTypeCheckers) {
+function createUnionTypeChecker(TypeCheckers) {
   function validate(props, propName, componentName) {
     for (let i = 0; i < arrayOfTypeCheckers.length; i++) {
       const checker = arrayOfTypeCheckers[i];

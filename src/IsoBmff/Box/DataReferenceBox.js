@@ -75,5 +75,5 @@ DataReferenceBox.defaultProps = {
 DataReferenceBox.spec = {
   container: 'dinf',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

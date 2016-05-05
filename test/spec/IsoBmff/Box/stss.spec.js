@@ -3,11 +3,11 @@ import customMatchers from '../../../helper/matcher';
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('SyncSampleBox', () => {
-  const IsoBmff = Kontainer.IsoBmff,
-      value1 = [
+  const value1 = [
         0, 0, 0, 16, // size=16
         115, 116, 115, 115, // type='stss'
         0, 0, 0, 0, // version=0, flags=0
@@ -25,20 +25,20 @@ describe('SyncSampleBox', () => {
 
   it('supports zero entry', () => {
     const stssElement = <stss entries={[]} />;
-    const buffer = Kontainer.renderToBuffer(stssElement);
+    const buffer = Kontainer.render(stssElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value1);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(stssElement).toHaveTheSameProps(element);
   });
 
   it('supports multiple entries', () => {
     const stssElement = <stss entries={[1, 2, 3]} />;
-    const buffer = Kontainer.renderToBuffer(stssElement);
+    const buffer = Kontainer.render(stssElement);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value2);
-    const element = IsoBmff.createElementFromBuffer(buffer);
+    const element = Kontainer.createElementFromBuffer(buffer);
     expect(element).not.toBe(null);
     expect(stssElement).toHaveTheSameProps(element);
   });

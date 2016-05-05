@@ -105,5 +105,5 @@ CompactSampleSizeBox.defaultProps = {
 CompactSampleSizeBox.spec = {
   container: 'stbl',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

@@ -64,5 +64,5 @@ MPEG4BitRateBox.propTypes = {
 MPEG4BitRateBox.spec = {
   container: 'avc1',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

@@ -23,11 +23,10 @@ The actual media data (audio and video chunks) and the metadata are represented 
 ```js
 import Kontainer from 'kontainer-js';
 
-const IsoBmff = Kontainer.IsoBmff;
-
 export default class MP4 {
 
   constructor(width, height) {
+    Kontainer.use('mp4'); // format (mp4|webm) needs to be set before any API call
     this.width = width;
     this.height = height;
   }
@@ -51,19 +50,19 @@ export default class MP4 {
 }
 ```
 
-The above code is transpiled into the calls to `createElement()` using [`babel`](https://babeljs.io/) and a dedicated [plugin](https://www.npmjs.com/package/babel-plugin-transform-kontainer-js).
+The above code can be transpiled into the calls to `createElement()` using [`babel`](https://babeljs.io/) and a dedicated [plugin](https://www.npmjs.com/package/babel-plugin-transform-kontainer-js).
 
 ```js
-    // IsoBmff.createElement()
+    // Kontainer.createElement()
     //   Accepts: type, props, children...
     //   Returns: KontainerElement
-    return IsoBmff.createElement('file', null,
-      IsoBmff.createElement('ftyp', {majorBrand: 'isom'}),
-      IsoBmff.createElement('moov', null,
-        IsoBmff.createElement('mvhd', {creationTime: new Date(0), modificationTime: new Date(), timeScale: 1, nextTrackId: 4}),
-        IsoBmff.createElement('trak', null,
-          IsoBmff.createElement('tkhd', {creationTime: new Date(0), modificationTime: new Date(), trackId: 1, width: 640, height: 480}),
-          IsoBmff.createElement('mdia', null,
+    return Kontainer.createElement('file', null,
+      Kontainer.createElement('ftyp', {majorBrand: 'isom'}),
+      Kontainer.createElement('moov', null,
+        Kontainer.createElement('mvhd', {creationTime: new Date(0), modificationTime: new Date(), timeScale: 1, nextTrackId: 4}),
+        Kontainer.createElement('trak', null,
+          Kontainer.createElement('tkhd', {creationTime: new Date(0), modificationTime: new Date(), trackId: 1, width: 640, height: 480}),
+          Kontainer.createElement('mdia', null,
             ...
             // KontainerElement can be a child of other elements to compose a large nested tree.
           )
@@ -72,30 +71,30 @@ The above code is transpiled into the calls to `createElement()` using [`babel`]
     );
 ```
 
-Once an element is obtained, it can be serialized into a byte stream using `renderToBuffer()`.
+Once an element is obtained, it can be serialized into a byte stream using `render()`.
 
 ```js
-    // Kontainer.renderToBuffer()
+    // Kontainer.render()
     //   Accepts: KontainerElement
     //   Returns: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream
-    buffer = Kontainer.renderToBuffer(element);
+    buffer = Kontainer.render(element);
 ```
 
-On the other hand, you can parse a byte stream and reproduce a KontainerElement from it.
+On the other hand, you can create a KontainerElement from a byte stream.
 
 ```js
-    // IsoBmff.createElementFromBuffer()
+    // Kontainer.createElementFromBuffer()
     //   Accepts: Buffer (in node) or ArrayBuffer (in browser) that contains a media stream [, offset=0]
     //   Returns: KontainerElement.
-    element = IsoBmff.createElementFromBuffer(buffer, offset);
+    element = Kontainer.createElementFromBuffer(buffer, offset);
 
 ```
 
-You can also create your hook and process a byte stream progressively.
+You can also create your hook and process a byte stream progressively. (This works only for Node.js)
 
 ```js
   const input = fs.createReadStream('./test.mp4');
-  const transform = IsoBmff.transform((type, props, children) => {
+  const transform = Kontainer.transform((type, props, children) => {
     if (type === 'tkhd') {
       // Change video dimensions
       props.width /= 2;
@@ -107,7 +106,7 @@ You can also create your hook and process a byte stream progressively.
 
 ### JSX
 
-To transpile JSX code into `createElement()` calls together with your ES6 code, you need to install `babel` and its plugins.
+To transpile JSX into `createElement()` calls together with your ES.next code, you need to install `babel` and its plugins.
 
 ```
 $ npm install babel-cli
@@ -135,19 +134,21 @@ See the [plugin code](https://github.com/kuu/babel-plugin-transform-kontainer-js
 
 ## CLI
 
-A simple parser for displaying the structure of media file.
+A simple parser for displaying the structure of a media file.
 
 ```
 Usage:
     kontainer filePath [options]
 
 Example:
-
     kontainer /path/to/file
-Options:
+    kontainer --webm /path/to/file
 
+Options:
   -h, --help    Print help
   -v, --version Print version
+  --mp4         The file is MP4 (default)
+  --webm        The file is WebM
 ```
 
 ## Development

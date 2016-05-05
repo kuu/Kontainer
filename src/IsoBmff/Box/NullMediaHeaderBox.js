@@ -35,5 +35,5 @@ NullMediaHeaderBox.defaultProps = {
 NullMediaHeaderBox.spec = {
   container: 'minf',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

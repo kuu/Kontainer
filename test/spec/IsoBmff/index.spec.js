@@ -1,10 +1,9 @@
 import Kontainer from 'kontainer-js';
 import customMatchers from '../../helper/matcher';
 import Buffer from '../../../src/core/Buffer';
-import {Visitor} from '../../../src/core/Visitor';
+import {Visitor, ElementVisitor} from '../../../src/core/Visitor';
 import sample from '../../helper/IsoBmff';
 
-const IsoBmff = Kontainer.IsoBmff;
 const ELEMENT = sample.element;
 const BUFFER = sample.buffer;
 const UNKNOWN = sample.unknownBuffer;
@@ -12,6 +11,7 @@ const ELEMENT_NUM = 22;
 
 beforeEach(() => {
   jasmine.addMatchers(customMatchers);
+  Kontainer.use('mp4');
 });
 
 describe('IsoBmff', () => {
@@ -117,7 +117,7 @@ describe('IsoBmff', () => {
         };
 
         const input = new InputStream();
-        const transform = IsoBmff.transform(visitor);
+        const transform = Kontainer.transform(visitor);
         const output = new OutputStream(cb);
         input.pipe(transform).pipe(output);
       });
@@ -140,7 +140,7 @@ describe('IsoBmff', () => {
         };
 
         const input = new InputStream();
-        const transform = IsoBmff.transform(visitor);
+        const transform = Kontainer.transform(visitor);
         const output = new OutputStream(cb);
         input.pipe(transform).pipe(output);
       });
@@ -163,7 +163,7 @@ describe('IsoBmff', () => {
         };
 
         const input = new InputStream();
-        const transform = IsoBmff.transform(visitor);
+        const transform = Kontainer.transform(visitor);
         const output = new OutputStream(cb);
         input.pipe(transform).pipe(output);
       });
@@ -192,7 +192,7 @@ describe('IsoBmff', () => {
       }
 
       it('can convert buffer to element and revert it back', (cb) => {
-        const visitor = new IsoBmff.ElementVisitor();
+        const visitor = new ElementVisitor();
 
         InputStream.prototype._read = function (size) {
           if (this.finished) {
@@ -204,13 +204,13 @@ describe('IsoBmff', () => {
         };
 
         const input = new InputStream();
-        const transform = IsoBmff.transform(visitor);
+        const transform = Kontainer.transform(visitor);
         const output = new ElementOutputStream(cb, buffer);
         input.pipe(transform).pipe(output);
       });
 
       it('keeps unknown boxes untouched', (cb) => {
-        const visitor = new IsoBmff.ElementVisitor();
+        const visitor = new ElementVisitor();
 
         InputStream.prototype._read = function (size) {
           if (this.finished) {
@@ -222,13 +222,13 @@ describe('IsoBmff', () => {
         };
 
         const input = new InputStream();
-        const transform = IsoBmff.transform(visitor);
+        const transform = Kontainer.transform(visitor);
         const output = new ElementOutputStream(cb, unknownBuffer);
         input.pipe(transform).pipe(output);
       });
 
       it('is safe even if paused when parsing unknown box', (cb) => {
-        const visitor = new IsoBmff.ElementVisitor();
+        const visitor = new ElementVisitor();
 
         InputStream.prototype._read = function (size) {
           const count = this.count;
@@ -245,7 +245,7 @@ describe('IsoBmff', () => {
         };
 
         const input = new InputStream();
-        const transform = IsoBmff.transform(visitor);
+        const transform = Kontainer.transform(visitor);
         const output = new ElementOutputStream(cb, unknownBuffer);
         input.pipe(transform).pipe(output);
       });

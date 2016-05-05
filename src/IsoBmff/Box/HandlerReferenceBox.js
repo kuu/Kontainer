@@ -35,7 +35,6 @@ export default class HandlerReferenceBox extends FullBox {
 
   static validate(context, props) {
     context.currentTrackType = props.handlerType;
-    return null;
   }
 
   serialize(buffer, offset=0) {
@@ -98,5 +97,5 @@ HandlerReferenceBox.defaultProps = {
 HandlerReferenceBox.spec = {
   container: ['mdia', 'meta'],
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

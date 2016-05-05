@@ -50,5 +50,5 @@ MovieFragmentHeaderBox.propTypes = {
 MovieFragmentHeaderBox.spec = {
   container: 'moof',
   quantity: Box.QUANTITY_EXACTLY_ONE,
-  mandatoryBoxList: []
+  mandatoryList: []
 };

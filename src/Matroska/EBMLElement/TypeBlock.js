@@ -6,24 +6,24 @@ import {throwException} from '../../core/Util';
 
 function decodeFlags(flags) {
   return {
-    keyframe: !!(flags & 0x01),
-    invisible: !!(flags & 0x10),
-    lacing: (flags >>> 5) & 0x03,
-    discardable: !!(flags & 0x80)
+    keyframe: !!(flags & 0x80),
+    invisible: !!(flags & 0x08),
+    lacing: (flags >> 1) & 0x03,
+    discardable: !!(flags & 0x01)
   };
 }
 
 function encodeFlags(flags) {
   let byte = 0;
   if (flags.keyframe) {
-    byte |= 0x01;
+    byte |= 0x80;
   }
   if (flags.invisible) {
-    byte |= 0x10;
+    byte |= 0x08;
   }
-  byte |= (TypeBlock.LACING_EBML << 5);
+  byte |= (TypeBlock.LACING_EBML << 1);
   if (flags.discardable) {
-    byte |= 0x80;
+    byte |= 0x01;
   }
   return byte;
 }

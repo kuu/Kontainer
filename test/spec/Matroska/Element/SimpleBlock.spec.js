@@ -13,7 +13,7 @@ describe('SimpleBlock', () => {
         163, 73, 7, // EBML-id [A3], size=11+800+500+1000=2311 [49][07]
         33, 0, 0, // Track Number=65536
         0, 33, // Timecode=33 (ms)
-        97, // Keyframe=true, Invisible=false, Lacing=EBML, Discardable=false
+        134, // Keyframe=true, Invisible=false, Lacing=EBML, Discardable=false
         2, // Number of frames in the lace-1
         67, 32, 126, 212, // Lacing sizes=[800, 500, 1000]
       ];

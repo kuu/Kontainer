@@ -22,7 +22,7 @@ describe('BlockGroup', () => {
         161, 197, // EBML-id [A1], size=6+63=69 [C5]
         254, // Track Number=126
         0, 33, // Timecode=33 (ms)
-        112, // Invisible=true, Lacing=EBML
+        14, // Invisible=true, Lacing=EBML
         0, // Number of frames in the lace-1
         191, // Lacing sizes=63 [BF]
       ];
@@ -33,7 +33,7 @@ describe('BlockGroup', () => {
         161, 73, 7, // EBML-id [A1], size=11+800+500+1000=2311 [49][07]
         33, 0, 0, // Track Number=65536
         0, 33, // Timecode=33 (ms)
-        96, // Invisible=false, Lacing=EBML
+        6, // Invisible=false, Lacing=EBML
         2, // Number of frames in the lace-1
         67, 32, 126, 212, // Lacing sizes=[800, 500, 1000]
       ];

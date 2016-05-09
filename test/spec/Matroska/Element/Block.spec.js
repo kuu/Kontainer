@@ -13,7 +13,7 @@ describe('Block', () => {
         161, 197, // EBML-id [A1], size=6+63=69 [C5]
         254, // Track Number=126
         0, 33, // Timecode=33 (ms)
-        112, // Invisible=true, Lacing=EBML
+        14, // Invisible=true, Lacing=EBML
         0, // Number of frames in the lace-1
         191, // Lacing sizes=63 [BF]
       ];

@@ -99,6 +99,7 @@ export default class Element extends Component {
 
         if (checkUnknownSize(buffer, offset, i)) {
           // the size is encoded to all 1's, which indicates that the size of the Element is unknown
+          buffer[offset] = msb; // restore
           return [i, -1];
         }
         const [readBytesNum, size] = Reader.readNumber(buffer, offset, i);

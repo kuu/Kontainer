@@ -207,25 +207,31 @@ function parse(buffer, offset, visitor) {
   let componentClass, componentSize;
 
   // Read the first bytes as we don't know the type and the size.
-  [componentClass, componentSize] = currentFormat.parseTypeAndSize(buffer, offset);
+  [readBytesNum, componentClass, componentSize] = currentFormat.parseTypeAndSize(buffer, offset);
+
+  let bytesToSkip = 0;
 
   if (componentSize === -1) {
-    // TODO: Unknown size.
-    throwException('Unknown size is not supported');
+    // Unknown size. Naive code.
+    bytesToSkip = currentFormat.skipBytes(buffer, offset + readBytesNum);
   }
 
-  if (!componentClass) {
-    visitor.offset += componentSize;
-    return componentSize;
-  }
-  const componentEnd = offset + componentSize;
+  const componentEnd = componentSize === -1 ? buffer.length : offset + componentSize;
   const componentName = componentClass.COMPACT_NAME;
 
   //console.log(`parse enter.: type=${componentName} size=${componentSize} offset=${offset}`);
 
-  [readBytesNum, props] = componentClass.parse(buffer, offset);
+  if (componentSize === -1) {
+    try {
+      [readBytesNum, props] = componentClass.parse(buffer, offset);
+    } catch (e) {
+      props = {size: -1};
+    }
+    readBytesNum += bytesToSkip;
+  } else {
+    [readBytesNum, props] = componentClass.parse(buffer, offset);
+  }
   base += readBytesNum;
-
   visitor.offset = base;
   visitor.enter(componentClass, props);
 

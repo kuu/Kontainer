@@ -281,7 +281,7 @@ function lookupByName(name) {
   return clazz[name];
 }
 
-function lookupById(id) {
+function lookupById(id, failIfUnknown=false) {
   const table = CLASS_LOOKUP_TABLE[id.length - 1];
   const indices = table.indices;
   let elementClass;
@@ -304,6 +304,9 @@ function lookupById(id) {
   }
 
   if (!elementClass) {
+    if (failIfUnknown) {
+      throwException(`Matroska.lookupById: Unknown element id ${id}`);
+    }
     return createUnknownElement(id);
   }
   return elementClass;

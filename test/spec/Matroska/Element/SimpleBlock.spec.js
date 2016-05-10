@@ -15,7 +15,7 @@ describe('SimpleBlock', () => {
         0, 33, // Timecode=33 (ms)
         134, // Keyframe=true, Invisible=false, Lacing=EBML, Discardable=false
         2, // Number of frames in the lace-1
-        67, 32, 126, 212, // Lacing sizes=[800, 500, 1000]
+        67, 32, 94, 211, // Lacing sizes=[800, 500, 1000]
       ];
 
   const frame1 = (new Array(800)).fill(1);

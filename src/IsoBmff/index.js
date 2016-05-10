@@ -1,5 +1,6 @@
 import Box from './Box/Box';
 import createUnknownBox from './Box/UnknownBox';
+import {throwException} from '../core/Util';
 
 const clazz = {
   'file': require('./Box/File').default,
@@ -63,24 +64,41 @@ function parseTypeAndSize(buffer, offset) {
 
   if (boxType.length < 4) {
     console.error(`IsoBmff.parseTypeAndSize: Invalid type - "${boxType}"`);
-    return [null, boxSize];
+    return [readBytesNum, null, boxSize];
   }
 
   let boxClass = clazz[boxType];
 
   if (!boxClass) {
     console.error(`IsoBmff.parseTypeAndSize: Unsupported type - "${boxType}"`);
-    return [createUnknownBox(boxType), boxSize];
+    return [readBytesNum, createUnknownBox(boxType), boxSize];
   }
-  return [boxClass, boxSize];
+  return [readBytesNum, boxClass, boxSize];
 }
 
 function getRootWrapperClass() {
   return clazz['file'];
 }
 
+function skipBytes(buffer, offset) {
+  const names = Object.keys(clazz);
+
+  for (let i = offset; i < buffer.length; i++) {
+    const end = i + 4;
+    const chars = [];
+    for (let j = i; j < end; j++) {
+      chars.push(String.fromCharCode(buffer[j]));
+    }
+    if (names.indexOf(chars.join('')) !== -1) {
+      return j - offset;
+    }
+  }
+  throwException('IsoBmff.skipBytes: Reached the end of buffer.');
+}
+
 export default {
   getComponentClass,
   parseTypeAndSize,
-  getRootWrapperClass
+  getRootWrapperClass,
+  skipBytes
 };

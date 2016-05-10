@@ -35,7 +35,7 @@ describe('BlockGroup', () => {
         0, 33, // Timecode=33 (ms)
         6, // Invisible=false, Lacing=EBML
         2, // Number of frames in the lace-1
-        67, 32, 126, 212, // Lacing sizes=[800, 500, 1000]
+        67, 32, 94, 211, // Lacing sizes=[800, 500, 1000]
       ];
 
   value3 = value3.concat(frame2, frame3, frame4);

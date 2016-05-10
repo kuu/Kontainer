@@ -28,16 +28,37 @@ function encodeFlags(flags) {
   return byte;
 }
 
-function readEBMLFrameSize(buffer, offset) {
+function getEBMLFrameSizeCode(byteLength) {
+  switch (byteLength) {
+  case 1:
+    return 63;
+  case 2:
+    return 8191;
+  case 3:
+    return 1048575;
+  case 4:
+    return 134217727;
+  case 5:
+    return 17179869183;
+  case 6:
+    return 2199023255551;
+  case 7:
+    return 281474976710655;
+  }
+}
+
+function readEBMLFrameSize(buffer, offset, signed) {
   const msb = buffer[offset];
   for (let i = 1; i <= 7; i++) {
     if ((msb >>> 8 - i) & 0x01) { // search the most left 1 bit
       buffer[offset] &= (0xFF >>> i); // drop left i bits
-      if ((msb >>> 8 - i - 1) & 0x01) { // check sign
-        // negative
-        buffer[offset] |= (0xFF << 8 - i); // set the most left bits to 1s
+      let readBytesNum, frameSize;
+      if (signed) {
+        [readBytesNum, frameSize] = Reader.readNumber(buffer, offset, i, true);
+        frameSize -= getEBMLFrameSizeCode(i);
+      } else {
+        [readBytesNum, frameSize] = Reader.readNumber(buffer, offset, i, false);
       }
-      const [readBytesNum, frameSize] = Reader.readNumber(buffer, offset, i, true);
       buffer[offset] = msb; // restore
       return [readBytesNum, frameSize];
     }
@@ -45,53 +66,34 @@ function readEBMLFrameSize(buffer, offset) {
   throwException('Invalid EBML frame size');
 }
 
-/*
-function createNegativeMask(sizeLen) {
-  let mask = 0xFF >>> (sizeLen + 1);
-  for (let i = 1; i < sizeLen; i++) {
-    mask = (mask << (i * 8)) | 0xFF;
+function writeEBMLFrameSize(size, buffer, offset, sizeLen, signed) {
+  if (signed) {
+    size += getEBMLFrameSizeCode(sizeLen);
   }
-  return mask;
-}
-*/
-
-function writeEBMLFrameSize(size, buffer, base, sizeLen) {
-  /*
-  if (size < 0) {
-    size = ~(-size) & createNegativeMask(sizeLen);
+  const writtenBytesNum = Writer.writeNumber(size, buffer, offset, sizeLen);
+  if (buffer) {
+    buffer[offset] &= (0xFF >>> sizeLen); // drop left sizeLen bits
+    buffer[offset] |= (0x01 << (8 - sizeLen)); // set the most left bit to 1
   }
-  */
-  let msb = size >>> ((sizeLen - 1) * 8);
-  msb &= (0xFF >>> sizeLen); // drop left sizeLen bits
-  msb |= (0x01 << (8 - sizeLen)); // set the most left bit to 1
-  let maskedSize = 0;
-  for (let i = 0; i < sizeLen; i++) {
-    if (i === 0) {
-      maskedSize = msb;
-    } else {
-      maskedSize <<= 8;
-      maskedSize |= ((size >>> ((sizeLen - i - 1) * 8)) & 0xFF);
-    }
-  }
-  return Writer.writeNumber(maskedSize, buffer, base, sizeLen);
+  return writtenBytesNum;
 }
 
 function getNecessaryBytesNumForEBMLFrameSize(value) {
   let bytesNum = 0;
 
-  if (value >= -(1 << 6) && value <= (1 << 6) - 1) {
+  if (value >= -63 && value <= 63) {
     bytesNum = 1;
-  } else if (value >= -(1 << 13) && value <= (1 << 13) - 1) {
+  } else if (value >= -8191 && value <= 8191) {
     bytesNum = 2;
-  } else if (value >= -(1 << 20) && value <= (1 << 20) - 1) {
+  } else if (value >= -1048575 && value <= 1048575) {
     bytesNum = 3;
-  } else if (value >= -(1 << 27) && value <= (1 << 27) - 1) {
+  } else if (value >= -134217727 && value <= 134217727) {
     bytesNum = 4;
-  } else if (value >= -(1 << 34) && value <= (1 << 34) - 1) {
+  } else if (value >= -17179869183 && value <= 17179869183) {
     bytesNum = 5;
-  } else if (value >= -(1 << 41) && value <= (1 << 41) - 1) {
+  } else if (value >= -2199023255551 && value <= 2199023255551) {
     bytesNum = 6;
-  } else if (value >= -(1 << 48) && value <= (1 << 48) - 1) {
+  } else if (value >= -281474976710655 && value <= 281474976710655) {
     bytesNum = 7;
   } else {
     throwException(`Matroska.TypeBlock.serialize(${value}): largesize(>=2^53) is not supported.`);
@@ -123,7 +125,7 @@ function readFrameSizeList(buffer, offset, length, lacing, numberOfFramesInLace)
         tempSize = 0;
       }
     } else if (lacing === TypeBlock.LACING_EBML) {
-      const [readBytesNum, frameSize] = readEBMLFrameSize(buffer, base);
+      const [readBytesNum, frameSize] = readEBMLFrameSize(buffer, base, i > 0);
       if (i === 0) {
         frameSizeList.push(frameSize);
       } else {
@@ -191,7 +193,7 @@ export default class TypeBlock extends Element {
 
     for (let i = 0; i < frames.length; i++) {
       if (i === 0 || i < frames.length - 1) {
-        base += writeEBMLFrameSize(frameSizeList[i], buffer, base, frameSizeLengthList[i]);
+        base += writeEBMLFrameSize(frameSizeList[i], buffer, base, frameSizeLengthList[i], i > 0);
       }
     }
 

@@ -31,16 +31,14 @@ if (argv.h || argv.help) {
   console.info(HELP);
 } else if (argv.v || argv.version) {
   console.info(VERSION);
-} else if (!filePath) {
-  console.info(HELP);
 } else {
 
   let input;
 
-  if (filePath === process.stdin) {
-    input = filePath;
-  } else {
+  if (filePath) {
     input = fs.createReadStream(filePath);
+  } else {
+    input = process.stdin;
   }
 
   const visitor = new Kontainer.DumpVisitor();

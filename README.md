@@ -142,6 +142,7 @@ Usage:
 
 Example:
     kontainer /path/to/file
+    cat /path/to/file | kontainer
 
 Options:
   -h, --help    Print help

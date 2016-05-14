@@ -142,13 +142,10 @@ Usage:
 
 Example:
     kontainer /path/to/file
-    kontainer --webm /path/to/file
 
 Options:
   -h, --help    Print help
   -v, --version Print version
-  --mp4         The file is MP4 (default)
-  --webm        The file is WebM
 ```
 
 ## Development

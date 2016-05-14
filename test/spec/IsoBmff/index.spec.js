@@ -9,12 +9,11 @@ const BUFFER = sample.buffer;
 const UNKNOWN = sample.unknownBuffer;
 const ELEMENT_NUM = 22;
 
-beforeEach(() => {
-  jasmine.addMatchers(customMatchers);
-  Kontainer.use('mp4');
-});
-
 describe('IsoBmff', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(customMatchers);
+    Kontainer.use('mp4');
+  });
 
   describe('querySelector', () => {
 

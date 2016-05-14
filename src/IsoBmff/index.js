@@ -63,14 +63,14 @@ function parseTypeAndSize(buffer, offset) {
   const boxType = (props.type === 'uuid' ? props.extendedType : props.type);
 
   if (boxType.length < 4) {
-    console.error(`IsoBmff.parseTypeAndSize: Invalid type - "${boxType}"`);
+    //console.error(`IsoBmff.parseTypeAndSize: Invalid type - "${boxType}"`);
     return [readBytesNum, null, boxSize];
   }
 
   let boxClass = clazz[boxType];
 
   if (!boxClass) {
-    console.error(`IsoBmff.parseTypeAndSize: Unsupported type - "${boxType}"`);
+    //console.error(`IsoBmff.parseTypeAndSize: Unsupported type - "${boxType}"`);
     return [readBytesNum, createUnknownBox(boxType), boxSize];
   }
   return [readBytesNum, boxClass, boxSize];
@@ -96,9 +96,23 @@ function skipBytes(buffer, offset) {
   throwException('IsoBmff.skipBytes: Reached the end of buffer.');
 }
 
+function canParse(buffer, offset) {
+  try {
+    let [readBytesNum, componentClass] = parseTypeAndSize(buffer, offset);
+    if (componentClass) {
+      [readBytesNum] = componentClass.parse(buffer, offset);
+      return true;
+    }
+  } catch (e) {
+    ;
+  }
+  return false;
+}
+
 export default {
   getComponentClass,
   parseTypeAndSize,
   getRootWrapperClass,
-  skipBytes
+  skipBytes,
+  canParse
 };

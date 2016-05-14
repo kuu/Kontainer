@@ -22,6 +22,28 @@ function use(format) {
   }
 }
 
+function checkContainerFormat(buffer, offset=0) {
+  if (IsoBmff.canParse(buffer, offset)) {
+    return 'mp4';
+  }
+  if (Matroska.canParse(buffer, offset)) {
+    return 'webm'
+  }
+  return 'unknown';
+}
+
+function detectFormat(buffer, offset=0) {
+  const format = checkContainerFormat(buffer, offset);
+  if (format === 'unknown') {
+    return false;
+  } else if (format === 'mp4') {
+    currentFormat = IsoBmff;
+  } else if (format === 'webm') {
+    currentFormat = Matroska;
+  }
+  return true;
+}
+
 function traverse(context, element, buffer, offset=0) {
   let type, props, children, instance,
       propTypes, base = offset, err;
@@ -253,6 +275,12 @@ function createElementFromBuffer(buffer, offset=0) {
   if (buffer instanceof ArrayBuffer) {
     buffer = new Uint8Array(buffer);
   }
+
+  if (detectFormat(buffer, base) === false) {
+    console.error('createElementFromBuffer: Unknown format');
+    return null;
+  }
+
   const endOfBuffer = base + buffer.length;
 
   const visitor = new ElementVisitor();
@@ -300,6 +328,13 @@ function transform(visitor) {
     if (buf instanceof ArrayBuffer) {
       buf = new Uint8Array(buf);
     }
+
+    if (detectFormat(buf, base) === false) {
+      // Unknow format or the buffer is insufficient.
+      done(null, null);
+      return;
+    }
+
     const endOfBuffer = buf.length;
     try {
       while (base < endOfBuffer) {
@@ -323,6 +358,7 @@ function transform(visitor) {
 
 export default {
   use,
+  checkContainerFormat,
   get mode() {
     return currentFormat === Matroska ? 'webm' : 'mp4';
   },

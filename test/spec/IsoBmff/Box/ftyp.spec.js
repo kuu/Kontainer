@@ -1,12 +1,12 @@
 import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 
-beforeEach(() => {
-  jasmine.addMatchers(customMatchers);
-  Kontainer.use('mp4');
-});
-
 describe('FileTypeBox', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(customMatchers);
+    Kontainer.use('mp4');
+  });
+  
   const defaultValue = [
         0, 0, 0, 16, // size=16
         102, 116, 121, 112, // type='ftyp'

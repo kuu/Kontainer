@@ -2,12 +2,12 @@ import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 import sample from '../../../helper/IsoBmff';
 
-beforeEach(() => {
-  jasmine.addMatchers(customMatchers);
-  Kontainer.use('mp4');
-});
-
 describe('File', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(customMatchers);
+    Kontainer.use('mp4');
+  });
+  
   const topLevelElement = sample.element,
       value = sample.buffer;
 

@@ -1,12 +1,12 @@
 import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 
-beforeEach(() => {
-  jasmine.addMatchers(customMatchers);
-  Kontainer.use('mp4');
-});
-
 describe('MP4AudioSampleEntry', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(customMatchers);
+    Kontainer.use('mp4');
+  });
+  
   const value1 = [
         0, 0, 0, 36, // size=36
         109, 112, 52, 97, // type='mp4a'

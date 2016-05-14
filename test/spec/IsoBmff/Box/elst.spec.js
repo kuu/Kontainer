@@ -2,12 +2,12 @@ import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 import Buffer from '../../../../src/core/Buffer';
 
-beforeEach(() => {
-  jasmine.addMatchers(customMatchers);
-  Kontainer.use('mp4');
-});
-
 describe('EditListBox', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(customMatchers);
+    Kontainer.use('mp4');
+  });
+  
   const value1 = [
         0, 0, 0, 40, // size=40
         101, 108, 115, 116, // type='elst'

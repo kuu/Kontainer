@@ -1,12 +1,12 @@
 import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 
-beforeEach(() => {
-  jasmine.addMatchers(customMatchers);
-  Kontainer.use('mp4');
-});
-
 describe('CompactSampleSizeBox', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(customMatchers);
+    Kontainer.use('mp4');
+  });
+  
   const value1 = [
         0, 0, 0, 20, // size=20
         115, 116, 115, 122, // type='stsz'

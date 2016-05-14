@@ -2,12 +2,12 @@ import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 import Buffer from '../../../../src/core/Buffer';
 
-beforeEach(() => {
-  jasmine.addMatchers(customMatchers);
-  Kontainer.use('mp4');
-});
-
 describe('UnknownBox', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(customMatchers);
+    Kontainer.use('mp4');
+  });
+  
   const UNKNOWN_BOX_NAME = '    ';
   const unknownValue = [
         0, 0, 0, 16, // size=16

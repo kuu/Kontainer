@@ -1,12 +1,12 @@
 import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 
-beforeEach(() => {
-  jasmine.addMatchers(customMatchers);
-  Kontainer.use('mp4');
-});
-
 describe('MediaDataBox', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(customMatchers);
+    Kontainer.use('mp4');
+  });
+  
   const mdatValue = [
         0, 0, 0, 16, // size=16
         109, 100, 97, 116, // type='mdat'

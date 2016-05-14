@@ -1,12 +1,12 @@
 import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 
-beforeEach(() => {
-  jasmine.addMatchers(customMatchers);
-  Kontainer.use('mp4');
-});
-
 describe('SyncSampleBox', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(customMatchers);
+    Kontainer.use('mp4');
+  });
+  
   const value1 = [
         0, 0, 0, 16, // size=16
         115, 116, 115, 115, // type='stss'

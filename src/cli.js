@@ -2,20 +2,17 @@ import fs from 'fs';
 import yargs from 'yargs';
 import Kontainer from '.';
 
-const argv = yargs.boolean(['mp4', 'webm']).argv;
+const argv = yargs.argv;
 const HELP = `
 Usage:
     kontainer filePath [options]
 
 Example:
     kontainer /path/to/file
-    kontainer --webm /path/to/file
 
 Options:
   -h, --help    Print help
   -v, --version Print version
-  --mp4         The file is MP4 (default)
-  --webm        The file is WebM
 `;
 
 let pkg;
@@ -44,12 +41,6 @@ if (argv.h || argv.help) {
     input = filePath;
   } else {
     input = fs.createReadStream(filePath);
-  }
-
-  if (argv.webm) {
-    Kontainer.use('webm');
-  } else {
-    Kontainer.use('mp4');
   }
 
   const visitor = new Kontainer.DumpVisitor();

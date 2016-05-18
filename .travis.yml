@@ -2,6 +2,8 @@ language: node_js
 node_js:
   - "4.4"
 
+script: npm install -g npm
+
 before_install:
 - export CHROME_BIN=chromium-browser
 - export DISPLAY=:99.0

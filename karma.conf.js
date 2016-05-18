@@ -76,4 +76,17 @@ module.exports = function(config) {
     // To prevent this error: https://github.com/karma-runner/karma/issues/598
     browserNoActivityTimeout: 60000
   });
+
+  if (process.env.TRAVIS) {
+    var configuration = {
+      customLaunchers: {
+        chromeTravisCi: {
+          base: 'Chrome',
+          flags: ['--no-sandbox']
+        }
+      },
+      browsers: ['chromeTravisCi']
+    }
+    config.set(configuration);
+  }
 };

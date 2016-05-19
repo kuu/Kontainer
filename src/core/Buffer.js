@@ -8,11 +8,11 @@ export default class Buffer {
         if (typeof Uint8Array.from === 'function') {
           this.buffer = Uint8Array.from(array);
         } else {
-          console.log('mjd?');
-          this.buffer = new Uint8Array(array.length);
+          const buf = new Uint8Array(array.length);
           for (let i = 0; i < array.length; i++) {
-            this.buffer[i] = array[i];
+            buf[i] = array[i];
           }
+          this.buffer = buf;
         }
       } else {
         this.buffer = new Uint8Array(...params);

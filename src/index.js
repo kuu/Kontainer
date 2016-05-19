@@ -29,10 +29,6 @@ function checkContainerFormat(buffer, offset=0) {
   if (Matroska.canParse(buffer, offset)) {
     return 'webm'
   }
-  console.log('++++++++++');
-  for (let i = 0; i < buffer.length; i++) {
-    console.log(`\tbuffer[${i}]=${buffer[i]}`);
-  }
   return 'unknown';
 }
 

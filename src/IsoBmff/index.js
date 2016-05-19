@@ -104,8 +104,10 @@ function canParse(buffer, offset) {
       return true;
     }
   } catch (e) {
+    console.log(e);
     ;
   }
+  console.log(`--------${componentClass.COMPACT_NAME}`);
   return false;
 }
 

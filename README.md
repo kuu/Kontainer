@@ -1,5 +1,5 @@
 # Kontainer
-A media file format generator/parser that exposes a React-like API. `kontainer-js` is available as an [npm package](https://www.npmjs.com/package/kontainer-js).
+A media file format generator/parser that exposes a React-like API.
 [![Build Status](https://travis-ci.org/kuu/Kontainer.svg?branch=master)](http://travis-ci.org/kuu/Kontainer)
 
 ![logo](logo.png)

@@ -104,6 +104,9 @@ function canParse(buffer, offset) {
       return true;
     }
   } catch (e) {
+    if (e.message !== 'Interrupted by insufficient buffer.') {
+      console.log(e.stack);
+    }
     ;
   }
   return false;

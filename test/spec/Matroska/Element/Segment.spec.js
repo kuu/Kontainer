@@ -369,7 +369,7 @@ describe('Segment', () => {
       <Info>
         <TimecodeScale value={2000000} />
         <Duration value={65536} />
-        <DateUTC value={new Date('2016/01/01 00:00:00')} />
+        <DateUTC value={new Date('2016/01/01 00:00:00 +0900')} />
         <Title value={'\u30C6\u30B9\u30C8'} />
         <MuxingApp value="kontainer-js" />
         <WritingApp value="kontainer-js" />
@@ -377,7 +377,7 @@ describe('Segment', () => {
       <Info>
         <TimecodeScale value={2000000} />
         <Duration value={65536} />
-        <DateUTC value={new Date('2016/01/01 00:00:00')} />
+        <DateUTC value={new Date('2016/01/01 00:00:00 +0900')} />
         <Title value={'\u30C6\u30B9\u30C8'} />
         <MuxingApp value="kontainer-js" />
         <WritingApp value="kontainer-js" />

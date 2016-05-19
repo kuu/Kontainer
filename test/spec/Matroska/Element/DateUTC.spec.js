@@ -13,7 +13,7 @@ describe('DateUTC', () => {
       ];
 
   it('should parse/serialize the DateUTC element', () => {
-    const element1 = <DateUTC value={new Date('2016/01/01 00:00:00')} />;
+    const element1 = <DateUTC value={new Date('2016/01/01 00:00:00 +0900')} />;
     const buffer = Kontainer.render(element1);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(value);

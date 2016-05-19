@@ -3,7 +3,7 @@ export default class Buffer {
     if (global && global.Buffer) {
       this.buffer = new global.Buffer(...params);
     } else {
-      if (params.length === 1 && params[0].length !== void 0) {
+      if (params.length === 1 && params[0] && typeof params[0][Symbol.iterator] === 'function') {
         this.buffer = Uint8Array.from(params[0]);
       } else {
         this.buffer = new Uint8Array(...params);

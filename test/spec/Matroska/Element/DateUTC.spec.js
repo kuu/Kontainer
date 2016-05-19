@@ -16,10 +16,6 @@ describe('DateUTC', () => {
     const element1 = <DateUTC value={new Date('2016/01/01 00:00:00 +0900')} />;
     const buffer = Kontainer.render(element1);
     expect(buffer).not.toBe(null);
-    console.log('++++++++++');
-    for (let i = 0; i < buffer.length; i++) {
-      console.log(`\tbuffer[${i}]=${buffer[i]}`);
-    }
     expect(buffer).toBeTheSameBuffer(value);
     const element2 = Kontainer.createElementFromBuffer(buffer);
     expect(element2).not.toBe(null);

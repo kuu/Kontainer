@@ -3,8 +3,17 @@ export default class Buffer {
     if (global && global.Buffer) {
       this.buffer = new global.Buffer(...params);
     } else {
-      if (params.length === 1 && params[0].length !== void 0) {
-        this.buffer = Uint8Array.from(params[0]);
+      if (params.length === 1 && params[0] && Array.isArray(params[0])) {
+        const array = params[0];
+        if (typeof Uint8Array.from === 'function') {
+          this.buffer = Uint8Array.from(array);
+        } else {
+          console.log('mjd?');
+          this.buffer = new Uint8Array(array.length);
+          for (let i = 0; i < array.length; i++) {
+            this.buffer[i] = array[i];
+          }
+        }
       } else {
         this.buffer = new Uint8Array(...params);
       }

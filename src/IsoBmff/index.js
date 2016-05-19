@@ -98,18 +98,17 @@ function skipBytes(buffer, offset) {
 
 function canParse(buffer, offset) {
   try {
-    var [readBytesNum, componentClass] = parseTypeAndSize(buffer, offset);
+    let [readBytesNum, componentClass] = parseTypeAndSize(buffer, offset);
     if (componentClass) {
       [readBytesNum] = componentClass.parse(buffer, offset);
       return true;
     }
   } catch (e) {
     if (e.message !== 'Interrupted by insufficient buffer.') {
-      console.log(e);
+      console.log(e.stack);
     }
     ;
   }
-  console.log(`--------${componentClass && componentClass.COMPACT_NAME}`);
   return false;
 }
 

@@ -45,11 +45,7 @@ export default class EditListBox extends FullBox {
     [readBytesNum, entryCount] = Reader.readNumber(buffer, base, 4); // entry_count (32)
     base += readBytesNum;
 
-    const entries = new Array(entryCount);
-    for (let i = 0; i < entries.length; i++) {
-      entries[i] = {segmentDuration: 0, mediaTime: 0, mediaRate: 0};
-    }
-
+    const entries = Array.from({length: entryCount}, () => {return {segmentDuration: 0, mediaTime: 0, mediaRate: 0};});
     const bytesToBeRead = props.version === 1 ? 8 : 4;
 
     entries.forEach(entry => {

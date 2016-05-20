@@ -52,7 +52,7 @@ function getComponentClass(name) {
   return clazz[name];
 }
 
-function parseTypeAndSize(buffer, offset) {
+function parseTypeAndSize(buffer, offset, options={}) {
   let readBytesNum, props;
 
   [readBytesNum, props] = Box.parse(buffer, offset);
@@ -69,7 +69,7 @@ function parseTypeAndSize(buffer, offset) {
 
   let boxClass = clazz[boxType];
 
-  if (!boxClass) {
+  if (!boxClass && !options.ignoreUnknown) {
     //console.error(`IsoBmff.parseTypeAndSize: Unsupported type - "${boxType}"`);
     return [readBytesNum, createUnknownBox(boxType), boxSize];
   }

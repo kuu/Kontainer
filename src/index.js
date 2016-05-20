@@ -221,7 +221,7 @@ function createElement(type, ...otherParams) {
   return element;
 }
 
-function parse(buffer, offset, visitor) {
+function parse(buffer, offset, visitor, options) {
   let readBytesNum;
   let props;
   let base = offset;
@@ -229,7 +229,12 @@ function parse(buffer, offset, visitor) {
   let componentClass, componentSize;
 
   // Read the first bytes as we don't know the type and the size.
-  [readBytesNum, componentClass, componentSize] = currentFormat.parseTypeAndSize(buffer, offset);
+  [readBytesNum, componentClass, componentSize] = currentFormat.parseTypeAndSize(buffer, offset, options);
+
+  if (!componentClass) {
+    visitor.offset = base;
+    return componentSize;
+  }
 
   let bytesToSkip = 0;
 
@@ -258,7 +263,7 @@ function parse(buffer, offset, visitor) {
   visitor.enter(componentClass, props);
 
   while (base < componentEnd) {
-    readBytesNum = parse(buffer, base, visitor);
+    readBytesNum = parse(buffer, base, visitor, options);
     base += readBytesNum;
   }
   visitor.exit();
@@ -269,7 +274,7 @@ function parse(buffer, offset, visitor) {
   return Math.min(base - offset, componentSize);
 }
 
-function createElementFromBuffer(buffer, offset=0) {
+function createElementFromBuffer(buffer, offset=0, options={}) {
   let base = offset;
 
   if (buffer instanceof ArrayBuffer) {
@@ -287,7 +292,7 @@ function createElementFromBuffer(buffer, offset=0) {
 
   try {
     while (base < endOfBuffer) {
-      const readBytesNum = parse(buffer, base, visitor);
+      const readBytesNum = parse(buffer, base, visitor, options);
       base += readBytesNum;
     }
   } catch (err) {
@@ -305,7 +310,7 @@ function createElementFromBuffer(buffer, offset=0) {
   return createBaseElement(currentFormat.getRootWrapperClass(), null, ...visitor.results);
 }
 
-function transform(visitor) {
+function transform(visitor, options={}) {
   let vtor;
 
   if (visitor instanceof Visitor) {
@@ -338,7 +343,7 @@ function transform(visitor) {
     const endOfBuffer = buf.length;
     try {
       while (base < endOfBuffer) {
-        const readBytesNum = parse(buf, base, vtor);
+        const readBytesNum = parse(buf, base, vtor, options);
         base += readBytesNum;
       }
     } catch (err) {

@@ -7,9 +7,9 @@ function getComponentClass(name) {
   return ElementLookup.lookupByName(name);
 }
 
-function parseTypeAndSize(buffer, offset) {
+function parseTypeAndSize(buffer, offset, options={}) {
   const [readBytesNum, props] = Element.parse(buffer, offset);
-  const elementClass = ElementLookup.lookupById(props.elementId);
+  const elementClass = ElementLookup.lookupById(props.elementId, !!options.ignoreUnknown);
   return [readBytesNum, elementClass, props.size === -1 ? -1 : readBytesNum + props.size];
 }
 

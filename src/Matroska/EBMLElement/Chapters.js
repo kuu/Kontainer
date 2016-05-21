@@ -12,7 +12,7 @@ Chapters.COMPACT_NAME = 'Chapters';
 Chapters.ELEMENT_ID = [0x10, 0x43, 0xa7, 0x70];
 
 Chapters.spec = {
-  container: 'Segment',
+  container: '*',
   quantity: Element.QUANTITY_EXACTLY_ONE,
   mandatoryList: ['EditionEntry']
 };

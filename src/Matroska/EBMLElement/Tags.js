@@ -12,7 +12,7 @@ Tags.COMPACT_NAME = 'Tags';
 Tags.ELEMENT_ID = [0x12, 0x54, 0xC3, 0x67];
 
 Tags.spec = {
-  container: 'Segment',
+  container: '*',
   quantity: Element.QUANTITY_ANY_NUMBER,
   mandatoryList: ['Tag']
 };

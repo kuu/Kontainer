@@ -126,7 +126,7 @@ function validateChild(context, child) {
   let container, quantity;
 
   // Container check.
-  if (childSpec.container) {
+  if (childSpec.container && childSpec.container !== '*') {
     if (childSpec.container instanceof Array) {
       container = childSpec.container;
     } else {

@@ -12,7 +12,7 @@ Cluster.COMPACT_NAME = 'Cluster';
 Cluster.ELEMENT_ID = [0x1f, 0x43, 0xb6, 0x75];
 
 Cluster.spec = {
-  container: 'Segment',
+  container: ['Segment', 'Cluster'],
   quantity: Element.QUANTITY_ANY_NUMBER,
   mandatoryList: ['Timecode']
 };

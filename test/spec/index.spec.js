@@ -65,4 +65,25 @@ describe('Kontainer', () => {
     expect(element4).not.toBe(null);
     expect(element4.getMimeType()).toEqual('video/webm');
   });
+
+  it('should be able to handle "location-free" elements', () => {
+    const nestedCluster = (
+      <Cluster>
+        <Timecode value={4294967295} />
+        <Cluster>
+          <Timecode value={4294967295} />
+          <PrevSize value={65536} />
+          <SimpleBlock {...{
+            trackNumber: 126,
+            timecode: 33,
+            flags: {keyframe: true, invisible: false, discardable: false},
+            frames: [new Buffer([1, 2, 3, 4, 5]).getView()]
+          }}>
+            <Void value={new Buffer([1, 2, 3, 4, 5]).getView()} />
+          </SimpleBlock>
+        </Cluster>
+      </Cluster>
+    );
+    expect(nestedCluster).not.toBe(null);
+  });
 });

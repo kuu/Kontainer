@@ -17,7 +17,7 @@ Void.propTypes = {
 };
 
 Void.spec = {
-  container: 'File',
+  container: '*',
   quantity: Component.QUANTITY_ANY_NUMBER,
   mandatoryList: []
 };

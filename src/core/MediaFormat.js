@@ -8,7 +8,7 @@ class Element {
   }
 
   querySelector(type) {
-    let queue = [this];
+    const queue = [this];
     let element;
 
     while (element = queue.shift()) {
@@ -23,6 +23,29 @@ class Element {
       }
     }
     return null;
+  }
+
+  querySelectorAll(type) {
+    const queue = [this];
+    const elems = [];
+    let element;
+
+    while (element = queue.shift()) {
+      if (type === element.type.COMPACT_NAME) {
+        elems.push(element);
+      }
+      const children = element.props.children;
+      if (children) {
+        children.forEach(child => {
+          queue.push(child);
+        });
+      }
+    }
+    return elems;
+  }
+
+  getMimeType() {
+    return this.type.getMimeType(this);
   }
 }
 

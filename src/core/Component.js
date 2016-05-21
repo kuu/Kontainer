@@ -32,6 +32,11 @@ export default class Component {
   static parse(buffer, offset) {
     void offset;
   }
+
+  // To be overridden
+  static getMimeType(element) {
+    return '';
+  }
 }
 
 Component.QUANTITY_ANY_NUMBER = 0;

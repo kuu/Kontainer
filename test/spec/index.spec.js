@@ -1,5 +1,6 @@
 import Kontainer from 'kontainer-js';
 import testDataMp4 from '../helper/IsoBmff';
+import testDataWebM from '../helper/Matroska';
 import Buffer from '../../src/core/Buffer';
 
 describe('Kontainer', () => {
@@ -43,5 +44,25 @@ describe('Kontainer', () => {
     const element2 = Kontainer.createElementFromBuffer((new Buffer(unknownValue)).getData(), 0, {ignoreUnknown: true});
     expect(element2).not.toBe(null);
     expect(element2.querySelector(UNKNOWN_BOX_NAME)).toBe(null);
+  });
+
+  it('should be able to provide its MIME type', () => {
+    const audioOnlyMP4 = Kontainer.render(testDataMp4.audioOnly);
+    const audioVideoMP4 = Kontainer.render(testDataMp4.fullAV);
+    const audioOnlyWebM = Kontainer.render(testDataWebM.audioOnly);
+    const audioVideoWebM = Kontainer.render(testDataWebM.fullAV);
+
+    const element1 = Kontainer.createElementFromBuffer(audioOnlyMP4);
+    expect(element1).not.toBe(null);
+    expect(element1.getMimeType()).toEqual('audio/mp4');
+    const element2 = Kontainer.createElementFromBuffer(audioVideoMP4);
+    expect(element2).not.toBe(null);
+    expect(element2.getMimeType()).toEqual('video/mp4');
+    const element3 = Kontainer.createElementFromBuffer(audioOnlyWebM);
+    expect(element3).not.toBe(null);
+    expect(element3.getMimeType()).toEqual('audio/webm');
+    const element4 = Kontainer.createElementFromBuffer(audioVideoWebM);
+    expect(element4).not.toBe(null);
+    expect(element4.getMimeType()).toEqual('video/webm');
   });
 });

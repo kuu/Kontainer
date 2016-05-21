@@ -184,4 +184,15 @@ export default class Element extends Component {
       elementId
     }];
   }
+
+  static getMimeType(element) {
+    const results = element.querySelectorAll('TrackType');
+    const audioOnly = results.every(trackType => {
+      return trackType.props.kind === 'audio';
+    });
+    if (audioOnly) {
+      return 'audio/webm';
+    }
+    return 'video/webm';
+  }
 }

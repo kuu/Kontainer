@@ -85,6 +85,17 @@ export default class Box extends Component {
       extendedType,
     }];
   }
+
+  static getMimeType(element) {
+    const results = element.querySelectorAll('hdlr');
+    const audioOnly = results.every(hdlr => {
+      return hdlr.props.handlerType === 'audio';
+    });
+    if (audioOnly) {
+      return 'audio/mp4';
+    }
+    return 'video/mp4';
+  }
 }
 
 Box.QUANTITY_ANY_NUMBER = Component.QUANTITY_ANY_NUMBER;

@@ -59,10 +59,6 @@ FlagInterlaced.propTypes = {
   kind: PropTypes.oneOf(['interlaced', 'progressive', 'undetermined']).isRequired
 };
 
-FlagInterlaced.defaultProps = {
-  value: 'undetermined'
-};
-
 FlagInterlaced.spec = {
   container: 'Video',
   quantity: Component.QUANTITY_EXACTLY_ONE,

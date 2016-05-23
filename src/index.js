@@ -326,7 +326,7 @@ function transform(visitor, options={}) {
     vtor = new TransformVisitor();
   }
 
-  return new TransformStream((buffer, offset, done) => {
+  return new TransformStream((buffer, offset, cb) => {
     let base = vtor.offset;
     let buf = buffer.getData();
 
@@ -336,9 +336,11 @@ function transform(visitor, options={}) {
 
     if (detectFormat(buf, base) === false) {
       // Unknow format or the buffer is insufficient.
-      done(null, null);
+      cb('done', null);
       return;
     }
+
+    cb('format', currentFormat === IsoBmff ? 'mp4' : 'webm');
 
     const endOfBuffer = buf.length;
     try {
@@ -350,14 +352,21 @@ function transform(visitor, options={}) {
       if (err.message !== BufferReadError.ERROR_MESSAGE) {
         console.error(`transform: An error occurred in parsing the buffer: ${err.stack}`);
       }
-      done(null, null);
+      cb('done', null);
       return;
     }
 
     while (vtor.stack.length) {
       vtor.exit();
     }
-    done(null, render(createBaseElement(currentFormat.getRootWrapperClass(), null, ...vtor.results)));
+
+    if (options.until) {
+      options.until.then(() => {
+        cb('done', render(createBaseElement(currentFormat.getRootWrapperClass(), null, ...vtor.results)));
+      });
+    } else {
+      cb('done', render(createBaseElement(currentFormat.getRootWrapperClass(), null, ...vtor.results)));
+    }
   });
 }
 

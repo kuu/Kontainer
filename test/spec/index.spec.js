@@ -86,4 +86,50 @@ describe('Kontainer', () => {
     );
     expect(nestedCluster).not.toBe(null);
   });
+
+  if (global && global.Buffer) {
+    it('should be able to handle asynchronous transformations', (callback) => {
+      const fakeFuncs = {
+        formatCounter() {},
+        fulfillCounter() {},
+      };
+      spyOn(fakeFuncs, 'formatCounter');
+      spyOn(fakeFuncs, 'fulfillCounter');
+
+      const stream = require('stream');
+      class OutputStream extends stream.Writable {
+        constructor(cb, options) {
+          super(options);
+          this.on('finish', () => {
+            expect(fakeFuncs.formatCounter.calls.count()).toEqual(1);
+            expect(fakeFuncs.fulfillCounter.calls.count()).toEqual(1);
+            cb();
+          });
+        }
+
+        _write(chunk, encoding, done) {
+          done();
+        }
+      }
+      const output = new OutputStream(callback);
+
+      const promise = Promise.resolve();
+      promise.then(() => {
+        fakeFuncs.fulfillCounter();
+      });
+
+      const transform = Kontainer.transform((type, props, children) => {
+        ;
+      }, {until: promise});
+
+      transform.on('format', (format) => {
+        fakeFuncs.formatCounter();
+      });
+
+      const bufMp4 = testDataMp4.buffer;
+      const input = new stream.PassThrough();
+      input.end(new Buffer(testDataMp4.buffer).getData());
+      input.pipe(transform).pipe(output);
+    });
+  }
 });

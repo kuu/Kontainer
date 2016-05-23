@@ -17,6 +17,8 @@ export default class AVCConfigurationBox extends Box {
       p = 77;
     } else if (profile === 'extended') {
       p = 88;
+    } else if (profile === 'high') {
+      p = 100;
     }
     return p;
   }
@@ -29,6 +31,8 @@ export default class AVCConfigurationBox extends Box {
       profile = 'main';
     } else if (p === 88) {
       profile = 'extended';
+    } else if (p === 100) {
+      profile = 'high';
     } else {
       console.error(`IsoBmff.AVConfigurationBox.parse: Unknown profile - ${p}`);
     }
@@ -195,7 +199,7 @@ AVCConfigurationBox.COMPACT_NAME = 'avcC';
 
 AVCConfigurationBox.propTypes = {
   configurationVersion: PropTypes.number,
-  avcProfileIndication: PropTypes.oneOf(['baseline', 'main', 'extended']).isRequired,
+  avcProfileIndication: PropTypes.oneOf(['baseline', 'main', 'extended', 'high']).isRequired,
   profileCompatibility: PropTypes.shape({
     constraintSet0Flag: PropTypes.bool,
     constraintSet1Flag: PropTypes.bool,

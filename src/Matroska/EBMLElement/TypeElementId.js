@@ -10,7 +10,7 @@ export default class TypeElementId extends Element {
     const maxIdLength = context.maxIdLength;
     if (maxIdLength) {
       const ElementLookup = require('../ElementLookup').default;
-      const elementId = ElementLookup.lookupByName(this.props.value).ELEMENT_ID;
+      const elementId = ElementLookup.lookupByName(props.value).ELEMENT_ID;
       if (elementId.length > maxIdLength) {
         throwException(`Element Id(len=${elementId.length}) cannot exceed the EBMLMaxIDLength(${maxIdLength})`);
       }

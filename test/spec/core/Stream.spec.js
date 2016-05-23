@@ -67,7 +67,7 @@ describe('Stream', () => {
         for (let i = offset; i < length; i++) {
           newBuf[i - offset] = oldBuf[i] * 2;
         }
-        done(null, doubled);
+        done('done', doubled);
       });
     });
 

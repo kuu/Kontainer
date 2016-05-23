@@ -21,14 +21,18 @@ if (global && global.Buffer) {
         } else {
           this.buffer = chunk;
         }
-        this.parser(new Buffer(this.buffer), this.offset, (err, buf) => {
-          let b;
-          if (buf && buf instanceof Buffer) {
-            b = buf.getData();
-          } else {
-            b = buf;
+        this.parser(new Buffer(this.buffer), this.offset, (event, param) => {
+          if (event === 'done') {
+            let b;
+            if (param && param instanceof Buffer) {
+              b = param.getData();
+            } else {
+              b = param;
+            }
+            done(null, b);
+          } else if (event === 'format') {
+            this.emit('format', param);
           }
-          done(err, b);
         });
       }
     }

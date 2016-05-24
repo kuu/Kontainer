@@ -95,7 +95,7 @@ function traverse(context, element, buffer, offset=0) {
   return instance.getSize();
 }
 
-function render(element) {
+function render(element, options={}) {
   let size, buffer, context = {};
 
   try {
@@ -104,6 +104,10 @@ function render(element) {
   } catch (err) {
     console.error(`render: An error occurred in culculating the buffer size: ${err.stack}`);
     return null;
+  }
+
+  if (options.dryRun) {
+    return size;
   }
 
   if (size === 0) {

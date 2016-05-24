@@ -6,7 +6,7 @@ describe('MediaDataBox', () => {
     jasmine.addMatchers(customMatchers);
     Kontainer.use('mp4');
   });
-  
+
   const mdatValue = [
         0, 0, 0, 16, // size=16
         109, 100, 97, 116, // type='mdat'
@@ -22,5 +22,9 @@ describe('MediaDataBox', () => {
     const buffer = Kontainer.render(<mdat {...{data}} />);
     expect(buffer).not.toBe(null);
     expect(buffer).toBeTheSameBuffer(mdatValue);
+    const element = Kontainer.createElementFromBuffer(buffer);
+    expect(element).not.toBe(null);
+    expect(element.props.data).toBeTheSameBuffer(mdatValue.slice(8));
+    expect(element.props.byteOffset).toBe(8);
   });
 });

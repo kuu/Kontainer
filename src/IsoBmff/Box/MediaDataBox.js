@@ -32,10 +32,11 @@ export default class MediaDataBox extends Box {
 
   static parse(buffer, offset=-1) {
     let base = offset, readBytesNum, props,
-        toBeRead, data, buf;
+        toBeRead, data, buf, byteOffset;
 
     [readBytesNum, props] = Box.parse(buffer, base);
     base += readBytesNum;
+    byteOffset = base;
     toBeRead = props.size - readBytesNum;
 
     Reader.ASSERT(buffer, base, toBeRead);
@@ -46,6 +47,7 @@ export default class MediaDataBox extends Box {
       data[i] = buffer[base++];
     }
     props.data = buf.getView();
+    props.byteOffset = byteOffset;
 
     return [base - offset, props];
   }
@@ -54,7 +56,12 @@ export default class MediaDataBox extends Box {
 MediaDataBox.COMPACT_NAME = 'mdat';
 
 MediaDataBox.propTypes = {
+  byteOffset: PropTypes.number,
   data: PropTypes.any.isRequired
+};
+
+MediaDataBox.defaultProps = {
+  byteOffset: 0
 };
 
 MediaDataBox.spec = {

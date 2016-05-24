@@ -1,13 +1,14 @@
 import Kontainer from 'kontainer-js';
 import customMatchers from '../../../helper/matcher';
 import sample from '../../../helper/IsoBmff';
+import Buffer from '../../../../src/core/Buffer';
 
 describe('File', () => {
   beforeEach(() => {
     jasmine.addMatchers(customMatchers);
     Kontainer.use('mp4');
   });
-  
+
   const topLevelElement = sample.element,
       value = sample.buffer;
 
@@ -23,8 +24,10 @@ describe('File', () => {
     );
     expect(buffer).toBe(null);
 
+    const len = Kontainer.render(topLevelElement, {dryRun: true});
     buffer = Kontainer.render(topLevelElement);
     expect(buffer).not.toBe(null);
+    expect(new Buffer(buffer).getLength()).toBe(len);
     expect(buffer).toBeTheSameBuffer(value);
     elem = Kontainer.createElementFromBuffer(buffer);
     expect(elem).toHaveTheSameProps(topLevelElement);

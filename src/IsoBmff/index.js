@@ -1,6 +1,7 @@
 import Box from './Box/Box';
 import createUnknownBox from './Box/UnknownBox';
 import {throwException} from '../core/Util';
+import {BufferReadError} from '../core/Error';
 
 const clazz = {
   'file': require('./Box/File').default,
@@ -103,8 +104,10 @@ function canParse(buffer, offset) {
       [readBytesNum] = componentClass.parse(buffer, offset);
       return true;
     }
-  } catch (e) {
-    ;
+  } catch (err) {
+    if (err.message === BufferReadError.ERROR_MESSAGE) {
+      return true;
+    }
   }
   return false;
 }

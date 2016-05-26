@@ -2,6 +2,7 @@ import Element from './EBMLElement/Element';
 import ElementLookup from './ElementLookup';
 import Reader from '../core/Reader';
 import {throwException} from '../core/Util';
+import {BufferReadError} from '../core/Error';
 
 function getComponentClass(name) {
   return ElementLookup.lookupByName(name);
@@ -37,8 +38,10 @@ function canParse(buffer, offset) {
       [readBytesNum] = componentClass.parse(buffer, offset);
       return true;
     }
-  } catch (e) {
-    ;
+  } catch (err) {
+    if (err.message === BufferReadError.ERROR_MESSAGE) {
+      return true;
+    }
   }
   return false;
 }

@@ -23,11 +23,11 @@ function use(format) {
 }
 
 function checkContainerFormat(buffer, offset=0) {
-  if (IsoBmff.canParse(buffer, offset)) {
-    return 'mp4';
-  }
   if (Matroska.canParse(buffer, offset)) {
     return 'webm'
+  }
+  if (IsoBmff.canParse(buffer, offset)) {
+    return 'mp4';
   }
   return 'unknown';
 }
@@ -315,7 +315,7 @@ function createElementFromBuffer(buffer, offset=0, options={}) {
 }
 
 function transform(visitor, options={}) {
-  let vtor;
+  let vtor, formatSet = false;
 
   if (visitor instanceof Visitor) {
     vtor = visitor;
@@ -338,11 +338,13 @@ function transform(visitor, options={}) {
       buf = new Uint8Array(buf);
     }
 
-    if (detectFormat(buf, base) === false) {
+    if (!formatSet && detectFormat(buf, base) === false) {
       // Unknow format or the buffer is insufficient.
       cb('done', null);
       return;
     }
+
+    formatSet = true;
 
     cb('format', currentFormat === IsoBmff ? 'mp4' : 'webm');
 

@@ -1,6 +1,7 @@
 import Box from './Box/Box';
 import createUnknownBox from './Box/UnknownBox';
 import {throwException} from '../core/Util';
+import {BufferReadError} from '../core/Error';
 
 const clazz = {
   'file': require('./Box/File').default,
@@ -62,7 +63,7 @@ function parseTypeAndSize(buffer, offset, options={}) {
   const boxSize = props.size || buffer.length - offset;
   const boxType = (props.type === 'uuid' ? props.extendedType : props.type);
 
-  if (boxType.length < 4) {
+  if (boxType.length < 4 || boxType.search(/^[a-z]{1}[\w\s]{3}$/g) !== 0) {
     //console.error(`IsoBmff.parseTypeAndSize: Invalid type - "${boxType}"`);
     return [readBytesNum, null, boxSize];
   }
@@ -97,14 +98,18 @@ function skipBytes(buffer, offset) {
 }
 
 function canParse(buffer, offset) {
+  let readBytesNum, componentClass;
+
   try {
-    let [readBytesNum, componentClass] = parseTypeAndSize(buffer, offset);
+    [readBytesNum, componentClass] = parseTypeAndSize(buffer, offset);
     if (componentClass) {
       [readBytesNum] = componentClass.parse(buffer, offset);
       return true;
     }
-  } catch (e) {
-    ;
+  } catch (err) {
+    if (componentClass && err.message === BufferReadError.ERROR_MESSAGE) {
+      return true;
+    }
   }
   return false;
 }

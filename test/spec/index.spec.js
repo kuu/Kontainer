@@ -24,12 +24,12 @@ describe('Kontainer', () => {
 
   it('can ingore unknown boxes', () => {
 
-    const UNKNOWN_BOX_NAME = '    ';
+    const UNKNOWN_BOX_NAME = 'a   ';
     const unknownValue = [
           0, 0, 0, 40, // size=40
           109, 105, 110, 102, // type='minf'
           0, 0, 0, 16, // size=16
-          32, 32, 32, 32, // type=(unknown)
+          97, 32, 32, 32, // type=(unknown)
           1, 2, 4, 8,
           16, 32, 64, 128,
           0, 0, 0, 16, // size=16

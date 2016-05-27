@@ -7,11 +7,11 @@ describe('UnknownBox', () => {
     jasmine.addMatchers(customMatchers);
     Kontainer.use('mp4');
   });
-  
-  const UNKNOWN_BOX_NAME = '    ';
+
+  const UNKNOWN_BOX_NAME = 'a   ';
   const unknownValue = [
         0, 0, 0, 16, // size=16
-        32, 32, 32, 32, // type='    ' (unknown)
+        97, 32, 32, 32, // type='a   ' (unknown)
         1, 2, 4, 8,
         16, 32, 64, 128
       ];

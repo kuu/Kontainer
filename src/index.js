@@ -355,7 +355,9 @@ function transform(visitor, options={}) {
         base += readBytesNum;
       }
     } catch (err) {
-      if (err.message !== BufferReadError.ERROR_MESSAGE) {
+      if (err.message === BufferReadError.ERROR_MESSAGE) {
+        cb('progress', err.pendingData);
+      } else {
         console.error(`transform: An error occurred in parsing the buffer: ${err.stack}`);
       }
       cb('done', null);

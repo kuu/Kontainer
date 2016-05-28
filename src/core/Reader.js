@@ -7,6 +7,10 @@ function ASSERT(buffer, offset, bytesToRead) {
   }
 }
 
+function throwBufferReadException(pendingData) {
+  throw new BufferReadError(pendingData);
+}
+
 function readCharacter(buffer, offset) {
   let base = offset;
 
@@ -203,5 +207,6 @@ export default {
   readNumber,
   readFixedNumber,
   readIso639Lang,
-  ASSERT
+  ASSERT,
+  throwBufferReadException
 };

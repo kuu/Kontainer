@@ -30,8 +30,8 @@ if (global && global.Buffer) {
               b = param;
             }
             done(null, b);
-          } else if (event === 'format') {
-            this.emit('format', param);
+          } else {
+            this.emit(event, param);
           }
         });
       }

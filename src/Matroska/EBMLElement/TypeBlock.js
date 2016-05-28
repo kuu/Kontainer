@@ -201,9 +201,8 @@ export default class TypeBlock extends Element {
       let tempBase = base;
       for (let i = 0; i < frames.length; i++) {
         const frame = frames[i];
-        for (let j = 0; j < frame.length; j++) {
-          buffer[tempBase++] = frame[j];
-        }
+        Buffer.wrap(buffer).copyFrom(frame, 0, frame.length, tempBase);
+        tempBase += frame.length;
       }
     }
     base += frameLength;
@@ -251,12 +250,8 @@ export default class TypeBlock extends Element {
     const frames = [];
 
     frameSizeList.forEach(frameSize => {
-      const buf = new Buffer(frameSize);
-      const data = buf.getView();
-
-      for (let i = 0; i < frameSize; i++) {
-        data[i] = buffer[base++];
-      }
+      const buf = Buffer.wrap(buffer).copy(base, frameSize);
+      base += frameSize;
       frames.push(buf.getView());
     });
 

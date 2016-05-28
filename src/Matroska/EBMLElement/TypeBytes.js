@@ -18,9 +18,7 @@ export default class TypeBytes extends Element {
     base += super.serialize(buffer, base);
 
     if (buffer) {
-      for (let i = 0; i < bytes.length; i++) {
-        buffer[base + i] = bytes[i];
-      }
+      Buffer.wrap(buffer).copyFrom(bytes, 0, bytes.length, base);
     }
     base += bytes.length;
 
@@ -35,13 +33,8 @@ export default class TypeBytes extends Element {
     base += readBytesNum;
 
     Reader.ASSERT(buffer, base, props.size);
-
-    const buf = new Buffer(props.size);
-    const data = buf.getView();
-
-    for (let i = 0; i < props.size; i++) {
-      data[i] = buffer[base++];
-    }
+    const buf = Buffer.wrap(buffer).copy(base, props.size);
+    base += props.size;
     props.value = buf.getView();
 
     return [base - offset, props];

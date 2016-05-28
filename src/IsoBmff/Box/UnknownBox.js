@@ -18,12 +18,9 @@ export default function createUnknownBox(name) {
       base += super.serialize(buffer, base);
 
       if (buffer) {
-        for (let i = 0, il = data.length; i < il; i++) {
-          buffer[base++] = data[i];
-        }
-      } else {
-        base += data.length;
+        Buffer.wrap(buffer).copyFrom(data, 0, data.length, base);
       }
+      base += data.length;
 
       super.setSize(base - offset, buffer, offset);
 
@@ -32,20 +29,16 @@ export default function createUnknownBox(name) {
     }
 
     static parse(buffer, offset=-1) {
-      let base = offset, readBytesNum, props,
-          toBeRead, data, buf;
+      let base = offset, readBytesNum, props;
 
       [readBytesNum, props] = Box.parse(buffer, base);
       base += readBytesNum;
-      toBeRead = props.size - readBytesNum;
 
+      const toBeRead = props.size - readBytesNum;
       Reader.ASSERT(buffer, base, toBeRead);
-      buf = new Buffer(toBeRead);
-      data = buf.getView();
+      const buf = Buffer.wrap(buffer).copy(base, toBeRead);
+      base += toBeRead;
 
-      for (let i = 0; i < toBeRead; i++) {
-        data[i] = buffer[base++];
-      }
       props.data = buf.getView();
 
       return [base - offset, props];

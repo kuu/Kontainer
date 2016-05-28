@@ -82,7 +82,7 @@ export default class AVCConfigurationBox extends Box {
     const sequenceParameterSets = props.sequenceParameterSets;
     const pictureParameterSets = props.pictureParameterSets;
 
-    let i, length, data, base = offset;
+    let base = offset;
 
     base += super.serialize(buffer, base);
     base += Writer.writeNumber(configurationVersion, buffer, base, 1);
@@ -92,29 +92,23 @@ export default class AVCConfigurationBox extends Box {
     base += Writer.writeNumber(0xFC | lengthSizeMinusOne, buffer, base, 1);
     base += Writer.writeNumber(0xE0 | sequenceParameterSets.length, buffer, base, 1);
     sequenceParameterSets.forEach(sps => {
-      length = sps.length;
-      data = sps.data;
+      let length = sps.length;
+      let data = sps.data;
       base += Writer.writeNumber(length, buffer, base, 2);
       if (buffer) {
-        for (i = 0; i < length; i++) {
-          buffer[base++] = data[i];
-        }
-      } else {
-        base += length;
+        Buffer.wrap(buffer).copyFrom(data, 0, length, base);
       }
+      base += length;
     });
     base += Writer.writeNumber(pictureParameterSets.length, buffer, base, 1);
     pictureParameterSets.forEach(pps => {
-      length = pps.length;
-      data = pps.data;
+      let length = pps.length;
+      let data = pps.data;
       base += Writer.writeNumber(length, buffer, base, 2);
       if (buffer) {
-        for (i = 0; i < length; i++) {
-          buffer[base++] = data[i];
-        }
-      } else {
-        base += length;
+        Buffer.wrap(buffer).copyFrom(data, 0, length, base);
       }
+      base += length;
     });
 
     super.setSize(base - offset, buffer, offset);
@@ -124,7 +118,7 @@ export default class AVCConfigurationBox extends Box {
   }
 
   static parse(buffer, offset=0) {
-    let base = offset, readBytesNum, props, i, j, length, data, buf,
+    let base = offset, readBytesNum, props, length, data,
         configurationVersion, avcProfileIndication, profileCompatibility,
         avcLevelIndication, lengthSizeMinusOne,
         numOfParameterSets,
@@ -154,33 +148,25 @@ export default class AVCConfigurationBox extends Box {
 
     numOfParameterSets &= 0x1F;
 
-    for (i = 0; i < numOfParameterSets; i++) {
+    for (let i = 0; i < numOfParameterSets; i++) {
       [readBytesNum, length] = Reader.readNumber(buffer, base, 2);
       base += readBytesNum;
-
       Reader.ASSERT(buffer, base, length);
-      buf = new Buffer(length);
-      data = buf.getView();
-      for (j = 0; j < length; j++) {
-        data[j] = buffer[base++];
-      }
-      sequenceParameterSets.push({length: length, data: buf.getView()});
+      const buf = Buffer.wrap(buffer).copy(base, length);
+      base += length;
+      sequenceParameterSets.push({length: length, data: buf.getData()});
     }
 
     [readBytesNum, numOfParameterSets] = Reader.readNumber(buffer, base, 1);
     base += readBytesNum;
 
-    for (i = 0; i < numOfParameterSets; i++) {
+    for (let i = 0; i < numOfParameterSets; i++) {
       [readBytesNum, length] = Reader.readNumber(buffer, base, 2);
       base += readBytesNum;
-
       Reader.ASSERT(buffer, base, length);
-      buf = new Buffer(length);
-      data = buf.getView();
-      for (j = 0; j < length; j++) {
-        data[j] = buffer[base++];
-      }
-      pictureParameterSets.push({length: length, data: buf.getView()});
+      const buf = Buffer.wrap(buffer).copy(base, length);
+      base += length;
+      pictureParameterSets.push({length: length, data: buf.getData()});
     }
 
     props.configurationVersion = configurationVersion;

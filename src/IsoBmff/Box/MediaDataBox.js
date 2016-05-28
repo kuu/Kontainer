@@ -36,12 +36,19 @@ export default class MediaDataBox extends Box {
     const byteOffset = base;
 
     const toBeRead = props.size - readBytesNum;
-    Reader.ASSERT(buffer, base, toBeRead);
-    const buf = Buffer.wrap(buffer).copy(base, toBeRead);
-    base += toBeRead;
+    const available = buffer.length - base;
+    const bytesToRead = Math.min(available, toBeRead);
+    const buf = Buffer.wrap(buffer).copy(base, bytesToRead);
+    const data = buf.getView();
 
-    props.data = buf.getView();
+    base += bytesToRead;
+
+    props.data = data;
     props.byteOffset = byteOffset;
+
+    if (available < toBeRead) {
+      Reader.throwBufferReadException(props);
+    }
 
     return [base - offset, props];
   }

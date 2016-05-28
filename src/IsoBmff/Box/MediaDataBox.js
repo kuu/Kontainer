@@ -17,12 +17,9 @@ export default class MediaDataBox extends Box {
     base += super.serialize(buffer, base);
 
     if (buffer) {
-      for (let i = 0, il = data.length; i < il; i++) {
-        buffer[base++] = data[i];
-      }
-    } else {
-      base += data.length;
+      Buffer.wrap(buffer).copyFrom(data, 0, data.length, base);
     }
+    base += data.length;
 
     super.setSize(base - offset, buffer, offset);
 
@@ -31,21 +28,18 @@ export default class MediaDataBox extends Box {
   }
 
   static parse(buffer, offset=-1) {
-    let base = offset, readBytesNum, props,
-        toBeRead, data, buf, byteOffset;
+    let base = offset, readBytesNum, props;
 
     [readBytesNum, props] = Box.parse(buffer, base);
     base += readBytesNum;
-    byteOffset = base;
-    toBeRead = props.size - readBytesNum;
 
+    const byteOffset = base;
+
+    const toBeRead = props.size - readBytesNum;
     Reader.ASSERT(buffer, base, toBeRead);
-    buf = new Buffer(toBeRead);
-    data = buf.getView();
+    const buf = Buffer.wrap(buffer).copy(base, toBeRead);
+    base += toBeRead;
 
-    for (let i = 0; i < toBeRead; i++) {
-      data[i] = buffer[base++];
-    }
     props.data = buf.getView();
     props.byteOffset = byteOffset;
 

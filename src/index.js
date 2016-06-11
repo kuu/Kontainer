@@ -330,7 +330,7 @@ function transform(visitor, options={}) {
     vtor = new TransformVisitor();
   }
 
-  return new TransformStream((buffer, offset, cb) => {
+  return new TransformStream(function (buffer, offset, cb) {
     let base = vtor.offset;
     let buf = buffer.getData();
 
@@ -368,14 +368,14 @@ function transform(visitor, options={}) {
       vtor.exit();
     }
 
-    if (options.until) {
-      options.until.then(() => {
+    if (this.options.until) {
+      this.options.until.then(() => {
         cb('done', render(createBaseElement(currentFormat.getRootWrapperClass(), null, ...vtor.results)));
       });
     } else {
       cb('done', render(createBaseElement(currentFormat.getRootWrapperClass(), null, ...vtor.results)));
     }
-  });
+  }, options);
 }
 
 export default {

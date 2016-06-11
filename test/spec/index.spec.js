@@ -88,34 +88,37 @@ describe('Kontainer', () => {
   });
 
   if (global && global.Buffer) {
+
+    const fakeFuncs = {
+      formatCounter() {},
+      fulfillCounter() {},
+    };
+
+    const stream = require('stream');
+    class OutputStream1 extends stream.Writable {
+      constructor(cb, options) {
+        super(options);
+        this.on('finish', () => {
+          expect(fakeFuncs.formatCounter.calls.count()).toEqual(1);
+          expect(fakeFuncs.fulfillCounter.calls.count()).toEqual(1);
+          cb();
+        });
+      }
+
+      _write(chunk, encoding, done) {
+        done();
+      }
+    }
+
     it('should be able to handle asynchronous transformations', (callback) => {
-      const fakeFuncs = {
-        formatCounter() {},
-        fulfillCounter() {},
-      };
+      const output = new OutputStream1(callback);
       spyOn(fakeFuncs, 'formatCounter');
       spyOn(fakeFuncs, 'fulfillCounter');
-
-      const stream = require('stream');
-      class OutputStream extends stream.Writable {
-        constructor(cb, options) {
-          super(options);
-          this.on('finish', () => {
-            expect(fakeFuncs.formatCounter.calls.count()).toEqual(1);
-            expect(fakeFuncs.fulfillCounter.calls.count()).toEqual(1);
-            cb();
-          });
-        }
-
-        _write(chunk, encoding, done) {
-          done();
-        }
-      }
-      const output = new OutputStream(callback);
-
-      const promise = Promise.resolve();
-      promise.then(() => {
-        fakeFuncs.fulfillCounter();
+      const promise = new Promise((fulfill, reject) => {
+        setTimeout(() => {
+          fakeFuncs.fulfillCounter();
+          fulfill();
+        }, 10);
       });
 
       const transform = Kontainer.transform((type, props, children) => {
@@ -132,78 +135,102 @@ describe('Kontainer', () => {
       input.pipe(transform).pipe(output);
     });
 
-    it('should be able to read progressively', (cb) => {
+    it('should be able to handle asynchronous transformations', (callback) => {
+      const output = new OutputStream1(callback);
+      spyOn(fakeFuncs, 'formatCounter');
+      spyOn(fakeFuncs, 'fulfillCounter');
+      const promise = new Promise((fulfill, reject) => {
+        setTimeout(() => {
+          fakeFuncs.fulfillCounter();
+          fulfill();
+        }, 10);
+      });
 
-      if (global && global.Buffer) {
-        const sourceBuffer = new global.Buffer([
-          0, 0, 0, 16, // size=16
-          109, 100, 97, 116, // type='mdat'
-          1, 2, 4, 8,
-          16, 32, 64, 128
-        ]);
+      const transform = Kontainer.transform((type, props, children) => {
+        ;
+      });
 
-        const streams = require('stream');
-        const Readable = streams.Readable;
-        const Writable = streams.Writable;
+      transform.setOptions({until: promise});
 
-        class InputStream extends Readable {
-          constructor(options) {
-            super(options);
-            this.finished = false;
-            this.count = 0;
-          }
+      transform.on('format', (format) => {
+        fakeFuncs.formatCounter();
+      });
 
-          _read(size) {
-            const count = this.count;
-            if (count === 2) {
-              this.push(null);
-            } else {
-              if (count === 0) {
-                this.push(sourceBuffer.slice(0, 12));
-              } else {
-                this.push(sourceBuffer.slice(12, 16));
-              }
-              this.count++;
-            }
-          }
-        }
-
-        class OutputStream extends Writable {
-          constructor(cb, options) {
-            super(options);
-            this.on('finish', () => {
-              expect(fakeFuncs.progressCounter.calls.count()).toEqual(1);
-              expect(fakeFuncs.progressCounter.calls.mostRecent().args[0].type).toBe('mdat');
-              expect(fakeFuncs.progressCounter.calls.mostRecent().args[0].size).toBe(sourceBuffer.length);
-              expect(fakeFuncs.progressCounter.calls.mostRecent().args[0].data.length).toBe(4);
-              cb();
-            });
-          }
-
-          _write(chunk, encoding, done) {
-            done();
-          }
-        }
-
-        const fakeFuncs = {
-          progressCounter() {},
-        };
-        spyOn(fakeFuncs, 'progressCounter');
-
-        const transform = Kontainer.transform((type, props, children) => {
-          ;
-        });
-
-        transform.on('progress', (data) => {
-          fakeFuncs.progressCounter(data);
-        });
-
-        const input = new InputStream();
-        const output = new OutputStream(cb);
-        input.pipe(transform).pipe(output);
-      } else {
-        // TODO (WhatWG's streams)
-      }
+      const bufMp4 = testDataMp4.buffer;
+      const input = new stream.PassThrough();
+      input.end(new Buffer(testDataMp4.buffer).getData());
+      input.pipe(transform).pipe(output);
     });
+
+    it('should be able to read progressively', (cb) => {
+      const sourceBuffer = new global.Buffer([
+        0, 0, 0, 16, // size=16
+        109, 100, 97, 116, // type='mdat'
+        1, 2, 4, 8,
+        16, 32, 64, 128
+      ]);
+
+      const streams = require('stream');
+      const Readable = streams.Readable;
+      const Writable = streams.Writable;
+
+      class InputStream extends Readable {
+        constructor(options) {
+          super(options);
+          this.finished = false;
+          this.count = 0;
+        }
+
+        _read(size) {
+          const count = this.count;
+          if (count === 2) {
+            this.push(null);
+          } else {
+            if (count === 0) {
+              this.push(sourceBuffer.slice(0, 12));
+            } else {
+              this.push(sourceBuffer.slice(12, 16));
+            }
+            this.count++;
+          }
+        }
+      }
+
+      class OutputStream2 extends Writable {
+        constructor(cb, options) {
+          super(options);
+          this.on('finish', () => {
+            expect(fakeFuncs.progressCounter.calls.count()).toEqual(1);
+            expect(fakeFuncs.progressCounter.calls.mostRecent().args[0].type).toBe('mdat');
+            expect(fakeFuncs.progressCounter.calls.mostRecent().args[0].size).toBe(sourceBuffer.length);
+            expect(fakeFuncs.progressCounter.calls.mostRecent().args[0].data.length).toBe(4);
+            cb();
+          });
+        }
+
+        _write(chunk, encoding, done) {
+          done();
+        }
+      }
+
+      const fakeFuncs = {
+        progressCounter() {},
+      };
+      spyOn(fakeFuncs, 'progressCounter');
+
+      const transform = Kontainer.transform((type, props, children) => {
+        ;
+      });
+
+      transform.on('progress', (data) => {
+        fakeFuncs.progressCounter(data);
+      });
+
+      const input = new InputStream();
+      const output = new OutputStream2(cb);
+      input.pipe(transform).pipe(output);
+    });
+  } else {
+    // TODO (WhatWG's streams)
   }
 });

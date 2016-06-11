@@ -6,11 +6,12 @@ if (global && global.Buffer) {
   const Transform = require('stream').Transform;
 
   class NodeTransform extends Transform {
-    constructor(parser, options) {
+    constructor(parser, options={}) {
       super(options);
       this.buffer = null;
       this.offset = 0;
       this.parser = parser;
+      this.options = options;
     }
 
     _transform(chunk, encoding, done) {
@@ -39,6 +40,10 @@ if (global && global.Buffer) {
 
     _flush(done) {
       done();
+    }
+
+    setOptions(options) {
+      Object.assign(this.options, options);
     }
   }
 

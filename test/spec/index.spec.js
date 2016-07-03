@@ -91,7 +91,7 @@ describe('Kontainer', () => {
 
     const fakeFuncs = {
       formatCounter() {},
-      fulfillCounter() {},
+      dataCounter() {},
     };
 
     const stream = require('stream');
@@ -100,7 +100,7 @@ describe('Kontainer', () => {
         super(options);
         this.on('finish', () => {
           expect(fakeFuncs.formatCounter.calls.count()).toEqual(1);
-          expect(fakeFuncs.fulfillCounter.calls.count()).toEqual(1);
+          expect(fakeFuncs.dataCounter.calls.count()).toEqual(1);
           cb();
         });
       }
@@ -110,56 +110,27 @@ describe('Kontainer', () => {
       }
     }
 
-    it('should be able to handle asynchronous transformations', (callback) => {
+    it('should be able to create a transform stream in object mode', (callback) => {
       const output = new OutputStream1(callback);
       spyOn(fakeFuncs, 'formatCounter');
-      spyOn(fakeFuncs, 'fulfillCounter');
-      const promise = new Promise((fulfill, reject) => {
-        setTimeout(() => {
-          fakeFuncs.fulfillCounter();
-          fulfill();
-        }, 10);
-      });
+      spyOn(fakeFuncs, 'dataCounter');
 
-      const transform = Kontainer.transform((type, props, children) => {
-        ;
-      }, {until: promise});
-
-      transform.on('format', (format) => {
-        fakeFuncs.formatCounter();
-      });
-
-      const bufMp4 = testDataMp4.buffer;
-      const input = new stream.PassThrough();
-      input.end(new Buffer(testDataMp4.buffer).getData());
-      input.pipe(transform).pipe(output);
-    });
-
-    it('should be able to handle asynchronous transformations', (callback) => {
-      const output = new OutputStream1(callback);
-      spyOn(fakeFuncs, 'formatCounter');
-      spyOn(fakeFuncs, 'fulfillCounter');
-      const promise = new Promise((fulfill, reject) => {
-        setTimeout(() => {
-          fakeFuncs.fulfillCounter();
-          fulfill();
-        }, 10);
-      });
-
-      const transform = Kontainer.transform((type, props, children) => {
+      const transformer = Kontainer.createObjectStream((type, element) => {
         ;
       });
 
-      transform.setOptions({until: promise});
-
-      transform.on('format', (format) => {
+      transformer.on('format', (format) => {
         fakeFuncs.formatCounter();
       });
 
+      transformer.on('end', (format) => {
+        fakeFuncs.dataCounter();
+      });
+
       const bufMp4 = testDataMp4.buffer;
-      const input = new stream.PassThrough();
+      const input = new stream.PassThrough({objectMode: true});
       input.end(new Buffer(testDataMp4.buffer).getData());
-      input.pipe(transform).pipe(output);
+      input.pipe(transformer).pipe(output);
     });
 
     it('should be able to read progressively', (cb) => {

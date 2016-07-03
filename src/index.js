@@ -368,14 +368,25 @@ function transform(visitor, options={}) {
       vtor.exit();
     }
 
-    if (this.options.until) {
-      this.options.until.then(() => {
-        cb('done', render(createBaseElement(currentFormat.getRootWrapperClass(), null, ...vtor.results)));
-      });
+    if (this.options.objectMode) {
+      cb('done', null);
     } else {
       cb('done', render(createBaseElement(currentFormat.getRootWrapperClass(), null, ...vtor.results)));
     }
   }, options);
+}
+
+function createObjectStream(visitor, options={}) {
+  class TransformVisitor extends ElementVisitor {
+    visit(type, props, children) {
+      const element = super.visit(type, props, children);
+      visitor && visitor(type.COMPACT_NAME, element);
+      return element;
+    }
+  }
+  const vtor = new TransformVisitor();
+  options.objectMode = true;
+  return transform(vtor, options)
 }
 
 export default {
@@ -388,6 +399,7 @@ export default {
   createElement,
   createElementFromBuffer,
   transform,
+  createObjectStream,
   ElementVisitor,
   DumpVisitor
 };

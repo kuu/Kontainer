@@ -5,6 +5,7 @@ class Element {
     this.type = type;
     this.props = props;
     this.instance = null; // Instantiation is deferred until the rendering time.
+    this.rootClass = null;
   }
 
   querySelector(type) {

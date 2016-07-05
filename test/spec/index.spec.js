@@ -115,8 +115,12 @@ describe('Kontainer', () => {
       spyOn(fakeFuncs, 'formatCounter');
       spyOn(fakeFuncs, 'dataCounter');
 
-      const transformer = Kontainer.createObjectStream((type, element) => {
-        ;
+      const transformer = Kontainer.createObjectStream((type, element, depth) => {
+        if (depth === 0) {
+          expect(element.wrap([])).not.toBe();
+        } else {
+          expect(element.wrap([])).toBe(null);
+        }
       });
 
       transformer.on('format', (format) => {

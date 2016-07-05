@@ -380,7 +380,11 @@ function createObjectStream(visitor, options={}) {
   class TransformVisitor extends ElementVisitor {
     visit(type, props, children) {
       const element = super.visit(type, props, children);
-      visitor && visitor(type.COMPACT_NAME, element);
+      const depth = this.depth();
+      if (depth === 0) {
+        element.setRootClass(currentFormat.getRootWrapperClass());
+      }
+      visitor && visitor(type.COMPACT_NAME, element, depth);
       return element;
     }
   }

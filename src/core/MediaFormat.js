@@ -47,6 +47,17 @@ class Element {
   getMimeType() {
     return this.type.getMimeType(this);
   }
+
+  setRootClass(rootClass) {
+    this.rootClass = rootClass;
+  }
+
+  wrap(elements) {
+    if (this.rootClass) {
+      return createElement(this.rootClass, null, elements);
+    }
+    return null;
+  }
 }
 
 function isValidComponentClass(type) {

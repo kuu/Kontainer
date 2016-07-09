@@ -49,6 +49,7 @@ function canParse(buffer, offset) {
 }
 
 export default {
+  name: 'webm',
   getComponentClass,
   parseTypeAndSize,
   getRootWrapperClass,

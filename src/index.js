@@ -10,38 +10,47 @@ import {BufferReadError} from './core/Error';
 import {createElement as createBaseElement} from './core/MediaFormat';
 import {throwException} from './core/Util';
 
+const SUPPORTED_FORMATS = [Matroska, IsoBmff];
+const DEFAULT_FORMAT = IsoBmff;
+
 let currentFormat = IsoBmff;
 
 function use(format) {
-  if (format === 'mp4') {
-    currentFormat = IsoBmff;
-  } else if (format === 'webm') {
-    currentFormat = Matroska;
+  const fmt = SUPPORTED_FORMATS.find(f => {
+    return f.name === format;
+  });
+
+  if (fmt) {
+    currentFormat = fmt;
   } else {
     console.error(`[Kontainer.use] Unsupported format: "${format}"`);
+    currentFormat = DEFAULT_FORMAT;
   }
 }
 
 function checkContainerFormat(buffer, offset=0) {
-  if (Matroska.canParse(buffer, offset)) {
-    return 'webm'
+  const fmt = SUPPORTED_FORMATS.find(f => {
+    return f.canParse(buffer, offset);
+  });
+
+  if (fmt) {
+    return fmt.name;
+  } else {
+    return 'unknown';
   }
-  if (IsoBmff.canParse(buffer, offset)) {
-    return 'mp4';
-  }
-  return 'unknown';
 }
 
 function detectFormat(buffer, offset=0) {
-  const format = checkContainerFormat(buffer, offset);
-  if (format === 'unknown') {
+  const fmt = SUPPORTED_FORMATS.find(f => {
+    return f.canParse(buffer, offset);
+  });
+
+  if (fmt) {
+    currentFormat = fmt;
+    return true;
+  } else {
     return false;
-  } else if (format === 'mp4') {
-    currentFormat = IsoBmff;
-  } else if (format === 'webm') {
-    currentFormat = Matroska;
   }
-  return true;
 }
 
 function traverse(context, element, buffer, offset=0) {
@@ -346,7 +355,7 @@ function transform(visitor, options={}) {
 
     formatSet = true;
 
-    cb('format', currentFormat === IsoBmff ? 'mp4' : 'webm');
+    cb('format', currentFormat.name);
 
     const endOfBuffer = buf.length;
     try {
@@ -382,7 +391,7 @@ function createObjectStream(visitor, options={}) {
       const element = super.visit(type, props, children);
       const depth = this.depth();
       if (depth === 0) {
-        element.setRootClass(currentFormat.getRootWrapperClass());
+        element.setFormatInfo(currentFormat);
       }
       visitor && visitor(type.COMPACT_NAME, element, depth);
       return element;
@@ -397,7 +406,7 @@ export default {
   use,
   checkContainerFormat,
   get mode() {
-    return currentFormat === Matroska ? 'webm' : 'mp4';
+    return currentFormat.name;
   },
   render,
   createElement,

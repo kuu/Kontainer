@@ -6,6 +6,7 @@ class Element {
     this.props = props;
     this.instance = null; // Instantiation is deferred until the rendering time.
     this.rootClass = null;
+    this.format = null;
   }
 
   querySelector(type) {
@@ -49,13 +50,16 @@ class Element {
     return this.type.getMimeType(this);
   }
 
-  setRootClass(rootClass) {
-    this.rootClass = rootClass;
+  setFormatInfo(format) {
+    this.format = format.name;
+    this.rootClass = format.getRootWrapperClass();
   }
 
   wrap(elements) {
     if (this.rootClass) {
-      return createElement(this.rootClass, null, elements);
+      const rootElement = createElement(this.rootClass, null, elements);
+      rootElement.format = this.format;
+      return rootElement;
     }
     return null;
   }

@@ -115,6 +115,7 @@ function canParse(buffer, offset) {
 }
 
 export default {
+  name: 'mp4',
   getComponentClass,
   parseTypeAndSize,
   getRootWrapperClass,

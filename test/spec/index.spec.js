@@ -117,9 +117,11 @@ describe('Kontainer', () => {
 
       const transformer = Kontainer.createObjectStream((type, element, depth) => {
         if (depth === 0) {
-          expect(element.wrap([])).not.toBe();
+          expect(element.wrap([])).not.toBeNull();
+          expect(element.format).toBe('mp4');
         } else {
-          expect(element.wrap([])).toBe(null);
+          expect(element.wrap([])).toBeNull();
+          expect(element.format).toBeNull();
         }
       });
 
